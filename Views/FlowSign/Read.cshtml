@@ -1,0 +1,55 @@
+﻿@{ 
+	var cols = _Fun.DefHCols;
+}
+
+<script src="~/js/view/FlowSign.js"></script>
+<script type="text/javascript">
+    $(function () {
+        _me.init();
+    });
+</script>
+
+@await Component.InvokeAsync("XgProgPath", new { names = new string[] { "待簽核假單" } })
+<div class="xp-prog">
+    <div id="divRead">
+        @*
+        <form id='rform' class='xg-form' style="margin-bottom:0;">
+            <div class="row">
+                <div class="col-md-2 xg-label">開始時間</div>
+                <div class="col-md-10 xg-input">
+                    @await Component.InvokeAsync("XiDate", new { fid = "StartTime", inRow = true, extClass = "xg-inline" })
+                    <span>～</span>
+                    @await Component.InvokeAsync("XiDate", new { fid = "StartTime2", inRow = true, extClass = "xg-inline" })
+                    @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
+                </div>
+            </div>
+            @await Component.InvokeAsync("XiSelect", new { title = "假別", fid = "LeaveType", rows = (List<IdStrDto>)ViewBag.LeaveTypes })
+            @await Component.InvokeAsync("XiSelect", new { title = "流程狀態", fid = "FlowStatus", rows = (List<IdStrDto>)ViewBag.SignStatuses })
+        </form>
+
+        <div class='xg-btns-box'>
+            @await Component.InvokeAsync("XgCreate")
+        </div>
+        *@
+        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>請假人</th>
+                    @*<th>代理人</th>*@
+                    <th>假別</th>
+                    <th>開始時間</th>
+                    <th>結束時間</th>
+                    <th>請假時數</th>
+                    <th>節點名稱</th>
+                    <th>建檔日期</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="divEdit" class="xg-hide">
+        <partial name="Edit" />
+    </div>
+</div>

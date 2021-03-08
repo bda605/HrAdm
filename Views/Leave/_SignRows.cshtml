@@ -1,0 +1,25 @@
+﻿@model List<SignRowDto>
+
+<table class="table table-bordered xg-table" cellspacing="0">
+    <thead>
+        <tr>
+            <th>節點名稱</th>
+            <th>簽核人</th>
+            <th>簽核狀態</th>
+            <th>簽核時間</th>
+            <th>備註</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model)
+        {
+            <tr>
+                <td>@row.NodeName</td>
+                <td>@row.SignerName</td>
+                <td>@row.SignStatusName</td>
+                <td>@row.SignTime</td>
+                <td>@row.Note</td>
+            </tr>
+        }
+    </tbody>
+</table>
