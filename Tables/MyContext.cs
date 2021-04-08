@@ -1,4 +1,5 @@
 ﻿using System;
+using Base.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -39,8 +40,7 @@ namespace HrAdm.Tables
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Hr;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(_Fun.Config.Db);
             }
         }
 
@@ -50,8 +50,7 @@ namespace HrAdm.Tables
 
             modelBuilder.Entity<Code>(entity =>
             {
-                entity.HasKey(e => new { e.Type, e.Value })
-                    .HasName("PK__Code");
+                entity.HasKey(e => new { e.Type, e.Value });
 
                 entity.Property(e => e.Type)
                     .HasMaxLength(20)
@@ -380,10 +379,34 @@ namespace HrAdm.Tables
                     .IsRequired()
                     .HasMaxLength(30);
 
+                entity.Property(e => e.ListenLevel)
+                    .IsRequired()
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.ReadLevel)
+                    .IsRequired()
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.SpeakLevel)
+                    .IsRequired()
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.Property(e => e.WriteLevel)
+                    .IsRequired()
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
             });
 
             modelBuilder.Entity<UserLicense>(entity =>

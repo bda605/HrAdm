@@ -18,6 +18,7 @@ var _BR = {
     //for crud form
     Create: '新增',
     Update: '修改',
+    View: '檢視',
     UpdateOk: '資料更新完成。',
     DeleteOk: '資料刪除完成。',
     SaveOk: '資料儲存完成。',
@@ -66,6 +67,16 @@ var _BR = {
 	};
 }(jQuery));
 
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else if (typeof module === "object" && module.exports) {
+		module.exports = factory( require( "jquery" ) );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: ZH (Chinese; 中文 (Zhōngwén), 汉语, 漢語)
@@ -87,6 +98,9 @@ $.extend( $.validator.messages, {
 	minlength: $.validator.format( "最少 {0} 個字" ),
 	rangelength: $.validator.format( "請輸入長度為 {0} 至 {1} 之間的字串" ),
 	range: $.validator.format( "請輸入 {0} 至 {1} 之間的數值" ),
+	step: $.validator.format( "請輸入 {0} 的整數倍值" ),
 	max: $.validator.format( "請輸入不大於 {0} 的數值" ),
 	min: $.validator.format( "請輸入不小於 {0} 的數值" )
 } );
+return $;
+}));

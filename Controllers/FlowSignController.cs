@@ -1,14 +1,8 @@
 ﻿using Base.Enums;
 using Base.Models;
-using Base.Services;
 using BaseWeb.Services;
-using BaseWeb.Attributes;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using BaseFlow.Services;
 
 namespace HrAdm.Controllers
 {
@@ -33,13 +27,13 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new FlowSignRead().GetPage(dt).ToString(), _Web.AppJson);
+            return Content(new FlowSignRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
         public ContentResult GetJson(string key)
         {
-            return Content(new FlowSignEdit().GetJson(key).ToString(), _Web.AppJson);
+            return Content(new FlowSignEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
         }
 
         /// <summary>
@@ -59,8 +53,7 @@ namespace HrAdm.Controllers
         //get file/image
         public FileContentResult GetFile(string table, string fid, string key)
         {
-            var path = _File.GetFirstPath(_Xp.GetDirLeave(), "FileName_" + key, _Xp.NoImagePath);
-            return _WebFile.EchoImage(path);
+            return _Xp.FileLeave(key);
         }
 
     }//class

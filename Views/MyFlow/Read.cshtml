@@ -96,6 +96,7 @@
         @await Component.InvokeAsync("XgSaveBack", new { align = "right" })
     </div>
 </div>
+
 <div class="xp-prog">
     <!-- read form -->
     <div id="divRead">
@@ -199,7 +200,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@br.BtnCancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@br.BtnCancel</button>
                 <button type="button" class="btn btn-primary" onclick="_me.flow.onModalNodeOk()">@br.BtnYes</button>
             </div>
         </div>
@@ -215,16 +216,16 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="eformLine" class="form-horizontal xg-form" style="padding:5px 20px;">
+                <form id="eformLine" class="form-horizontal xg-form" style="padding:0 10px;">
                     @await Component.InvokeAsync("XiRead", new { title = "Start Node :", fid = "StartNode", cols = cols })
                     @await Component.InvokeAsync("XiRead", new { title = "End Node :", fid = "EndNode", cols = cols })
-                    @await Component.InvokeAsync("XiNum", new { title = "Run Order :", fid = "Sort", required = true, cols = cols })
+                    @await Component.InvokeAsync("XiNum", new { title = "執行順序 :", fid = "Sort", required = true, cols = "4,2" })
                     @*Html.XiNum("Sort", "", "Run Order :", true, cols, new PropNumModel() { IsDigit = true, MaxValue = 10, Width = "80px" })*@
                     @*Html.XiRadios("LineType", "0", "執行種類 :", (List<IdStrDto>)ViewBag.LineTypes, 9)*@
                     <div id="divLineCondBox" class="row xg-row">
-                        <div class="col-md-12 col-sm-12 xg-label" style="margin-bottom: 5px;">
+                        <div class="col-md-12" style="margin:5px 0 2px -10px;">
                             執行條件
-                            <button type="button" class="btn btn-primary" onclick="_me.flow.onAddLineCond()">新增一列</button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="_me.flow.onAddLineCond()">新增一列</button>
                         </div>
                         <table class="table table-bordered xg-table" cellspacing="0">
                             <thead>
@@ -242,7 +243,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@br.BtnCancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@br.BtnCancel</button>
                 <button type="button" class="btn btn-primary" onclick="_me.flow.onModalLineOk()">@br.BtnYes</button>
             </div>
         </div>
@@ -251,7 +252,7 @@
 
 <script id="tplLineCond" type="text/template">
     <tr>
-        <td>@await Component.InvokeAsync("XiSelect", new { fid = "AndOr", value = "{{AndOr}}", rows = (List<IdStrDto>)ViewBag.AndOrs, inRow = true })</td>
+        <td width="104px">@await Component.InvokeAsync("XiSelect", new { fid = "AndOr", value = "{{AndOr}}", rows = (List<IdStrDto>)ViewBag.AndOrs, inRow = true })</td>
         <td>@await Component.InvokeAsync("XiText", new { fid = "Fid", value = "{{Fid}}", maxLen = 30, inRow = true })</td>
         <td>@await Component.InvokeAsync("XiSelect", new { fid = "Op", value = "{{Op}}", rows = (List<IdStrDto>)ViewBag.LineOps, inRow = true })</td>
         <td>@await Component.InvokeAsync("XiText", new { fid = "Value", value = "{{Value}}", maxLen = 30, inRow = true })</td>

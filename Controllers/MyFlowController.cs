@@ -1,6 +1,6 @@
-﻿using Base.Models;
+﻿using Base.Enums;
+using Base.Models;
 using Base.Services;
-using BaseFlow.Services;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +30,13 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new FlowRead().GetPage(dt).ToString(), _Web.AppJson);
+            return Content(new FlowRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
         public ContentResult GetJson(string key)
         {
-            return Content(new FlowEdit().GetJson(key).ToString(), _Web.AppJson);
+            return Content(new FlowEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]

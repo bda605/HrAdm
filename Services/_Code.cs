@@ -75,6 +75,23 @@ namespace HrAdm.Services
         }
         #endregion
 
+        #region others
+        public static List<IdStrDto> GetSelects()
+        {
+            return new List<IdStrDto>(){
+                new IdStrDto(){ Id="1", Str="Select1"},
+                new IdStrDto(){ Id="2", Str="Select2"},
+            };
+        }
+        public static List<IdStrDto> GetRadios()
+        {
+            return new List<IdStrDto>(){
+                new IdStrDto(){ Id="1", Str="Radio1"},
+                new IdStrDto(){ Id="2", Str="Radio2"},
+            };
+        }
+        #endregion
+
         private static List<IdStrDto> TableToList(string table, Db db = null)
         {
             var sql = string.Format(@"
@@ -89,13 +106,11 @@ order by Id
         //get codes from sql 
         private static List<IdStrDto> SqlToList(string sql, Db db = null)
         {
-            var emptyDb = (db == null);
-            if (emptyDb)
-                db = new Db();
+            var emptyDb = false;
+            _Fun.CheckOpenDb(ref db, ref emptyDb);
 
             var rows = db.GetModels<IdStrDto>(sql);
-            if (emptyDb)
-                db.Dispose();
+            _Fun.CheckCloseDb(db, emptyDb);
             return rows;
         }
 

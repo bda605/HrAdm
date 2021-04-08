@@ -26,7 +26,8 @@ var _idt = $.extend({}, _idate, {
             hour = 0;
             min = 0;
         } else {
-            date = _date.jsToUiDate(value);
+            //date = _date.jsToUiDate(value);
+            date = value;   //_idate will set
             hour = parseInt(_str.getMid(value, ' ', ':'));
             min = parseInt(_str.getMid(value, ':', ':'));
         }

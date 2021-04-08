@@ -4,9 +4,7 @@
     temp: {},
 
     //initial application
-    initApp: function () {
-        //debugger;
-        //_locale.getBaseR0(locale);
+    init: function () {
         _leftmenu.init();
         _pjax.init('.xu-body');
         _tool.init();

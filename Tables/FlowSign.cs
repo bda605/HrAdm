@@ -12,6 +12,7 @@ namespace HrAdm.Tables
         public string SourceId { get; set; }
         public string NodeName { get; set; }
         public short FlowLevel { get; set; }
+        public short TotalLevel { get; set; }
         public string SignerId { get; set; }
         public string SignerName { get; set; }
         public string SignStatus { get; set; }

@@ -43,8 +43,8 @@
 
     //TODO: add your code
     //onclick viewFile, called by XiFile component
-    onViewFile: function (elm) {
-        _me.edit0.onViewImage('', '', elm);
+    onViewFile: function (fid, elm) {
+        _me.edit0.onViewImage('', fid, elm);
     },
 
     edit0_afterOpenEdit: function (fun, json) {
@@ -53,7 +53,7 @@
         if (fun == _fun.FunC) {
             box.empty();
         } else {
-            _ajax.getView('SignRows', { id: _me.edit0.getKey() }, function (html) {
+            _ajax.getView('GetSignRows', { id: _me.edit0.getKey() }, function (html) {
                 box.html(html);
             });
         }

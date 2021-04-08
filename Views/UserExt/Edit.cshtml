@@ -3,12 +3,13 @@
 }
 
 <form id='eform' class='xg-form'>
-	@await Component.InvokeAsync("XiHide", new { fid = "Id" })
-	
-	@await Component.InvokeAsync("XiText", new { title = "帳號", fid = "Account", maxLen = 20 })
-	@await Component.InvokeAsync("XiText", new { title = "使用者名稱", fid = "Name", maxLen = 20 })
-	@await Component.InvokeAsync("XiText", new { title = "部門", fid = "DeptId", maxLen = 10 })
-	@await Component.InvokeAsync("XiCheck", new { title = "資料狀態", fid = "Status" })
+    @await Component.InvokeAsync("XiHide", new { fid = "Id" })
+
+    @await Component.InvokeAsync("XiText", new { title = "帳號", fid = "Account", maxLen = 20 })
+    @await Component.InvokeAsync("XiText", new { title = "使用者名稱", fid = "Name", maxLen = 20 })
+    @await Component.InvokeAsync("XiText", new { title = "部門", fid = "DeptId", maxLen = 10 })
+    @await Component.InvokeAsync("XiFile", new { title = "上傳照片", fid = "PhotoFile", labelTip = "請上傳 9:7 左右直立照片" })
+    @await Component.InvokeAsync("XiCheck", new { title = "資料狀態", fid = "Status" })
 </form>
 
 <div class='xg-btns-box'>

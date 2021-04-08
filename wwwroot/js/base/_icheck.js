@@ -4,7 +4,7 @@ var _icheck = $.extend({}, _ibase, {
     /**
      * default data-fid attribute value for multiple selection
      */
-    check0Id: '_check0',
+    Check0Id: '_check0',
 
     /**
      * (override)get data-value, not checked status !!, return '0' if unchecked.
@@ -61,10 +61,10 @@ var _icheck = $.extend({}, _ibase, {
      * return {string array}
      */ 
     getCheckeds: function (form, fid) {
-        fid = fid || _icheck.check0Id;
+        fid = fid || _icheck.Check0Id;
         var ary = [];
         _obj.getF(_fun.fidFilter(fid) + ':checked', form).each(function (i) {
-            ary[i] = $(this).data('value');
+            ary[i] = $(_icheck).data('value');
         });
         return ary;
     },
@@ -79,7 +79,7 @@ var _icheck = $.extend({}, _ibase, {
         if (_str.isEmpty(rows))
             return;
 
-        fid = fid || _icheck.check0Id;
+        fid = fid || _icheck.Check0Id;
         for (var i = 0; i < rows.length; i++) {
             var obj = form.find('[data-value=' + rows[i][fid] + ']');
             _icheck.setO(obj, 1);

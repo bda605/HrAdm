@@ -1,12 +1,9 @@
 ﻿using Base.Enums;
 using Base.Models;
 using Base.Services;
-using BaseWeb.Services;
-using BaseWeb.Attributes;
 using HrAdm.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
@@ -32,13 +29,13 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new LeaveRead().GetPage(dt).ToString(), _Web.AppJson);
+            return Content(new LeaveRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
         public ContentResult GetJson(string key)
         {
-            return Content(new LeaveEdit().GetJson(key).ToString(), _Web.AppJson);
+            return Content(new LeaveEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
@@ -63,8 +60,7 @@ namespace HrAdm.Controllers
         //get file/image
         public FileContentResult GetFile(string table, string fid, string key)
         {
-            var path = _File.GetFirstPath(_Xp.GetDirLeave(), "FileName_" + key, _Xp.NoImagePath);
-            return _WebFile.EchoImage(path);
+            return _Xp.FileLeave(key);
         }
 
         [HttpPost]
@@ -78,7 +74,7 @@ namespace HrAdm.Controllers
         /// </summary>
         /// <param name="id">Leave.Id</param>
         /// <returns></returns>
-        public ActionResult SignRows(string id)
+        public ActionResult GetSignRows(string id)
         {
             return PartialView("_SignRows", new LeaveService().GetSignRows(id));
         }

@@ -9,26 +9,33 @@
     <Compile Remove="wwwroot\js\base_old\**" />
     <Compile Remove="_log\**" />
     <Compile Remove="_source_old\**" />
+    <Compile Remove="_sql\**" />
+    <Compile Remove="_temp\**" />
     <Compile Remove="_upload\**" />
     <Content Remove="wwwroot\css\baseNoLine\**" />
     <Content Remove="wwwroot\js\base_old\**" />
     <Content Remove="_log\**" />
     <Content Remove="_source_old\**" />
+    <Content Remove="_sql\**" />
+    <Content Remove="_temp\**" />
     <Content Remove="_upload\**" />
     <EmbeddedResource Remove="wwwroot\css\baseNoLine\**" />
     <EmbeddedResource Remove="wwwroot\js\base_old\**" />
     <EmbeddedResource Remove="_log\**" />
     <EmbeddedResource Remove="_source_old\**" />
+    <EmbeddedResource Remove="_sql\**" />
+    <EmbeddedResource Remove="_temp\**" />
     <EmbeddedResource Remove="_upload\**" />
     <None Remove="wwwroot\css\baseNoLine\**" />
     <None Remove="wwwroot\js\base_old\**" />
     <None Remove="_log\**" />
     <None Remove="_source_old\**" />
+    <None Remove="_sql\**" />
+    <None Remove="_temp\**" />
     <None Remove="_upload\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\UserController - 複製.cs" />
     <Compile Remove="Services\UserEdit - 複製.cs" />
     <Compile Remove="Services\UserRead - 複製.cs" />
   </ItemGroup>
@@ -53,6 +60,7 @@
     <Content Remove="wwwroot\js\base\_ilinkFile.js" />
     <Content Remove="wwwroot\js\base\_multi.js_old" />
     <Content Remove="wwwroot\js\base\_text.j_old" />
+    <Content Remove="wwwroot\js\base\_valid.js" />
     <Content Remove="wwwroot\js\lib\zz_jquery.validate-1.19.1.js" />
     <Content Remove="wwwroot\js\lib\zz_jquery.validate-1.19.1.min.js" />
     <Content Remove="wwwroot\js\view\User - 複製.js" />
@@ -61,29 +69,22 @@
 
   <ItemGroup>
     <None Remove="Views\MyFlow\Edit.cshtml_old" />
-    <None Remove="Views\MyFlow\Read.cshtml_test" />
-    <None Remove="Views\MyFlow\Read.cshtml_test2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Views\MyFlow\Read.cshtml_test" />
-    <Content Include="Views\MyFlow\Read.cshtml_test2" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.3">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Base\BaseFlow\BaseFlow.csproj" />
     <ProjectReference Include="..\Base\BaseWeb\BaseWeb.csproj" />
     <ProjectReference Include="..\Base\Base\Base.csproj" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <None Include="wwwroot\js\base\_table.js" />
     <None Include="wwwroot\js\base\_tool.js" />
     <None Include="wwwroot\js\base\_valid.js" />
+    <None Include="wwwroot\js\base\_valid.j_old" />
     <None Include="wwwroot\js\base\_var.js" />
     <None Include="wwwroot\js\lib\bootstrap-datepicker-1.9.js" />
     <None Include="wwwroot\js\lib\bootstrap-datepicker-1.9.min.js" />

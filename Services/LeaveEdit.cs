@@ -1,7 +1,6 @@
 ﻿using Base.Enums;
 using Base.Models;
 using Base.Services;
-using BaseFlow.Services;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
@@ -75,7 +74,7 @@ where l.Id='{0}'
             var result = service.Create(json, null, FnCreateSignRows);
             if (_Valid.ResultStatus(result))
             {
-                await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), _Xp.GetDirLeave(), t0_FileName, nameof(t0_FileName));
+                await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), _Xp.DirLeave, t0_FileName, nameof(t0_FileName));
             }
             return result;
         }
@@ -88,7 +87,7 @@ where l.Id='{0}'
             var result = service.Update(key, json);
             if (_Valid.ResultStatus(result))
             {
-                await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), _Xp.GetDirLeave(), t0_FileName, nameof(t0_FileName));
+                await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), _Xp.DirLeave, t0_FileName, nameof(t0_FileName));
             }
             return result;
         }

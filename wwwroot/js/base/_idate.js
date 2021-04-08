@@ -1,4 +1,5 @@
 ﻿//for date input (bootstrap-datepicker)
+//_idt drive from _idate
 var _idate = $.extend({}, _ibase, {
 
     //constant
@@ -16,7 +17,7 @@ var _idate = $.extend({}, _ibase, {
      */
     setO: function (obj, value) {
         //obj.val(_date.jsToUiDate(value));
-        _idate._boxSetDate(_idate._elmToBox(obj), value);
+        _idate._boxSetDate(_idate._elmToBox(obj), _date.jsToUiDate(value));
     },
 
     setEditO: function (obj, status) {
@@ -30,7 +31,7 @@ var _idate = $.extend({}, _ibase, {
      */ 
     init: function (box, fid) {
         var obj = _str.isEmpty(fid)
-            ? $(_idate.BoxFilter)
+            ? box.find(_idate.BoxFilter)
             : _obj.get(fid, box).closet(_idate.BoxFilter);
         if (obj.length > 0)
             _idate.initO(obj);
@@ -48,7 +49,7 @@ var _idate = $.extend({}, _ibase, {
             showOnFocus: false,
             //startDate: '-3d'            
         }).on('changeDate', function (e) {
-            //$(this).datepicker('hide');
+            //$(_idate).datepicker('hide');
             //傳入 fid, value
             /* temp remark
             if (fnOnChange !== undefined) {

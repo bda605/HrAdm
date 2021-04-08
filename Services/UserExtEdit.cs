@@ -25,7 +25,8 @@ namespace HrAdm.Services
 					new EitemDto { Fid = "Account" },
 					new EitemDto { Fid = "Name" },
 					new EitemDto { Fid = "DeptId" },
-					new EitemDto { Fid = "Status" },
+                    new EitemDto { Fid = "PhotoFile" },
+                    new EitemDto { Fid = "Status" },
                 },
                 Childs = new EditDto[]
                 {
@@ -131,26 +132,30 @@ namespace HrAdm.Services
 
         //TODO: add your code
         //t03_FileName: t + table serial _ + fid
-        public async Task<ResultDto> CreateAsnyc(JObject json, List<IFormFile> t03_FileName)
+        public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
             var service = Service();
             var result = service.Create(json);
             if (_Valid.ResultStatus(result))
             {
-                await _WebFile.SaveCrudFilesAsnyc(json, service.GetNewKeyJson(), _Xp.GetDirUserLicence(), t03_FileName, nameof(t03_FileName));
+                var newKeyJson = service.GetNewKeyJson();
+                await _WebFile.SaveCrudFileAsnyc(json, newKeyJson, _Xp.DirUserExt, t0_PhotoFile, nameof(t0_PhotoFile));
+                await _WebFile.SaveCrudFilesAsnyc(json, newKeyJson, _Xp.DirUserLicense, t03_FileName, nameof(t03_FileName));
             }
             return result;
         }
 
         //TODO: add your code
         //t03_FileName: t + table serial _ + fid
-        public async Task<ResultDto> UpdateAsnyc(string key, JObject json, List<IFormFile> t03_FileName)
+        public async Task<ResultDto> UpdateAsnyc(string key, JObject json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
             var service = Service();
             var result = service.Update(key, json);
             if (_Valid.ResultStatus(result))
             {
-                await _WebFile.SaveCrudFilesAsnyc(json, service.GetNewKeyJson(), _Xp.GetDirUserLicence(), t03_FileName, nameof(t03_FileName));
+                var newKeyJson = service.GetNewKeyJson();
+                await _WebFile.SaveCrudFileAsnyc(json, newKeyJson, _Xp.DirUserExt, t0_PhotoFile, nameof(t0_PhotoFile));
+                await _WebFile.SaveCrudFilesAsnyc(json, newKeyJson, _Xp.DirUserLicense, t03_FileName, nameof(t03_FileName));
             }
             return result;
         }

@@ -357,7 +357,7 @@ var _crud = {
      * checkbox for multiple select
      * param value {string} [1] checkbox value
      * param editable {bool} [true]
-     * //param fid {string} [_icheck.check0Id] data-fid value
+     * //param fid {string} [_icheck.Check0Id] data-fid value
      */
     dtCheck0: function (value, editable) {
         //debugger;
@@ -365,7 +365,7 @@ var _crud = {
             value = 1;
 
         //attr
-        var attr = "data-fid='" + _icheck.check0Id + "'" +
+        var attr = "data-fid='" + _icheck.Check0Id + "'" +
             " data-value='" + value + "'";
         if (editable === false)
             attr += ' readonly';
@@ -383,7 +383,7 @@ var _crud = {
     dtCheck0: function (value, editable, fid) {
         if (editable === undefined)
             editable = true;
-        fid = fid || _icheck.check0Id;
+        fid = fid || _icheck.Check0Id;
         return _icheck.render2(0, fid, value, false, '', editable);
     },
     */
@@ -392,7 +392,7 @@ var _crud = {
     dtRadio1: function (value, editable) {
         if (editable === undefined)
             editable = true;
-        return _iradio.render(_icheck.check0Id, '', false, value, editable);
+        return _iradio.render(_icheck.Check0Id, '', false, value, editable);
     },
 
     /**
@@ -493,7 +493,10 @@ var _crud = {
         _prog.init();   //prog path
     },
 
-    //initial forms(recursive)
+    /**
+     * initial forms(recursive)
+     * param edit {object} EditOne/EditMany object
+     */
     initForm: function (edit) {
         if (edit.eform == null)
             return;
@@ -1331,8 +1334,10 @@ var _edit = {
                 continue;
 
             fid = fidTypes[j];
-            obj = _obj.get(fid, box);
-            value = _input.getO(obj, ftype);
+            obj = (ftype === 'radio')
+                ? _iradio.getObj(fid, box)
+                : _obj.get(fid, box);
+            value = _input.getO(obj, box, ftype);
             //如果使用完全比對, 字串和數字會不相等!!
             if (value != obj.data(_edit.DataOld)) {
                 row[fid] = value;
@@ -1356,8 +1361,7 @@ var _edit = {
         box.find(_fun.fidFilter()).each(function (i, item) {
             var obj = $(item);
             var j = i * 2;
-            fidTypes[j] = obj.data(_fun.Fid);
-            //fidTypes[j] = _obj.getName(obj);
+            fidTypes[j] = _fun.getFid(obj);
             fidTypes[j + 1] = _input.getType(obj);
         });
         me.fidTypes = fidTypes;
@@ -1375,7 +1379,7 @@ var _edit = {
         //var me = this;  //use outside .each()
         me.fileFids = [];      //upload file fid array
         box.find('[data-type=file]').each(function (index, item) {
-            me.fileFids[index] = $(item).data(_fun.Fid);
+            me.fileFids[index] = _fun.getFid($(item));
         });
         me.fileLen = me.fileFids.length;
         me.hasFile = me.fileFids.length > 0; //has input file or not
@@ -1527,7 +1531,7 @@ var _form = {
         var json = {};
         form.find(_fun.fidFilter()).filter(':not([data-type=read])').each(function () {
             var obj = $(this);
-            json[obj.data(_fun.Fid)] = _input.getO(obj);            
+            json[_fun.getFid(obj)] = _input.getO(obj, form);            
         });
         return json;
 
@@ -1795,7 +1799,7 @@ var _form = {
         var ok = true;
         box.find('.' + _fun.XdRequired).each(function () {
             var me = $(this);
-            if (_str.isEmpty(_input.getO(me))) {
+            if (_str.isEmpty(_input.getO(me, box))) {
                 ok = false;
                 //me.addClass(_fun.errCls);
                 var id = _obj.getId(me);
@@ -1849,7 +1853,7 @@ var _formData = {
 var _fun = {
 
     //=== constant start(大camel) ===
-    Fid: 'fid',            //data-fid
+    //Fid: 'name',            //data-fid
 
     //for moment.js
     //JsDateFormat: 'YYYY/MM/DD',
@@ -1858,11 +1862,10 @@ var _fun = {
     //input field error validation, need match server side _Web.cs
     //jsPath: '../Scripts/',      //js path for load
     //errTail: '_err',            //error label 欄位id後面會加上這個字元
-    XdRequired: 'xd-required',
+    //XdRequired: 'xd-required',
 
-    //??
-    errCls: 'xg-error',           //欄位驗証錯誤時會加上這個 class name
-    errLabCls: 'xg-error-label',     //error label 的 class name
+    //errCls: 'xg-error',           //欄位驗証錯誤時會加上這個 class name
+    //errLabCls: 'xg-error-label',     //error label 的 class name
     //errBoxCls: 'xg-errorbox', //??_box欄位驗証錯誤時會加上這個 class name
 
     //constant for mapping to backend
@@ -1875,20 +1878,29 @@ var _fun = {
 
 
     //variables
-    locale: 'zh-TW',
+    locale: 'zh-TW',    //now locale, _Layout.cshmlt will set
     maxFileSize: 50971520,  //upload file limit(50M)
 
     //mid variables
-    data: {},
+    //data: {},
 
     //variables ??
-    isCheck: true,
+    //isCheck: true,
 
     //後端必須實作 Fun/Test()
     onHello: function () {
         _ajax.getStr('../Fun/Hello', null, function (msg) {
             alert('OK');
         });
+    },
+
+    /**
+     * get data-fid of object
+     * param obj {object}
+     * return fid string
+     */
+    getFid: function (obj) {
+        return obj.data('fid');
     },
 
     /**
@@ -1908,8 +1920,13 @@ var _fun = {
     },
     */
 
-    default: function (val, val0) {
-        return (val == null) ? val0 : val;
+    /**
+     * get default value if need
+     * param val {object} checked value
+     * param defVal {object} default value to return if need
+     */
+    default: function (val, defVal) {
+        return (val == null) ? defVal : val;
     },
 
     hasValue: function (obj) {
@@ -1925,9 +1942,9 @@ var _fun = {
         });
     },
 
+    //#region remark code
     /*
       ??
-    */
     xgTextBoxValid: function (obj, Regex) {
         var parent = obj.parentNode;
         if (Regex == "") {
@@ -1950,9 +1967,7 @@ var _fun = {
         }
     },
 
-    /*
      ??
-    */
     xgCheckfn: function () {
         _fun.isCheck = true;
         var Inputs = document.getElementsByClassName('xg-textbox');
@@ -1972,13 +1987,12 @@ var _fun = {
         return _fun.isCheck;
     },
 
-    /**
+    //
      multiple checkbox onclick event
      params
        me : this component
        fid: field id 
        value: field value
-     */
     //onClickCheckMulti: function (me, fid, value, separator, onClickFn) {
     zz_onChangeMultiCheck: function (me, fid) {
 
@@ -2010,7 +2024,7 @@ var _fun = {
             onClickFn(me, $(me).val());
 
     },
-
+    */
  
     /**
      * 傳回錯誤訊息(多國語)
@@ -2039,6 +2053,7 @@ var _fun = {
     //    var field = $('#' + fid);
     //    return (field.length == 0) ? '' : field.val().join(separator);
     //},
+    //#endregion
 
 };//class
 
@@ -2059,6 +2074,45 @@ var _helper = {
         return _str.trim(attr);
     },
 };
+/*
+ * handle html data
+ */
+var _html = {
+    //*** 必要屬性 or 函式 ***
+    //get locale code
+    encodeRow: function (row, fields) {
+        for (var i = 0; i < fields.length; i++) {
+            var id = fields[i];
+            row[id] = _html.encode(row[id]);
+        }
+        return row;
+    },
+
+    //see: https://stackoverflow.com/questions/14346414/how-do-you-do-html-encode-using-javascript
+    encode: function (value) {
+        return $('<div/>').text(value).html();
+    },
+
+    decode: function(value){
+        return $('<div/>').html(value).text();
+    },
+
+    //?? 更新html欄位內容, 讀取 text()
+    update: function(id, box) {
+        var filter = '#' + id;
+        var obj = (box === undefined) ? $(filter) : box.find(filter);
+        //obj.text(value);
+        //obj.summernote('code', $(filter).text());
+        //debugger;
+        obj.summernote('code', obj.text());
+    },
+	//??
+    updates: function (ids, box) {
+        for (var i = 0; i < ids.length; i++)
+            _html.update(ids[i], box);
+    },
+    
+};
 
 //base class of all input field
 //must loaded first, or will got error !!
@@ -2071,22 +2125,23 @@ var _ibase = {
      * return {string}
      */ 
     get: function (fid, box) {
-        return _ibase.getO(_obj.get(fid, box));
+        return this.getO(_obj.get(fid, box));
     },
     //get value by filter
     getF: function (ft, box) {
-        return _ibase.getO(_obj.getF(ft, box));
+        return this.getO(_obj.getF(ft, box));
     },
-    /*
-    //get value by name
-    getN: function (fid, box) {
-        return _ibase.getO(_obj.getN(fid, box));
-    },
-    */
     //get value by object
     getO: function (obj) {
         return obj.val();
     },
+
+    /*
+    //get value by name
+    getN: function (fid, box) {
+        return this.getO(_obj.getN(fid, box));
+    },
+    */
 
     //get input border for show red border
     //default return this, drive class could rewrite.
@@ -2096,35 +2151,35 @@ var _ibase = {
 
     //set value
     set: function (fid, value, box) {
-        _ibase.setO(_obj.get(fid, box), value)
+        this.setO(_obj.get(fid, box), value)
     },
     setF: function (ft, value, box) {
-        _ibase.setO(_obj.getF(ft, box), value)
+        this.setO(_obj.getF(ft, box), value)
     },
-    /*
-    setN: function (fid, value, box) {
-        _ibase.setO(_obj.getN(fid, box), value)
-    },
-    */
     setO: function (obj, value) {
         obj.val(value);
     },
+    /*
+    setN: function (fid, value, box) {
+        this.setO(_obj.getN(fid, box), value)
+    },
+    */
 
     //set edit status
     setEdit: function (fid, status, box) {
-        _ibase.setEditO(_obj.get(fid, box), status);
+        this.setEditO(_obj.get(fid, box), status);
     },
     setEditF: function (ft, status, box) {
-        _ibase.setEditO(_obj.getF(ft, box), status);
+        this.setEditO(_obj.getF(ft, box), status);
     },
-    /*
-    setEditN: function (fid, status, box) {
-        _ibase.setEditO(_obj.getN(fid, box), status);
-    },
-    */
     setEditO: function (obj, status) {
         obj.prop('readonly', !status);
     },
+    /*
+    setEditN: function (fid, status, box) {
+        this.setEditO(_obj.getN(fid, box), status);
+    },
+    */
 
 };//class
 //for checkbox(use html checkbox)
@@ -2133,7 +2188,7 @@ var _icheck = $.extend({}, _ibase, {
     /**
      * default data-fid attribute value for multiple selection
      */
-    check0Id: '_check0',
+    Check0Id: '_check0',
 
     /**
      * (override)get data-value, not checked status !!, return '0' if unchecked.
@@ -2190,10 +2245,10 @@ var _icheck = $.extend({}, _ibase, {
      * return {string array}
      */ 
     getCheckeds: function (form, fid) {
-        fid = fid || _icheck.check0Id;
+        fid = fid || _icheck.Check0Id;
         var ary = [];
         _obj.getF(_fun.fidFilter(fid) + ':checked', form).each(function (i) {
-            ary[i] = $(this).data('value');
+            ary[i] = $(_icheck).data('value');
         });
         return ary;
     },
@@ -2208,7 +2263,7 @@ var _icheck = $.extend({}, _ibase, {
         if (_str.isEmpty(rows))
             return;
 
-        fid = fid || _icheck.check0Id;
+        fid = fid || _icheck.Check0Id;
         for (var i = 0; i < rows.length; i++) {
             var obj = form.find('[data-value=' + rows[i][fid] + ']');
             _icheck.setO(obj, 1);
@@ -2276,6 +2331,7 @@ var _icolor = {
 
 }; //class
 //for date input (bootstrap-datepicker)
+//_idt drive from _idate
 var _idate = $.extend({}, _ibase, {
 
     //constant
@@ -2293,7 +2349,7 @@ var _idate = $.extend({}, _ibase, {
      */
     setO: function (obj, value) {
         //obj.val(_date.jsToUiDate(value));
-        _idate._boxSetDate(_idate._elmToBox(obj), value);
+        _idate._boxSetDate(_idate._elmToBox(obj), _date.jsToUiDate(value));
     },
 
     setEditO: function (obj, status) {
@@ -2307,7 +2363,7 @@ var _idate = $.extend({}, _ibase, {
      */ 
     init: function (box, fid) {
         var obj = _str.isEmpty(fid)
-            ? $(_idate.BoxFilter)
+            ? box.find(_idate.BoxFilter)
             : _obj.get(fid, box).closet(_idate.BoxFilter);
         if (obj.length > 0)
             _idate.initO(obj);
@@ -2325,7 +2381,7 @@ var _idate = $.extend({}, _ibase, {
             showOnFocus: false,
             //startDate: '-3d'            
         }).on('changeDate', function (e) {
-            //$(this).datepicker('hide');
+            //$(_idate).datepicker('hide');
             //傳入 fid, value
             /* temp remark
             if (fnOnChange !== undefined) {
@@ -2401,7 +2457,8 @@ var _idt = $.extend({}, _idate, {
             hour = 0;
             min = 0;
         } else {
-            date = _date.jsToUiDate(value);
+            //date = _date.jsToUiDate(value);
+            date = value;   //_idate will set
             hour = parseInt(_str.getMid(value, ' ', ':'));
             min = parseInt(_str.getMid(value, ':', ':'));
         }
@@ -2525,7 +2582,7 @@ var _ifile = $.extend({}, _ibase, {
      */
     dataAddFile: function (data, fid, serverFid, box) {
         var obj = _obj.get(fid, box);
-        var file = _ifile._getUploadFile(_ifile._elmToFile(obj));
+        var file = _ifile.getUploadFile(_ifile._elmToFile(obj));
         var hasFile = (file != null);
         if (hasFile)
             data.append(serverFid, file);
@@ -2574,7 +2631,7 @@ var _ifile = $.extend({}, _ibase, {
     },
 
     onDeleteFile: function (btn) {
-        _ifile.setO(_ifile.elmToObj(btn), '');
+        _ifile.setO(_ifile._elmToObj(btn), '');
     },
     //=== event end ===
 
@@ -2602,7 +2659,7 @@ var _ifile = $.extend({}, _ibase, {
      * return {object} file box object
      */
     _elmToBox: function (elm) {
-        return $(elm).closest('.xi-file');
+        return $(elm).closest('.xi-box');
     },
     //get file object
     _elmToFile: function (elm) {
@@ -2633,16 +2690,102 @@ var _ifile = $.extend({}, _ibase, {
     },
 
     //border get uploaded file, return null if empty
-    _getUploadFile: function (fileObj) {
+    getUploadFile: function (fileObj) {
+        if (fileObj.length == 0)
+            return null;
+
         var files = fileObj.get(0).files;
         return (files.length > 0) ? files[0] : null;
     },
 
 }); //class
 /*
- 處理 html 欄位, 使用 summernote !!
+ * html input, use summernote !!
  */
-var _ihtml = {
+var _ihtml = $.extend({}, _ibase, {
+
+    //constant
+    //BoxFilter: '.date',
+
+    getO: function (obj) {
+        //return obj.html();
+        //return obj.val();
+        return obj.summernote('code');
+    },
+
+    setO: function (obj, value) {
+        //value = $('<div/>').html(value).text(); //decode
+        obj.summernote('code', value);
+        //obj.html(value);
+        //obj.val(value);
+    },
+
+    /**
+     * init html editor
+     * param obj {objects} html input object array
+     * param prog {string} program code
+     * param height {int} input height(px)
+     * param fnFileName {function} 傳回filename後面部分字串
+     */
+    init: function (box, prog, height, fnFileName) {
+        height = height || 250;
+        box.find('[data-type=html]').summernote({
+            height: height,
+            //new version use callbacks
+            callbacks: {
+                onImageUpload: function (files) {
+                    var editor = $(this);   //summernote instance !!
+                    var data = new FormData();
+                    data.append('file', files[0]);
+                    //fileName for file name
+                    var fileName = (fnFileName === undefined)
+                        ? prog + '_' + _obj.getFid($(this).closest('textarea'))
+                        : fnFileName();
+                    data.append('fileName', fileName);
+                    $.ajax({
+                        data: data,
+                        type: "POST",
+                        url: "../Image/Upload",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (url) {
+                            //create image element & add into editor
+                            var image = document.createElement('img');
+                            image.src = url;
+                            //new version syntax !!
+                            editor.summernote('insertNode', image);
+                        }
+                    });
+                },
+            },
+
+            //=== add image ext attr start ===
+            popover: {
+                image: [
+                    ['custom', ['imageAttributes']],
+                    ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                    ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                    ['remove', ['removeMedia']]
+                ],
+            },
+            lang: _fun.locale,
+            imageAttributes: {
+                imageDialogLayout: 'default', // default|horizontal
+                icon: '<i class="note-icon-pencil"/>',
+                removeEmpty: false // true = remove attributes | false = leave empty if present
+            },
+            displayFields: {
+                imageBasic: true,  // show/hide Title, Source, Alt fields
+                imageExtra: false, // show/hide Alt, Class, Style, Role fields
+                linkBasic: false,   // show/hide URL and Target fields for link
+                linkExtra: false   // show/hide Class, Rel, Role fields for link
+            },
+            //=== add image ext attr start ===
+
+        });
+    },
+
     //see: https://stackoverflow.com/questions/14346414/how-do-you-do-html-encode-using-javascript
     encode: function (value) {
         return $('<div/>').text(value).html();
@@ -2675,21 +2818,21 @@ var _ihtml = {
             _ihtml.update(fids[i], box);
     },
     
-};
+}); //class
 
 //link file
 var _ilinkFile = {
 
     //value by fid
     get: function (fid, form) {
-        return _ilinkFile.getO(_obj.get(fid, form));   //use data-fid
+        return this.getO(_obj.get(fid, form));   //use data-fid
     },
     //value by object
     getO: function (obj) {
         return obj.text();
     },
     set: function (fid, value, form) {
-        _ilinkFile.setO(_obj.get(fid, form), value);   //use data-fid
+        this.setO(_obj.get(fid, form), value);   //use data-fid
     },
     setO: function (obj, value) {
         obj.text(value);
@@ -2705,48 +2848,40 @@ var _ilinkFile = {
  */
 var _input = {
 
-    /*
-    //get object
-    getObj: function (fid, box) {
-        var obj = _obj.get(fid, box);
-        if (obj.length == 0)
-            obj = _obj.getD(fid, box);   //iRead use data-fid
-        return obj;
-    },
-    */
-
     //get input value by data-fid
     get: function (fid, box) {
-        return _input.getO(_obj.get(fid, box));
+        return _input.getO(_obj.get(fid, box), box);
     },
 
     /**
      * get input value by object
      * param obj {object}
-     * param type {string} optional, data-type
+     * param type {string} (optional) data-type
      * return input value
      */ 
-    getO: function (obj, type) {
+    getO: function (obj, box, type) {
         type = type || _input.getType(obj);
         switch (type) {
+            case 'text':
+                return _itext.getO(obj);
             case 'check':
                 return _icheck.getO(obj);
             case 'radio':
-                //obj is array now !!
-                return _iradio.getO(obj);
-            case 'textarea':
-                //must set html !!
-                return _itextarea.getO(obj);
+                return _iradio.getO(obj, box);
             case 'select':
                 return _iselect.getO(obj);
-            case 'file':
-                return _ifile.getO(obj);
-            case 'read':
-                return _iread.getO(obj);
             case 'date':
                 return _idate.getO(obj);
             case 'dt':
                 return _idt.getO(obj);
+            case 'file':
+                return _ifile.getO(obj);
+            case 'textarea':
+                return _itextarea.getO(obj);
+            case 'html':
+                return _ihtml.getO(obj);
+            case 'read':
+                return _iread.getO(obj);
             case 'linkFile':
                 return _ilinkFile.getO(obj);
             default:
@@ -2756,7 +2891,7 @@ var _input = {
     },
 
     set: function (fid, value, box) {
-        _input.setO(_obj.get(fid, box), value);
+        _input.setO(_obj.get(fid, box), value, box);
     },
 
     /**
@@ -2765,41 +2900,47 @@ var _input = {
      * param value {object}
      * param type {string} optional, data-type
      */ 
-    setO: function (obj, value, type) {
+    setO: function (obj, value, box, type) {
         type = type || _input.getType(obj);
         switch (type) {
+            case 'text':
+                _itext.setO(obj, value);
+                break;
             case 'check':
                 _icheck.setO(obj, value);
                 break;
             case 'radio':
                 //此時 obj 為 array
                 value = value || '0';
-                _iradio.setOs(obj, value);
-                break;
-            case 'textarea':
-                //重要!! 要設定它的 html 屬性!!
-                value = _ihtml.decode(value);
-                obj.html(value);
-                obj.val(value);     //也要設定這個屬性 !!
-                //obj.text(value);
+                _iradio.setO(obj, value, box);
                 break;
             case 'select':
                 _iselect.setO(obj, value);
-                break;
-            case 'file':
-                _ifile.setO(obj, value);
-                break;
-            case 'read':
-                //debugger;
-                var format = obj.data('format');
-                if (!_str.isEmpty(format) && !_str.isEmpty(_BR[format]))
-                    value = _date.jsToFormat(value, _BR[format]);
-                _iread.setO(obj, value);
                 break;
             case 'date':
                 return _idate.setO(obj, value);
             case 'dt':
                 return _idt.setO(obj, value);
+            case 'file':
+                _ifile.setO(obj, value);
+                break;
+            case 'textarea':
+                //value = _ihtml.decode(value);
+                //obj.html(value);
+                _itextarea.setO(obj, value);
+                break;
+            case 'html':
+                _ihtml.setO(obj, value);
+                //value = _ihtml.decode(value);
+                //obj.html(value);
+                //obj.val(value);     //也要設定這個屬性 !!
+                break;
+            case 'read':
+                var format = obj.data('format');
+                if (!_str.isEmpty(format) && !_str.isEmpty(_BR[format]))
+                    value = _date.jsToFormat(value, _BR[format]);
+                _iread.setO(obj, value);
+                break;
             case 'linkFile':
                 return _ilinkFile.setO(obj, value);
             default:
@@ -2841,28 +2982,6 @@ var _input = {
         label.text(msg);
         label.show();
         //_form.scrollTopError();
-    },
-     */
-
-    /**
-     * get input value by type
-     * param obj {object}
-     * param type {string} field type
-     * param box {object} (optional) for radio only
-     * return {object} input value
-    getByType: function (obj, type, box) {
-        switch (type) {
-            case 'check':
-                return _icheck.getO(obj);
-            case 'radio':
-                return _iradio.getO(obj, box);
-            //TODO: summernote
-            //case 'textarea':
-            //    return obj.html();   //html !!
-            default:
-                //同時適用select option
-                return obj.val();
-        }
     },
      */
 
@@ -2999,42 +3118,38 @@ var _iradio = $.extend({}, _ibase, {
 
     //=== get ===
     get: function (fid, box) {
-        return _iradio.getOs(_obj.get(fid, box));
+        return _iradio._getByName(fid, box);
     },
-    //obj 為單筆object
+    //obj could be multiple
     getO: function (obj, box) {
-        return obj.val();
-        /*
-        if (obj.length == 1)
-            obj = _obj.get(_obj.getName(obj), box);
-        return _iradio._getO(obj);
-        */
+        return _iradio._getByName(_obj.getName(obj), box);
     },
-    //get value by objects
-    getOs: function (objs) {
-        //use filter !!
-        return objs.filter(':checked').val();
+
+    //get checked object
+    getObj: function (fid, box) {
+        return _obj.getF('[name=' + fid + ']:checked', box);
+    },
+
+    //get data-value by checked name
+    _getByName: function (name, box) {
+        return _iradio.getObj(name, box).data('value');
     },
 
     //=== set ===
     //改成用name來查欄位
     set: function (fid, value, box) {
-        _iradio.setOs(_obj.get(fid, box), value);
+        _iradio._setByName(fid, value, box);
     },
-    //obj 為單筆object
+    
     //setO: function (obj, value, box) {
-    setO: function (obj) {
-        obj.prop('checked', true);
-        /*
-        if (obj.length == 1)
-            obj = _obj.getN(_obj.getName(obj), box);
-        return _iradio._setO(obj, value);
-        */
+    setO: function (obj, value, box) {
+        _iradio._setByName(_obj.getName(obj), value, box);
     },
-    //set value by objects
-    setOs: function (objs, value) {
-        //use filter !!
-        objs.filter('[value=' + value + ']').prop('checked', true);
+
+    //set checked status by name & data-value
+    _setByName: function (name, value, box) {
+        var obj2 = _obj.getF('[name=' + name + '][data-value=' + value + ']', box);
+        obj2.prop('checked', true);
     },
 
     //set status by name
@@ -3102,9 +3217,9 @@ var _iradio = $.extend({}, _ibase, {
     */
     render: function (fid, label, checked, value, editable, extClass, extProp) {
         var html = "" +
-            "<label class='xg-radio {0}'>" +
+            "<label class='xi-check {0}'>" +
             "   <input type='radio'{1}>{2}" +
-            "   <span></span>" +
+            "   <span class='xi-rspan'></span>" +
             "</label>";
 
         //adjust
@@ -3311,46 +3426,6 @@ var _iselect = $.extend({}, _ibase, {
 //https://stackoverflow.com/questions/10744552/extending-existing-singleton
 var _itext = $.extend({}, _ibase, {
 
-    /** 
-     for 多筆資料only, 配合jquery validate
-     產生 input text html 內容, 與後端 XiTextHelper 一致
-     validate使用name屬性, 必須唯一, 所以加上rowNo參數
-     @param {int} rowNo row no
-     @param {string} fid data-id
-     @param {string} value value
-     @param {int} maxLen 字串長度限制, default 0(表示不限制)
-     @param {bool} required default false, 是否為必填
-     @param {bool} editable default true, 是否可編輯
-     @param {string} extClass extend class
-     @param {string} extProp extend property, 可以放onChange
-     @return {string} html string.
-    */
-    /*
-    render: function (rowNo, fid, value, type, maxLen, required, editable, extClass, extProp) {
-        //default value
-        rowNo = rowNo || 0;
-        fid = fid || '';
-        value = value || '';
-        maxLen = maxLen || 0;
-        type = _var.emptyToValue(type, 'text');
-        required = required || false;
-        editable = editable || true;
-        extClass = extClass || '';
-        extProp = extProp || '';
-
-        //attr
-        var attr = _helper.getBaseProp(rowNo, fid, value, type, required, editable, extProp);
-        if (maxLen > 0)
-            attr += " maxlength='" + maxLen + "'";
-        if (extProp != '')
-            attr += " style='" + extProp + "'"; 
-        if (attr != '')
-            attr = ' ' + attr;
-        var html = "<input{0} data-val='true' class='form-control {1}'>";
-        return _str.format(html, attr, extClass);
-    },
-    */
-
     //add input mask
     //use jquery maskedinput
     mask: function (box) {
@@ -3364,18 +3439,20 @@ var _itext = $.extend({}, _ibase, {
 }); //class
 
 
-//textarea欄位, 如果為 html 內容, 則必須再呼叫 _ihtml.js 功能 !!
+//for textarea input
 var _itextarea = $.extend({}, _ibase, {
 
+    /*
     getO: function (obj) {
-        return obj.html();
-        //return obj.val();
+        //return obj.html();
+        return obj.val();
     },
 
     setO: function (obj, value) {
-        obj.html(value);
-        //obj.val(value);
+        //obj.html(value);
+        obj.val(value);
     },
+    */
 
 }); //class
 
@@ -3684,18 +3761,13 @@ var _obj = {
     },
 
     /**
-     * for none input object
-     * get object by id for none input field, like button
-     */
-    getById: function (id, box) {
-        return _obj.getF('#' + id, box);
-    },
-
-    /**
      * get object by filter string
      */
     getF: function (ft, box) {
-        return box.find(ft);
+        var obj = box.find(ft);
+        if (obj == null)
+            _log.info('_obj.js getF() found none. (filter=' + ft + ')');
+        return obj;
     },
 
     /**
@@ -3717,6 +3789,14 @@ var _obj = {
      */
     getV: function (val, box) {
         return _obj.getF('[value=' + val + ']', box);
+    },
+
+    /**
+     * for none input object
+     * get object by id for none input field, like button
+     */
+    getById: function (id, box) {
+        return _obj.getF('#' + id, box);
     },
 
     //以下function都傳入object
@@ -4187,46 +4267,64 @@ var _tool = {
 //use jquery validation
 var _valid = {
 
+    //error & valid calss same to jquer validate
+    errorClass: 'error',
+    //validClass: 'valid',
+
     /**
      * initial
      * param form {object}
      * param inputCfg {json} config
      */
-    init: function (form, inputCfg) {
+    init: function (form) {
 
         //remove data first
         form.removeData('validator');
-        form.removeData('unobtrusiveValidation');
+        //form.removeData('unobtrusiveValidation');
 
         //default config
+        //this keyword not work inside !!
         var config = {
             /*
-            unhighlight: function (element, errorClass, validClass) {
-                var me = $(element);
+            unhighlight: function (elm, errorClass, validClass) {
+                var me = $(elm);
                 me.data('edit', 1);    //註記此欄位有異動
             }
             */
-            ignore: '',
+            ignore: '',     //xiFile has hidden input need validate
             errorElement: 'span',
+            //onclick: false, //checkbox, radio, and select
             /*
-            highlight: function (element) {
-                _valid.getInputBox(element).addClass(_fun.errCls);
+            highlight: function (elm) {
+                _valid._getError(elm).addClass(_valid.errorClass);
+                return false;
             },
-            unhighlight: function (element) {
-                _valid.getInputBox(element).removeClass(_fun.errCls);
+            unhighlight: function (elm) {
+                _valid._getError(elm).removeClass(_valid.errorClass);
+                return false;
             },
-            //errorClass: 'label label-danger',
-            errorPlacement: function (error, element) {
-                error.insertAfter(_valid.getInputBox(element).parent());
-            }
             */
+            //errorClass: 'label label-danger',
+            errorPlacement: function (error, elm) {
+                error.insertAfter(_valid._getBox(elm));
+                return false;
+            }
         };
 
         //加入外部傳入的自定義組態
-        if (inputCfg)
-            config = _json.copy(inputCfg, config);
+        //if (inputCfg)
+        //    config = _json.copy(inputCfg, config);
 
         return form.validate(config);
+    },
+
+    _getBox: function (elm) {
+        return $(elm).closest('.xi-box');
+    },
+
+    //get error object
+    _getError: function (elm) {
+        return _valid._getBox(elm).next();
     },
 
     /**
@@ -4665,7 +4763,7 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
         for (var i = 0; i < this.fidTypeLen; i = i + 2) {
             fid = this.fidTypes[i];
             obj = _obj.get(fid, trObj);
-            row[fid] = _input.getO(obj, this.fidTypes[i + 1]);
+            row[fid] = _input.getO(obj, trObj, this.fidTypes[i + 1]);
         }
         return row;
     };
@@ -4764,7 +4862,7 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 
                 fid = me.fidTypes[j];
                 obj = _obj.get(fid, tr);
-                value = _input.getO(obj, ftype);
+                value = _input.getO(obj, tr, ftype);
                 //if totally compare, string is not equal to numeric !!
                 if (value != _edit.getOld(obj)) {
                     diffRow[fid] = value;
@@ -4955,10 +5053,11 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
         if (_str.isEmpty(sortFid))
             return;
 
+        var me = this;
         rowsBox = this.getRowsBox(rowsBox);
         rowsBox.find(_fun.fidFilter(sortFid)).each(function (i, item) {
             //this did not work in this loop !!
-            _itext.set(sortFid, i, $(item));
+            _itext.set(sortFid, i, $(item).closest(me.rowFilter));
         });
     };
 
@@ -5432,7 +5531,6 @@ function Flow(boxId, mNode, mLine) {
                 //var node = $(params.el);
                 var pos = $(params.el).position();
                 _form.loadJson(nodeObj, { PosX: pos.left, PosY: pos.top });
-                //this.mNode.setRow(node.data(_fun.Fid), { PosX: pos.left, PosY: pos.top });
             },
         });
 
@@ -6063,7 +6161,6 @@ function Flow(boxId, mNode, mLine) {
 
         //set new value
         var row = _form.toJson(this.eformNode);
-        //this.mNode.setRow(nodeObj.data(_fun.Fid), row);
 
         //update node display name
         var nodeObj = $(this.nowElm);
@@ -6114,7 +6211,6 @@ function Flow(boxId, mNode, mLine) {
         //var line = conn.getParameters();    //model
         var line = this.connToLine(conn);
         _form.loadJson(line, row);
-        //this.mLine.setRow(line[_fun.Fid], row);
 
         //change line label
         var prop = this.getLineProp(condStr)
@@ -6142,9 +6238,7 @@ var _xp = {
     temp: {},
 
     //initial application
-    initApp: function () {
-        //debugger;
-        //_locale.getBaseR0(locale);
+    init: function () {
         _leftmenu.init();
         _pjax.init('.xu-body');
         _tool.init();

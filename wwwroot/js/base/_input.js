@@ -7,48 +7,40 @@
  */
 var _input = {
 
-    /*
-    //get object
-    getObj: function (fid, box) {
-        var obj = _obj.get(fid, box);
-        if (obj.length == 0)
-            obj = _obj.getD(fid, box);   //iRead use data-fid
-        return obj;
-    },
-    */
-
     //get input value by data-fid
     get: function (fid, box) {
-        return _input.getO(_obj.get(fid, box));
+        return _input.getO(_obj.get(fid, box), box);
     },
 
     /**
      * get input value by object
      * param obj {object}
-     * param type {string} optional, data-type
+     * param type {string} (optional) data-type
      * return input value
      */ 
-    getO: function (obj, type) {
+    getO: function (obj, box, type) {
         type = type || _input.getType(obj);
         switch (type) {
+            case 'text':
+                return _itext.getO(obj);
             case 'check':
                 return _icheck.getO(obj);
             case 'radio':
-                //obj is array now !!
-                return _iradio.getO(obj);
-            case 'textarea':
-                //must set html !!
-                return _itextarea.getO(obj);
+                return _iradio.getO(obj, box);
             case 'select':
                 return _iselect.getO(obj);
-            case 'file':
-                return _ifile.getO(obj);
-            case 'read':
-                return _iread.getO(obj);
             case 'date':
                 return _idate.getO(obj);
             case 'dt':
                 return _idt.getO(obj);
+            case 'file':
+                return _ifile.getO(obj);
+            case 'textarea':
+                return _itextarea.getO(obj);
+            case 'html':
+                return _ihtml.getO(obj);
+            case 'read':
+                return _iread.getO(obj);
             case 'linkFile':
                 return _ilinkFile.getO(obj);
             default:
@@ -58,7 +50,7 @@ var _input = {
     },
 
     set: function (fid, value, box) {
-        _input.setO(_obj.get(fid, box), value);
+        _input.setO(_obj.get(fid, box), value, box);
     },
 
     /**
@@ -67,41 +59,47 @@ var _input = {
      * param value {object}
      * param type {string} optional, data-type
      */ 
-    setO: function (obj, value, type) {
+    setO: function (obj, value, box, type) {
         type = type || _input.getType(obj);
         switch (type) {
+            case 'text':
+                _itext.setO(obj, value);
+                break;
             case 'check':
                 _icheck.setO(obj, value);
                 break;
             case 'radio':
                 //此時 obj 為 array
                 value = value || '0';
-                _iradio.setOs(obj, value);
-                break;
-            case 'textarea':
-                //重要!! 要設定它的 html 屬性!!
-                value = _ihtml.decode(value);
-                obj.html(value);
-                obj.val(value);     //也要設定這個屬性 !!
-                //obj.text(value);
+                _iradio.setO(obj, value, box);
                 break;
             case 'select':
                 _iselect.setO(obj, value);
-                break;
-            case 'file':
-                _ifile.setO(obj, value);
-                break;
-            case 'read':
-                //debugger;
-                var format = obj.data('format');
-                if (!_str.isEmpty(format) && !_str.isEmpty(_BR[format]))
-                    value = _date.jsToFormat(value, _BR[format]);
-                _iread.setO(obj, value);
                 break;
             case 'date':
                 return _idate.setO(obj, value);
             case 'dt':
                 return _idt.setO(obj, value);
+            case 'file':
+                _ifile.setO(obj, value);
+                break;
+            case 'textarea':
+                //value = _ihtml.decode(value);
+                //obj.html(value);
+                _itextarea.setO(obj, value);
+                break;
+            case 'html':
+                _ihtml.setO(obj, value);
+                //value = _ihtml.decode(value);
+                //obj.html(value);
+                //obj.val(value);     //也要設定這個屬性 !!
+                break;
+            case 'read':
+                var format = obj.data('format');
+                if (!_str.isEmpty(format) && !_str.isEmpty(_BR[format]))
+                    value = _date.jsToFormat(value, _BR[format]);
+                _iread.setO(obj, value);
+                break;
             case 'linkFile':
                 return _ilinkFile.setO(obj, value);
             default:
@@ -143,28 +141,6 @@ var _input = {
         label.text(msg);
         label.show();
         //_form.scrollTopError();
-    },
-     */
-
-    /**
-     * get input value by type
-     * param obj {object}
-     * param type {string} field type
-     * param box {object} (optional) for radio only
-     * return {object} input value
-    getByType: function (obj, type, box) {
-        switch (type) {
-            case 'check':
-                return _icheck.getO(obj);
-            case 'radio':
-                return _iradio.getO(obj, box);
-            //TODO: summernote
-            //case 'textarea':
-            //    return obj.html();   //html !!
-            default:
-                //同時適用select option
-                return obj.val();
-        }
     },
      */
 

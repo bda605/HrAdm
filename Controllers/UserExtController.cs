@@ -1,8 +1,6 @@
 ﻿using Base.Enums;
 using Base.Models;
 using Base.Services;
-using BaseWeb.Services;
-using BaseWeb.Attributes;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,37 +21,37 @@ namespace HrAdm.Controllers
             return View();
         }
 
+        /*
         public ActionResult Edit()
         {
             return View();
         }
+        */
 
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new UserExtRead().GetPage(dt).ToString(), _Web.AppJson);
+            return Content(new UserExtRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
-        //TODO: add your code, tSn_fid ex: t03_FileName
-        public async Task<JsonResult> Create(string json, List<IFormFile> t03_FileName)
+        public async Task<JsonResult> Create(string json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
-            return Json(await new UserExtEdit().CreateAsnyc(_Json.StrToJson(json), t03_FileName));
+            return Json(await new UserExtEdit().CreateAsnyc(_Json.StrToJson(json), t0_PhotoFile, t03_FileName));
         }
 
         [HttpPost]
-        //TODO: add your code, tSn_fid ex: t03_FileName
-        public async Task<JsonResult> Update(string key, string json, List<IFormFile> t03_FileName)
+        public async Task<JsonResult> Update(string key, string json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
-            return Json(await new UserExtEdit().UpdateAsnyc(key, _Json.StrToJson(json), t03_FileName));
+            return Json(await new UserExtEdit().UpdateAsnyc(key, _Json.StrToJson(json), t0_PhotoFile, t03_FileName));
         }
 
-        //TODO: add your code
         //get file/image
         public FileContentResult GetFile(string table, string fid, string key)
         {
-            var path = _File.GetFirstPath(_Xp.GetDirUserLicence(), "FileName_" + key, _Xp.NoImagePath);
-            return _WebFile.EchoImage(path);
+            return (fid == "PhotoFile")
+                ? _Xp.FileUserExt(key)
+                : _Xp.FileUserLicense(key);
         }
 
         [HttpPost]
@@ -71,7 +69,12 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetJson(string key)
         {
-            return Content(new UserExtEdit().GetJson(key).ToString(), _Web.AppJson);
+            return Content(new UserExtEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+        }
+
+        public void GenWord(string id)
+        {
+            new UserExtService().GenDocu(id);
         }
 
     }//class

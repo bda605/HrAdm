@@ -1,9 +1,11 @@
 using Base.Enums;
 using Base.Models;
 using Base.Services;
+using HrAdm.Tables;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,28 +27,37 @@ namespace HrAdm
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //use newtonSoft for json serialize for controller
-            services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    //use pascal case json
-                    options.UseMemberCasing();
-                });
+            //1.use newtonSoft & pascal case json
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.UseMemberCasing();
+            });
 
-            services.AddControllersWithViews()
-                .AddJsonOptions(options =>
-                {
-                    //use pascal case json
-                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                });
+            //2.use pascal case json
+            services.AddControllersWithViews().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
 
+            //3.http context
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            //locale & user info for base component
+            //4.appSettings "FunConfig" section -> _Fun.Config
+            var config = new ConfigDto();
+            Configuration.GetSection("FunConfig").Bind(config);
+            _Fun.Config = config;
+
+            //5.avoid CS1030
+            services.AddDbContext<MyContext>(options =>
+            {
+                options.UseSqlServer(config.Db);
+            });
+
+            //6.locale & user info for base component
             services.AddSingleton<IBaseResService, BaseResService>();
             services.AddScoped<IBaseUserService, MyBaseUserService>();
 
-            //session1(memory cache)
+            //7.session1(memory cache)
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -55,16 +66,11 @@ namespace HrAdm
                 options.Cookie.IsEssential = true;
             });
 
-            //appSettings "FunConfig" section -> _Fun.Config
-            var config = new ConfigDto();
-            Configuration.GetSection("FunConfig").Bind(config);
-            _Fun.Config = config;
-
-            //ado.net for mssql
+            //8.ado.net for mssql
             services.AddTransient<DbConnection, SqlConnection>();
             services.AddTransient<DbCommand, SqlCommand>();
 
-            //initial _Fun by mssql
+            //9.initial _Fun by mssql
             IServiceProvider di = services.BuildServiceProvider();
             _Fun.Init(di, DbTypeEnum.MSSql, AuthTypeEnum.Ctrl);
         }

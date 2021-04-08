@@ -1,0 +1,59 @@
+﻿
+<script src="~/js/view/XpImport.js"></script>
+<script type="text/javascript">
+    $(function () {
+        _me.init();
+    });
+</script>
+
+@await Component.InvokeAsync("XgProgPath", new { names = new string[] { ViewBag.ProgName } })
+<div class="xp-prog">
+    <div id="divRead">
+        <form id='rform' class='xg-form' style="margin-bottom:0;">
+            <div class="row">
+                @await Component.InvokeAsync("XiText", new { title = "匯入檔案名稱", fid = "FileName", inRow = true })
+                @await Component.InvokeAsync("XgFindTbar")
+            </div>
+        </form>
+
+        <div class='xg-btns-box'>
+            <button type="button" class="btn xg-btn" onclick="_me.onOpenImport()">匯入Excel</button>
+            <a class="btn xg-btn" href="Template">下載範本</a>
+        </div>
+        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>成功筆數</th>
+                    <th>失敗筆數</th>
+                    <th>合計筆數</th>
+                    <th>匯入檔案</th>
+                    <th>執行人員</th>
+                    <th>執行時間</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- import modal -->
+<div id='modalImport' class='modal fade'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h6 class='modal-title'>匯入 Excel 檔案 :</h6>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body' style="padding: 20px 0 30px 50px;">
+                <input type="file">
+                <div id="divMsg" style="color:blue; display:none"></div>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary xg-btn-size xd-cancel' data-dismiss='modal'>取消</button>
+                <button type='button' class='btn btn-primary xg-btn-size xd-yes' onclick='_me.onImport()'>匯入</button>
+            </div>
+        </div>
+    </div>
+</div>

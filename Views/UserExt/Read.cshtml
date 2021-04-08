@@ -9,7 +9,7 @@
     });
 </script>
 
-@await Component.InvokeAsync("XgProgPath", new { names = new string[] { "用戶學經歷維護" } })
+@await Component.InvokeAsync("XgProgPath", new { names = new string[] { "用戶經歷維護" } })
 <div class="xp-prog">
     <div id="divRead">
 		<form id='rform' class='xg-form' style="margin-bottom:0;">
@@ -26,11 +26,12 @@
         <table id="table1" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
-					<th>帳號</th>
-					<th>使用者名稱</th>
-					<th>部門</th>
-					<th>資料狀態</th>
-					<th>維護</th>
+                    <th>帳號</th>
+                    <th>使用者名稱</th>
+                    <th>部門</th>
+                    <th>資料狀態</th>
+                    <th>功能</th>
+                    <th width='80px'>維護</th>
                 </tr>
             </thead>
             <tbody></tbody>

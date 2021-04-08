@@ -28,7 +28,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new UserRead().GetPage(dt).ToString(), _Web.AppJson);
+            return Content(new UserRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
@@ -58,7 +58,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetJson(string key)
         {
-            return Content(new UserEdit().GetJson(key).ToString(), _Web.AppJson);
+            return Content(new UserEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
         }
 
     }//class

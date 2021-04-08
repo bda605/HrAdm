@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
-    [XgProgAuth]
+    //[XgProgAuth]
     public class RoleController : Controller
     {
         public ActionResult Read()
@@ -26,7 +26,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new RoleRead().GetPage(dt).ToString(), _Web.AppJson);
+            return Content(new RoleRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
@@ -56,7 +56,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetJson(string key)
         {
-            return Content(new RoleEdit().GetJson(key).ToString(), _Web.AppJson);
+            return Content(new RoleEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
         }
 
     }//class

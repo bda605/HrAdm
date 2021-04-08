@@ -27,7 +27,7 @@ var _ifile = $.extend({}, _ibase, {
      */
     dataAddFile: function (data, fid, serverFid, box) {
         var obj = _obj.get(fid, box);
-        var file = _ifile._getUploadFile(_ifile._elmToFile(obj));
+        var file = _ifile.getUploadFile(_ifile._elmToFile(obj));
         var hasFile = (file != null);
         if (hasFile)
             data.append(serverFid, file);
@@ -76,7 +76,7 @@ var _ifile = $.extend({}, _ibase, {
     },
 
     onDeleteFile: function (btn) {
-        _ifile.setO(_ifile.elmToObj(btn), '');
+        _ifile.setO(_ifile._elmToObj(btn), '');
     },
     //=== event end ===
 
@@ -104,7 +104,7 @@ var _ifile = $.extend({}, _ibase, {
      * return {object} file box object
      */
     _elmToBox: function (elm) {
-        return $(elm).closest('.xi-file');
+        return $(elm).closest('.xi-box');
     },
     //get file object
     _elmToFile: function (elm) {
@@ -135,7 +135,10 @@ var _ifile = $.extend({}, _ibase, {
     },
 
     //border get uploaded file, return null if empty
-    _getUploadFile: function (fileObj) {
+    getUploadFile: function (fileObj) {
+        if (fileObj.length == 0)
+            return null;
+
         var files = fileObj.get(0).files;
         return (files.length > 0) ? files[0] : null;
     },

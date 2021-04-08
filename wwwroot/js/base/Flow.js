@@ -276,7 +276,6 @@ function Flow(boxId, mNode, mLine) {
                 //var node = $(params.el);
                 var pos = $(params.el).position();
                 _form.loadJson(nodeObj, { PosX: pos.left, PosY: pos.top });
-                //this.mNode.setRow(node.data(_fun.Fid), { PosX: pos.left, PosY: pos.top });
             },
         });
 
@@ -907,7 +906,6 @@ function Flow(boxId, mNode, mLine) {
 
         //set new value
         var row = _form.toJson(this.eformNode);
-        //this.mNode.setRow(nodeObj.data(_fun.Fid), row);
 
         //update node display name
         var nodeObj = $(this.nowElm);
@@ -958,7 +956,6 @@ function Flow(boxId, mNode, mLine) {
         //var line = conn.getParameters();    //model
         var line = this.connToLine(conn);
         _form.loadJson(line, row);
-        //this.mLine.setRow(line[_fun.Fid], row);
 
         //change line label
         var prop = this.getLineProp(condStr)

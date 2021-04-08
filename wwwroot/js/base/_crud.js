@@ -32,7 +32,7 @@ var _crud = {
      * checkbox for multiple select
      * param value {string} [1] checkbox value
      * param editable {bool} [true]
-     * //param fid {string} [_icheck.check0Id] data-fid value
+     * //param fid {string} [_icheck.Check0Id] data-fid value
      */
     dtCheck0: function (value, editable) {
         //debugger;
@@ -40,7 +40,7 @@ var _crud = {
             value = 1;
 
         //attr
-        var attr = "data-fid='" + _icheck.check0Id + "'" +
+        var attr = "data-fid='" + _icheck.Check0Id + "'" +
             " data-value='" + value + "'";
         if (editable === false)
             attr += ' readonly';
@@ -58,7 +58,7 @@ var _crud = {
     dtCheck0: function (value, editable, fid) {
         if (editable === undefined)
             editable = true;
-        fid = fid || _icheck.check0Id;
+        fid = fid || _icheck.Check0Id;
         return _icheck.render2(0, fid, value, false, '', editable);
     },
     */
@@ -67,7 +67,7 @@ var _crud = {
     dtRadio1: function (value, editable) {
         if (editable === undefined)
             editable = true;
-        return _iradio.render(_icheck.check0Id, '', false, value, editable);
+        return _iradio.render(_icheck.Check0Id, '', false, value, editable);
     },
 
     /**
@@ -168,7 +168,10 @@ var _crud = {
         _prog.init();   //prog path
     },
 
-    //initial forms(recursive)
+    /**
+     * initial forms(recursive)
+     * param edit {object} EditOne/EditMany object
+     */
     initForm: function (edit) {
         if (edit.eform == null)
             return;

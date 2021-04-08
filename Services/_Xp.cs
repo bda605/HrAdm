@@ -1,16 +1,30 @@
 ﻿using Base.Services;
+using BaseWeb.Services;
 using HrAdm.Tables;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Services
 {
     //project service
     public static class _Xp
     {
-        //public const string MyVer = "20201228f";     //for my.js/css
-        public static string MyVer = _Date.NowSecStr();
-        public const string LibVer = "20201228b";    //for lib.js/css
+        //public const string SiteVer = "20201228f";     //for my.js/css
+        public static string SiteVer = _Date.NowSecStr();
+        public const string LibVer = "20210325";    //for lib.js/css
 
         public static string NoImagePath = _Fun.DirRoot + "/wwwroot/images/noImage.jpg";
+
+        //dir
+        public static string DirTpl = _Fun.DirRoot + "_template/";
+        public static string DirUpload = _Fun.DirRoot + "_upload/";
+        public static string DirLeave = DirUpload + "Leave";
+        public static string DirUserExt = DirUpload + "UserExt";
+        public static string DirUserLicense = DirUpload + "UserLicense";
+        public static string DirCustInput = DirUpload + "CustInput";
+        public static string DirUserImport = DirUpload + "UserImport";
+        //dir cms
+        public static string DirCms = DirUpload + "Cms";
+
         //public static string Locale;
         //public static string LocaleNoDash;
 
@@ -22,21 +36,45 @@ namespace HrAdm.Services
             return new MyContext();
         }
 
-        public static string GetUploadDir()
+        #region get file path
+        public static string PathUserExt(string key)
         {
-            return _Fun.DirRoot + "_upload/";
+            return _File.GetFirstPath(DirUserExt, "PhotoFile_" + key, NoImagePath);
+        }
+        #endregion
+
+        public static string DirCmsType(string cmsType)
+        {
+            return DirCms + cmsType;
         }
 
-        //get upload dir of UserLicence
-        public static string GetDirUserLicence()
+        #region get file content
+        public static FileContentResult FileLeave(string key)
         {
-            return GetUploadDir() + "UserLicence";
+            var path = _File.GetFirstPath(DirLeave, "FileName_" + key, NoImagePath);
+            return _WebFile.EchoImage(path);
         }
 
-        public static string GetDirLeave()
+        public static FileContentResult FileUserExt(string key)
         {
-            return GetUploadDir() + "Leave";
+            return _WebFile.EchoImage(PathUserExt(key));
         }
+        public static FileContentResult FileUserLicense(string key)
+        {
+            var path = _File.GetFirstPath(DirUserLicense, "FileName_" + key, NoImagePath);
+            return _WebFile.EchoImage(path);
+        }
+        public static FileContentResult FileCustInput(string key)
+        {
+            var path = _File.GetFirstPath(DirCustInput, "FldFile_" + key, NoImagePath);
+            return _WebFile.EchoImage(path);
+        }
+        public static FileContentResult FileCmsType(string key, string cmsType)
+        {
+            var path = _File.GetFirstPath(DirCmsType(cmsType), "FileName_" + key, NoImagePath);
+            return _WebFile.EchoImage(path);
+        }
+        #endregion
 
         /*
         //constructor

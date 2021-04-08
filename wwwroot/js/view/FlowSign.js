@@ -44,8 +44,8 @@
 
     //TODO: add your code
     //onclick viewFile, called by XiFile component
-    onViewFile: function (elm) {
-        _edit.viewImage('', '', elm, _itext.get('LeaveId', _me.eform));
+    onViewFile: function (fid, elm) {
+        _edit.viewImage('', fid, elm, _itext.get('LeaveId', _me.eform));
     },
 
     onSubmit: function () {

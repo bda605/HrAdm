@@ -3,7 +3,7 @@
 var _fun = {
 
     //=== constant start(大camel) ===
-    Fid: 'fid',            //data-fid
+    //Fid: 'name',            //data-fid
 
     //for moment.js
     //JsDateFormat: 'YYYY/MM/DD',
@@ -12,11 +12,10 @@ var _fun = {
     //input field error validation, need match server side _Web.cs
     //jsPath: '../Scripts/',      //js path for load
     //errTail: '_err',            //error label 欄位id後面會加上這個字元
-    XdRequired: 'xd-required',
+    //XdRequired: 'xd-required',
 
-    //??
-    errCls: 'xg-error',           //欄位驗証錯誤時會加上這個 class name
-    errLabCls: 'xg-error-label',     //error label 的 class name
+    //errCls: 'xg-error',           //欄位驗証錯誤時會加上這個 class name
+    //errLabCls: 'xg-error-label',     //error label 的 class name
     //errBoxCls: 'xg-errorbox', //??_box欄位驗証錯誤時會加上這個 class name
 
     //constant for mapping to backend
@@ -29,20 +28,29 @@ var _fun = {
 
 
     //variables
-    locale: 'zh-TW',
+    locale: 'zh-TW',    //now locale, _Layout.cshmlt will set
     maxFileSize: 50971520,  //upload file limit(50M)
 
     //mid variables
-    data: {},
+    //data: {},
 
     //variables ??
-    isCheck: true,
+    //isCheck: true,
 
     //後端必須實作 Fun/Test()
     onHello: function () {
         _ajax.getStr('../Fun/Hello', null, function (msg) {
             alert('OK');
         });
+    },
+
+    /**
+     * get data-fid of object
+     * param obj {object}
+     * return fid string
+     */
+    getFid: function (obj) {
+        return obj.data('fid');
     },
 
     /**
@@ -62,8 +70,13 @@ var _fun = {
     },
     */
 
-    default: function (val, val0) {
-        return (val == null) ? val0 : val;
+    /**
+     * get default value if need
+     * param val {object} checked value
+     * param defVal {object} default value to return if need
+     */
+    default: function (val, defVal) {
+        return (val == null) ? defVal : val;
     },
 
     hasValue: function (obj) {
@@ -79,9 +92,9 @@ var _fun = {
         });
     },
 
+    //#region remark code
     /*
       ??
-    */
     xgTextBoxValid: function (obj, Regex) {
         var parent = obj.parentNode;
         if (Regex == "") {
@@ -104,9 +117,7 @@ var _fun = {
         }
     },
 
-    /*
      ??
-    */
     xgCheckfn: function () {
         _fun.isCheck = true;
         var Inputs = document.getElementsByClassName('xg-textbox');
@@ -126,13 +137,12 @@ var _fun = {
         return _fun.isCheck;
     },
 
-    /**
+    //
      multiple checkbox onclick event
      params
        me : this component
        fid: field id 
        value: field value
-     */
     //onClickCheckMulti: function (me, fid, value, separator, onClickFn) {
     zz_onChangeMultiCheck: function (me, fid) {
 
@@ -164,7 +174,7 @@ var _fun = {
             onClickFn(me, $(me).val());
 
     },
-
+    */
  
     /**
      * 傳回錯誤訊息(多國語)
@@ -193,5 +203,6 @@ var _fun = {
     //    var field = $('#' + fid);
     //    return (field.length == 0) ? '' : field.val().join(separator);
     //},
+    //#endregion
 
 };//class
