@@ -13,8 +13,8 @@ namespace HrAdm.Controllers
         public ActionResult Read()
         {
 			//for edit view
-			ViewBag.Radios = _Code.GetRadios();
-			ViewBag.Selects = _Code.GetSelects();
+			ViewBag.Radios = _XpCode.GetRadios();
+			ViewBag.Selects = _XpCode.GetSelects();
             return View();
         }
 
@@ -44,12 +44,14 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
+        //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Create(string json, IFormFile t0_FldFile)
         {
             return Json(await new CustInputEdit().CreateAsnyc(_Json.StrToJson(json), t0_FldFile));
         }
 
         [HttpPost]
+        //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FldFile)
         {
             return Json(await new CustInputEdit().UpdateAsnyc(key, _Json.StrToJson(json), t0_FldFile));

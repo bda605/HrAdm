@@ -14,15 +14,10 @@ namespace HrAdm.Controllers
         public ActionResult Read()
         {
 			//for read view
-			ViewBag.LeaveTypes = _Code.GetLeaveTypes();
-			ViewBag.SignStatuses = _Code.GetSignStatuses();
+			ViewBag.LeaveTypes = _XpCode.GetLeaveTypes();
+			ViewBag.SignStatuses = _XpCode.GetSignStatuses();
 			//for edit view
-			ViewBag.Users = _Code.GetUsers();
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
+			ViewBag.Users = _XpCode.GetUsers();
             return View();
         }
 

@@ -627,25 +627,48 @@ var _crud = {
         //debugger;
         $.each(obj, function (key, value) {
             if (value === null) {
-                //null才需要清除, 空白不必 !!
+                //delete only null, empty is not !!
                 delete obj[key];
             } else if (_json.isKeyValue(value)) {
                 _crud._removeNull(level+1, value);
             } else if ($.isArray(value)) {
+                //check
+                var len = value.length;
+                if (len == 0) {
+                    delete obj[key];
+                    return; //continue
+                }
+
+                //case of string array
+                if (!_json.isKeyValue(value[0])) {
+                    var isEmpty = true;
+                    for (var i = 0; i < len; i++) {
+                        if (!_str.isEmpty(value[i])) {
+                            isEmpty = false;
+                            break;
+                        }
+                    }
+                    if (isEmpty)
+                        delete obj[key];
+                    return; //continue
+                }
+
+                //case of json array
                 $.each(value, function (k, v) {
                     _crud._removeNull(level + 1, v);
 
                     if (_json.isEmpty(v))
                         v = null;
                 });
+
+                //check json and remove if need
                 var isEmpty = true;
-                var len = value.length;
-                //從陣列後面開始處理
+                //from end
                 for (var i=len - 1; i>=0; i--) {
                     if (!_json.isEmpty(value[i])) {
                         isEmpty = false;
                     } else if (isEmpty) {
-                        //刪除陣列元素
+                        //delete array element
                         delete value[i];
                     } else {
                         value[i] = null;
@@ -653,11 +676,6 @@ var _crud = {
                 }
                 if (isEmpty)
                     delete obj[key];
-            /*
-            } else {
-                if (key.substr(0, 2) === '__')
-                    delete obj[key];
-            */
             }
         });
     },

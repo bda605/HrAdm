@@ -15,11 +15,11 @@ select l.*,
     AgentName=u2.Name,
     LeaveName=c.Name,
     SignStatusName=c2.Name
-from Leave l
-join [User] u on l.UserId=u.Id
-join [User] u2 on l.AgentId=u2.Id
-join [Code] c on c.Type='LeaveType' and l.LeaveType=c.Value
-join [Code] c2 on c2.Type='FlowStatus' and l.FlowStatus=c2.Value
+from dbo.Leave l
+join dbo.[User] u on l.UserId=u.Id
+join dbo.[User] u2 on l.AgentId=u2.Id
+join dbo.XpCode c on c.Type='LeaveType' and l.LeaveType=c.Value
+join dbo.XpCode c2 on c2.Type='FlowStatus' and l.FlowStatus=c2.Value
 order by l.Id
 ",
             Items = new [] {

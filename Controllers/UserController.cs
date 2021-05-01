@@ -1,8 +1,6 @@
 ﻿using Base.Enums;
 using Base.Models;
 using Base.Services;
-using BaseWeb.Services;
-using BaseWeb.Attributes;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,14 +12,9 @@ namespace HrAdm.Controllers
         public ActionResult Read()
         {
 			//for read view
-			ViewBag.Depts = _Code.GetDepts();
+			ViewBag.Depts = _XpCode.GetDepts();
 			//for edit view
-			ViewBag.Roles = _Code.GetRoles();
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
+			ViewBag.Roles = _XpCode.GetRoles();
             return View();
         }
 

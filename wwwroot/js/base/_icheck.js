@@ -19,7 +19,7 @@ var _icheck = $.extend({}, _ibase, {
      */
     setO: function (obj, value) {
         //obj.val(value);
-        var status = (value == '1' || value == 'True' || value == true);
+        var status = !(value == null || value == '0' || value == 'False' || value == false);
         obj.prop('checked', status);
     },
 

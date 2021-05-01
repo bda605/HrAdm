@@ -1,0 +1,28 @@
+﻿var _me = {
+
+    init: function () {        
+        //datatable config
+        var config = {
+            dom: _crud.dtDom,
+            columns: [
+                { data: 'TableName' },
+                { data: 'ColName' },
+                { data: 'RowId' },
+                { data: 'Act' },
+                { data: 'OldValue' },
+                { data: 'NewValue' },
+                { data: 'Created' },
+            ],
+            columnDefs: [
+                _crud.dtColConfig,
+				{ targets: [6], render: function (data, type, full, meta) {
+                    return _date.jsToUiDt(data);
+                }},
+            ],
+        };
+
+        //initial
+        _crud.init(config);
+    },
+
+}; //class

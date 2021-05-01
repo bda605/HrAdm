@@ -34,7 +34,7 @@ namespace HrAdm.Services
         private List<string> SaveImportRows(List<UserImportVo> okRows)
         {
             var db = _Xp.GetDb();
-            var deptIds = db.Dept.Select(a => a.Id).ToList();
+            var deptIds = db.XpDept.Select(a => a.Id).ToList();
             var results = new List<string>();
             foreach (var row in okRows)
             {

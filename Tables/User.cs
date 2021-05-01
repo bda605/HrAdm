@@ -12,6 +12,7 @@ namespace HrAdm.Tables
         public string Account { get; set; }
         public string Pwd { get; set; }
         public string DeptId { get; set; }
+        public string PhotoFile { get; set; }
         public bool Status { get; set; }
     }
 }

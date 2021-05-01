@@ -23,7 +23,7 @@ select l.*,
     CreatorName=u.Name,
     ReviserName=u2.Name
 from dbo.Leave l
-join dbo.Code c on c.Type='FlowStatus' and l.FlowStatus=c.Value
+join dbo.XpCode c on c.Type='FlowStatus' and l.FlowStatus=c.Value
 join dbo.[User] u on l.Creator=u.Id
 left join dbo.[User] u2 on l.Reviser=u2.Id
 where l.Id='{0}'

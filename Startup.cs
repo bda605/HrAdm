@@ -27,13 +27,13 @@ namespace HrAdm
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //1.use newtonSoft & pascal case json
+            //1.use pascal for newtonSoft
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.UseMemberCasing();
             });
 
-            //2.use pascal case json
+            //2.use pascal for MVC
             services.AddControllersWithViews().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -57,7 +57,11 @@ namespace HrAdm
             services.AddSingleton<IBaseResService, BaseResService>();
             services.AddScoped<IBaseUserService, MyBaseUserService>();
 
-            //7.session1(memory cache)
+            //7.ado.net for mssql
+            services.AddTransient<DbConnection, SqlConnection>();
+            services.AddTransient<DbCommand, SqlCommand>();
+
+            //8.session (memory cache)
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -65,10 +69,6 @@ namespace HrAdm
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-
-            //8.ado.net for mssql
-            services.AddTransient<DbConnection, SqlConnection>();
-            services.AddTransient<DbCommand, SqlCommand>();
 
             //9.initial _Fun by mssql
             IServiceProvider di = services.BuildServiceProvider();
@@ -78,8 +78,11 @@ namespace HrAdm
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //set global
+            _Fun.IsDebug = env.IsDevelopment();
+
             if (env.IsDevelopment())
-            {
+            {                
                 app.UseDeveloperExceptionPage();
             }
             else

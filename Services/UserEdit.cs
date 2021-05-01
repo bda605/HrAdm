@@ -27,7 +27,7 @@ namespace HrAdm.Services
                 {
                     new EditDto
                     {
-                        Table = "dbo.[UserRole]",
+                        Table = "dbo.XpUserRole",
                         PkeyFid = "Id",
                         FkeyFid = "UserId",
                         Col4 = null,

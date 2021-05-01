@@ -62,10 +62,10 @@ namespace HrAdm.Services
 
             var langLevel = "LangLevel";
             var userLangs = (from a in db.UserLang
-                             join c1 in db.Code on new { Type = langLevel, Value = a.ListenLevel } equals new { c1.Type, c1.Value }
-                             join c2 in db.Code on new { Type = langLevel, Value = a.SpeakLevel } equals new { c2.Type, c2.Value }
-                             join c3 in db.Code on new { Type = langLevel, Value = a.ReadLevel } equals new { c3.Type, c3.Value }
-                             join c4 in db.Code on new { Type = langLevel, Value = a.WriteLevel } equals new { c4.Type, c4.Value }
+                             join c1 in db.XpCode on new { Type = langLevel, Value = a.ListenLevel } equals new { c1.Type, c1.Value }
+                             join c2 in db.XpCode on new { Type = langLevel, Value = a.SpeakLevel } equals new { c2.Type, c2.Value }
+                             join c3 in db.XpCode on new { Type = langLevel, Value = a.ReadLevel } equals new { c3.Type, c3.Value }
+                             join c4 in db.XpCode on new { Type = langLevel, Value = a.WriteLevel } equals new { c4.Type, c4.Value }
                              where a.UserId == userId
                              orderby a.Sort
                              select new

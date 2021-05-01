@@ -10,9 +10,9 @@ namespace HrAdm.Services
         public List<SignRowDto> GetSignRows(string id)
         {
             var db = _Xp.GetDb();
-            return (from s in db.FlowSign
-                    join f in db.Flow on s.FlowId equals f.Id
-                    join c in db.Code on new { Type = "SignStatus", Value = s.SignStatus } 
+            return (from s in db.XpFlowSign
+                    join f in db.XpFlow on s.FlowId equals f.Id
+                    join c in db.XpCode on new { Type = "SignStatus", Value = s.SignStatus } 
                         equals new { c.Type, c.Value }
                     where (f.Code == "Leave" && s.SourceId == id)
                     orderby s.FlowLevel

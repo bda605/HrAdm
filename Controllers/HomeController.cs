@@ -4,7 +4,6 @@ using BaseWeb.Attributes;
 using BaseWeb.Extensions;
 using BaseWeb.Services;
 using HrAdm.Models;
-using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -26,7 +25,7 @@ namespace HrAdmin.Controllers
         [HttpPost]
         public ActionResult Login(LoginVo vo)
         {
-            //reset msg
+            //reset UI msg
             vo.AccountMsg = "";
             vo.PwdMsg = "";
 
@@ -47,10 +46,11 @@ namespace HrAdmin.Controllers
 select u.Id as UserId, u.Name as UserName, u.Pwd,
     u.DeptId, d.Name as DeptName
 from dbo.[User] u
-join dbo.[Dept] d on u.DeptId=d.Id
+join dbo.XpDept d on u.DeptId=d.Id
 where u.Account=@Account
 ";
             var row = _Db.GetJson(sql, new List<object>() { "Account", vo.Account });
+            //TODO: encode if need
             //if (row == null || row["Pwd"].ToString() != _Str.Md5(vo.Pwd))
             if (row == null || row["Pwd"].ToString() != vo.Pwd)
             {
@@ -62,7 +62,7 @@ where u.Account=@Account
             #region set base user info
             var userId = row["UserId"].ToString();
             //var authType = AuthTypeEnum.Ctrl;
-            var authList = _Prog.GetAuthList(vo.Account);
+            var authList = _Prog.GetAuthList(userId);
             var userInfo = new BaseUserDto()
             {
                 UserId = userId,
@@ -96,14 +96,12 @@ where u.Account=@Account
             return Redirect("/Home/Index");
         }
 
-        //??
+        /*
         public string SetLocale(string locale)
         {
             _Locale.SetCulture(locale);
-            //_WebFun.SetLocale(locale);
             return locale;
-            //return View();
         }
-
+        */
     }
 }

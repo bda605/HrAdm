@@ -952,25 +952,48 @@ var _crud = {
         //debugger;
         $.each(obj, function (key, value) {
             if (value === null) {
-                //null才需要清除, 空白不必 !!
+                //delete only null, empty is not !!
                 delete obj[key];
             } else if (_json.isKeyValue(value)) {
                 _crud._removeNull(level+1, value);
             } else if ($.isArray(value)) {
+                //check
+                var len = value.length;
+                if (len == 0) {
+                    delete obj[key];
+                    return; //continue
+                }
+
+                //case of string array
+                if (!_json.isKeyValue(value[0])) {
+                    var isEmpty = true;
+                    for (var i = 0; i < len; i++) {
+                        if (!_str.isEmpty(value[i])) {
+                            isEmpty = false;
+                            break;
+                        }
+                    }
+                    if (isEmpty)
+                        delete obj[key];
+                    return; //continue
+                }
+
+                //case of json array
                 $.each(value, function (k, v) {
                     _crud._removeNull(level + 1, v);
 
                     if (_json.isEmpty(v))
                         v = null;
                 });
+
+                //check json and remove if need
                 var isEmpty = true;
-                var len = value.length;
-                //從陣列後面開始處理
+                //from end
                 for (var i=len - 1; i>=0; i--) {
                     if (!_json.isEmpty(value[i])) {
                         isEmpty = false;
                     } else if (isEmpty) {
-                        //刪除陣列元素
+                        //delete array element
                         delete value[i];
                     } else {
                         value[i] = null;
@@ -978,11 +1001,6 @@ var _crud = {
                 }
                 if (isEmpty)
                     delete obj[key];
-            /*
-            } else {
-                if (key.substr(0, 2) === '__')
-                    delete obj[key];
-            */
             }
         });
     },
@@ -1208,6 +1226,17 @@ var _date = {
     },
 
     /**
+     * timeStamp to ui datetime string
+     * param ts {string} timeStamp value, unit is second, convert to mini second
+     * return {string}
+     */
+    tsToUiDt: function (ts) {
+        return (ts == '')
+            ? ''
+            : moment(parseInt(ts) * 1000).format(_BR.UiDtFormat);
+    },
+
+    /**
      * get hour string from datetime string
      * param dts {string} datetime string
      * return {string}
@@ -1418,6 +1447,7 @@ var _edit = {
      * param key {string}
      */
     isNewKey: function (key) {
+        key = key.toString();   //convert to string for checking
         return (key.length <= 3);
     },
 
@@ -2203,7 +2233,7 @@ var _icheck = $.extend({}, _ibase, {
      */
     setO: function (obj, value) {
         //obj.val(value);
-        var status = (value == '1' || value == 'True' || value == true);
+        var status = !(value == null || value == '0' || value == 'False' || value == false);
         obj.prop('checked', status);
     },
 
@@ -4592,18 +4622,18 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
  * notice:
  *   1.set data-fkeyFid when save
  *   
- * param kid {string} pkey field id(single key)
- * param eformId {string} edit form id
+ * param kid {string} (required) pkey field id(single key)
+ * param eformId {string} (optional) edit form id
  *   if not empty, system will load UI & prepare save rows
  *     and rows container tag is fixed to 'tbody'
  *   if empty, you could write below custom functions:
- *     1.void fnLoadJson(json): necessary
+ *     1.void fnLoadJson(json): necessary, show form
  *     2.json fnGetUpdJson(upKey): necessary
- *     3.bool fnValid(): optional
- * param tplRowId {string} row template id, required
- * param sortFid {string} (optional) sort fid for sorting function
- * param rowFilter {string} (optional 'tr') filter for find row object
+ *     3.bool fnValid(): (optional) validate check
+ * param tplRowId {string} (optional) row template id for load row & render row.
+ * param rowFilter {string} (optional) filter for find row object
  *   1.inside element -> row(onDeleteRow), 2.rowsBox -> row(getUpdRows)
+ * param sortFid {string} (optional) sort fid for sorting function
  * return {EditMany}
  */
 function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
@@ -4617,14 +4647,17 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
         this.DataFkeyFid = '_fkeyfid';  //data field for fkey fid
 
         this.kid = kid;
-        this.tplRow = $('#' + tplRowId).html();
-        this.sortFid = sortFid;
+        this.hasTplRow = !_str.isEmpty(tplRowId);
         this.hasRowFilter = !_str.isEmpty(rowFilter);
         this.rowFilter = rowFilter;
+        this.sortFid = sortFid;
 
-        var rowObj = $(this.tplRow);
-        _edit.setFidTypeVars(this, rowObj);
-        _edit.setFileVars(this, rowObj);
+        if (this.hasTplRow) {
+            this.tplRow = $('#' + tplRowId).html();
+            var rowObj = $(this.tplRow);
+            _edit.setFidTypeVars(this, rowObj);
+            _edit.setFileVars(this, rowObj);
+        }
 
         //has edit form or not
         this.hasEform = !_str.isEmpty(eformId);
@@ -4658,6 +4691,10 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 
         //reset variables
         this.newIndex = 0;
+        this.resetDeleted();
+    };
+
+    this.resetDeleted = function () {
         this.deletedRows = [];
     };
 
@@ -4677,12 +4714,79 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
     };
 
     /**
+     * load json rows into UI by userRole mode(urm)
+     * param json {json} 
+     */
+    this.urmLoadJson = function (json, rowsBox, fids) {
+        //reset form first
+        var objs = rowsBox.find(':checkbox');
+        _icheck.setO(objs, 0);
+        objs.data('key', '');
+
+        //check
+        var rows = _crud.getJsonRows(json);
+        if (rows == null)
+            return;
+
+        //set checked sign & old value
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var obj = rowsBox.find(_fun.fidFilter(row[fids[1]]));   //fid map to dataFid
+            _icheck.setO(obj, 1);
+            obj.data('key', row[fids[0]]);
+        }
+    };
+
+    /**
+     * get upd json by UserRole mode(urm)
+     * param upKey {string} up key
+     * param rowsBox {object} rows box
+     * param keyFid {string} key fid, ex: UserId
+     * param dataFid {string} data fid, ex: RoleId
+     * return {json} modified columns only
+     */
+    this.urmGetUpdJson = function (upKey, rowsBox, fids) {
+        var json = {};
+        var rows = [];
+        var me = this;
+        var newIdx = 0;
+        this.resetDeleted();    //reset first
+        rowsBox.find(':checkbox').each(function () {
+            var obj = $(this);
+            var key = obj.data('key');
+            if (_str.isEmpty(key)) {
+                if (_icheck.checkedO(obj)) {
+                    //new row
+                    var row = {};
+                    row[fids[0]] = ++newIdx;
+                    row[fids[1]] = _icheck.getO(obj);
+                    me.rowSetFkey(row, upKey);  //set foreign key value
+                    rows[rows.length] = row;
+                }
+            } else {
+                if (!_icheck.checkedO(obj)) {
+                    //delete row
+                    me.deleteRow(key);
+                }
+            }
+        });
+
+        if (rows.length > 0)
+            json[_crud.Rows] = rows;
+        json[_crud.Deletes] = this.getDeletedStr();
+        return json;
+    },
+
+    /**
      * load row by row box(container), also set old value
      * param rowBox {object}
      * param row {json}
      * param index {int}
      */
     this.loadRow = function (rowBox, row, index) {
+        if (!this.checkTplRow())
+            return;
+
         var form = $(Mustache.render(this.tplRow, { Index: index }));
         _form.loadJson(form, row);   //use name field
 
@@ -4702,6 +4806,9 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
      * param rows {jsons}
      */ 
     this.loadRows = function (rowsBox, rows, reset) {
+        if (!this.checkTplRow())
+            return;
+
         //reset if need
         if (reset === undefined)
             reset = true;
@@ -4776,6 +4883,14 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
         return false;
     };
 
+    this.checkTplRow = function () {
+        if (this.hasTplRow)
+            return true;
+
+        _log.error('EditMany.js this.tplRow is empty.');
+        return false;
+    };
+
     /**
      * get row box by inside element/object
      * param elm {element/object}
@@ -4808,7 +4923,7 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
         rowsBox = this.getRowsBox(rowsBox);
         var json = {};
         json[_crud.Rows] = this.getUpdRows(upKey, rowsBox);
-        json[_crud.Deletes] = this.getDeletedRows();
+        json[_crud.Deletes] = this.getDeletedStr();
         return json;
     };
 
@@ -4888,9 +5003,9 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 
     /** 
      * get deleted rows(key array "string" !!)
-     * return empty if empty.
+     * return {string} null for empty.
      */ 
-    this.getDeletedRows = function () {
+    this.getDeletedStr = function () {
         return (this.deletedRows.length === 0)
             ? null : this.deletedRows.join();
     };    
@@ -4930,12 +5045,12 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
      * param rowBox {object} (optional) row box object
      */ 
     this.deleteRow = function (key, rowBox) {
-        var rows = this.deletedRows;
+        var deletes = this.deletedRows;
         var found = false;
-        var rowLen = rows.length;
+        var rowLen = deletes.length;
         for (var i = 0; i < rowLen; i++) {
             //do nothing if existed
-            if (rows[i][this.kid] === key) {
+            if (deletes[i][this.kid] === key) {
                 found = true;
                 break;
             }
@@ -4943,7 +5058,7 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 
         //add deleted[]
         if (!found)
-            rows[rowLen] = key;
+            deletes[rowLen] = key;
 
         //remove UI row if need
         if (_obj.isExist(rowBox))
@@ -4968,6 +5083,9 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
      * return {object} row object
      */ 
     this.renderRow = function (rowsBox, row) {
+        if (!this.checkTplRow())
+            return;
+
         rowsBox = this.getRowsBox(rowsBox);
         var obj = $(Mustache.render(this.tplRow, row));
         _form.loadJson(obj, row);
@@ -5013,22 +5131,22 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
      * param row {json}
      * param fkeyFid {string}
      */
-    this.rowSetFkeyFid = function (row, fkeyFid) {
+    this.rowSetFkey = function (row, fkey) {
         if (row != null && this.isNewRow(row))
-            row[this.DataFkeyFid] = fkeyFid;
+            row[this.DataFkeyFid] = fkey;
     };
 
     /**
      * rows set fkey value
      * param rows {jsons}
-     * param fkeyFid {string}
+     * param fkeyFid {string} fkey value
      */
-    this.rowsSetFkeyFid = function (rows, fkeyFid) {
+    this.rowsSetFkey = function (rows, fkey) {
         if (rows != null) {
             for (var i = 0; i < rows.length; i++) {
                 var row = rows[i];
                 if (row != null && this.isNewRow(row))
-                    row[this.DataFkeyFid] = fkeyFid;
+                    row[this.DataFkeyFid] = fkey;
             }
         }
     };

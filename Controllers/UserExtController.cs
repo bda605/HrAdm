@@ -15,18 +15,11 @@ namespace HrAdm.Controllers
         public ActionResult Read()
         {
 			//for read view
-			ViewBag.Depts = _Code.GetDepts();
+			ViewBag.Depts = _XpCode.GetDepts();
 			//for edit view
-			ViewBag.LangLevels = _Code.GetLangLevels();
+			ViewBag.LangLevels = _XpCode.GetLangLevels();
             return View();
         }
-
-        /*
-        public ActionResult Edit()
-        {
-            return View();
-        }
-        */
 
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
@@ -35,17 +28,20 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
+        //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Create(string json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
             return Json(await new UserExtEdit().CreateAsnyc(_Json.StrToJson(json), t0_PhotoFile, t03_FileName));
         }
 
         [HttpPost]
+        //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
             return Json(await new UserExtEdit().UpdateAsnyc(key, _Json.StrToJson(json), t0_PhotoFile, t03_FileName));
         }
 
+        //TODO: add your code
         //get file/image
         public FileContentResult GetFile(string table, string fid, string key)
         {
