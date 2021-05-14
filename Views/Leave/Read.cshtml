@@ -1,6 +1,5 @@
-﻿@{ 
-	var cols = _Fun.DefHCols;
-}
+﻿@inject IHtmlLocalizer<HrAdm.R0> R0
+@inject IViewLocalizer R
 
 <script src="~/js/view/Leave.js"></script>
 <script type="text/javascript">
@@ -9,12 +8,12 @@
     });
 </script>
 
-@await Component.InvokeAsync("XgProgPath", new { names = new string[] { "請假作業" } })
+@await Component.InvokeAsync("XgProgPath", new { names = new string[] { R0["MenuLeave"].Value } })
 <div class="xp-prog">
     <div id="divRead">
-		<form id='rform' class='xg-form' style="margin-bottom:0;">
+        <form id='rform' class='xg-form'>
             <div class="row">
-                <div class="col-md-2 xg-label">開始時間</div>
+                <div class="col-md-2 xg-label">@R["StartTime"]</div>
                 <div class="col-md-10 xg-input">
                     @await Component.InvokeAsync("XiDate", new { fid = "StartTime", inRow = true, extClass = "xg-inline" })
                     <span>～</span>
@@ -22,25 +21,25 @@
                     @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
                 </div>
             </div>
-			@await Component.InvokeAsync("XiSelect", new { title = "假別", fid = "LeaveType", rows = (List<IdStrDto>)ViewBag.LeaveTypes })
-			@await Component.InvokeAsync("XiSelect", new { title = "流程狀態", fid = "FlowStatus", rows = (List<IdStrDto>)ViewBag.SignStatuses })
+            @await Component.InvokeAsync("XiSelect", new { title = R["LeaveType"].Value, fid = "LeaveType", rows = (List<IdStrDto>)ViewBag.LeaveTypes })
+            @await Component.InvokeAsync("XiSelect", new { title = R["FlowStatus"].Value, fid = "FlowStatus", rows = (List<IdStrDto>)ViewBag.SignStatuses })
         </form>
 
-		<div class='xg-btns-box'>
-			@await Component.InvokeAsync("XgCreate")
+        <div class='xg-btns-box'>
+            @await Component.InvokeAsync("XgCreate")
         </div>
         <table id="table1" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
-                    <th>請假人</th>
-                    <th>代理人</th>
-                    <th>假別</th>
-                    <th>開始時間</th>
-                    <th>結束時間</th>
-                    <th>請假時數</th>
-                    <th>流程簽核狀態</th>
-                    <th>建檔日期</th>
-                    <th>維護</th>
+                    <th>@R["Asker"]</th>
+                    <th>@R["Agent"]</th>
+                    <th>@R["LeaveType"]</th>
+                    <th>@R["StartTime"]</th>
+                    <th>@R["EndTime"]</th>
+                    <th>@R["Hours"]</th>
+                    <th>@R["FlowStatus"]</th>
+                    <th>@R0["Created"]</th>
+                    <th>@R0["Crud"]</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -48,6 +47,31 @@
     </div>
 
     <div id="divEdit" class="xg-hide">
-        <partial name="Edit" />
+        <form id='eform' class='xg-form'>
+            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
+            @await Component.InvokeAsync("XiSelect", new { title = R["Asker"].Value, fid = "UserId", rows = (List<IdStrDto>)ViewBag.Users, required = true })
+            @await Component.InvokeAsync("XiSelect", new { title = R["Agent"].Value, fid = "AgentId", rows = (List<IdStrDto>)ViewBag.Users, required = true })
+            @await Component.InvokeAsync("XiSelect", new { title = R["LeaveType"].Value, fid = "LeaveType", rows = (List<IdStrDto>)ViewBag.LeaveTypes, required = true })
+            @await Component.InvokeAsync("XiDt", new { title = R["StartTime"].Value, fid = "StartTime", required = true, cols = "2,8" })
+            @await Component.InvokeAsync("XiDt", new { title = R["EndTime"].Value, fid = "EndTime", required = true, cols = "2,8" })
+            @await Component.InvokeAsync("XiNum", new { title = R["Hours"].Value, fid = "Hours", required = true, cols = "2,1" })
+            @await Component.InvokeAsync("XiFile", new { title = R0["UpdFile"].Value, fid = "FileName" })
+            @await Component.InvokeAsync("XiRead", new { title = R["FlowStatus"].Value, fid = "FlowStatusName" })
+            @*await Component.InvokeAsync("XiCheck", new { title = R0["Status"].Value, fid = "Status", label = R0["Active"].Value })*@
+            <div class="row">
+                @await Component.InvokeAsync("XiRead", new { title = R0["Creator"].Value, fid = "CreatorName", inRow = true, cols = "2,3" })
+                @await Component.InvokeAsync("XiRead", new { title = R0["Reviser"].Value, fid = "ReviserName", inRow = true, cols = "2,3" })
+            </div>
+            <div class="row">
+                @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value, fid = "Created", format = BrFormatEstr.Dt, inRow = true, cols = "2,3" })
+                @await Component.InvokeAsync("XiRead", new { title = R0["Revised"].Value, fid = "Revised", format = BrFormatEstr.Dt, inRow = true, cols = "2,3" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 xg-label">@R["SignRows"]</div>
+                <div class="col-md-8 xg-input" id="divSignRows"></div>
+            </div>
+        </form>
+        @await Component.InvokeAsync("XgSaveBack")
     </div>
 </div>

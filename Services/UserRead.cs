@@ -12,8 +12,8 @@ namespace HrAdm.Services
             ReadSql = @"
 select u.Id, u.Account, u.Name, u.Status,
    d.Name as DeptName
-from dbo.dbo.[User] u
-join dbo.XpDept d on u.DeptId=d.Id
+from dbo.[User] u
+join dbo.Dept d on u.DeptId=d.Id
 order by u.Name
 ",
             Items = new [] {

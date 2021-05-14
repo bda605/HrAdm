@@ -46,7 +46,7 @@ namespace HrAdmin.Controllers
 select u.Id as UserId, u.Name as UserName, u.Pwd,
     u.DeptId, d.Name as DeptName
 from dbo.[User] u
-join dbo.XpDept d on u.DeptId=d.Id
+join dbo.Dept d on u.DeptId=d.Id
 where u.Account=@Account
 ";
             var row = _Db.GetJson(sql, new List<object>() { "Account", vo.Account });
@@ -62,7 +62,7 @@ where u.Account=@Account
             #region set base user info
             var userId = row["UserId"].ToString();
             //var authType = AuthTypeEnum.Ctrl;
-            var authList = _Prog.GetAuthList(userId);
+            var authList = _XpProg.GetAuthList(userId);
             var userInfo = new BaseUserDto()
             {
                 UserId = userId,
@@ -70,7 +70,7 @@ where u.Account=@Account
                 DeptId = row["DeptId"].ToString(),
                 DeptName = row["DeptName"].ToString(),
                 Locale = _Fun.Config.Locale,
-                ProgAuthStrs = _Prog.GetAuthStrs(authList),
+                ProgAuthStrs = _XpProg.GetAuthStrs(authList),
                 IsLogin = true,
             };
             #endregion

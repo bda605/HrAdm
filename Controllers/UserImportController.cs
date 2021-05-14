@@ -11,7 +11,7 @@ namespace HrAdm.Controllers
         //constructor
         public UserImportController()
         {
-            ProgName = "匯入用戶資料";
+            //ProgName = "匯入用戶資料";
             ImportType = ImportTypeEstr.User;
             PathTpl = _Xp.DirTpl + "/UserImport.xlsx";
             DirUpload = _Xp.DirUserImport;

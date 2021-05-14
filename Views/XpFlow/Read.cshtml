@@ -1,6 +1,8 @@
-﻿@using Base.Services;
+﻿@inject IHtmlLocalizer<HrAdm.R0> R0
+@inject IViewLocalizer R
+
 @{
-    var br = _Fun.GetBaseRes();
+    var br = _Locale.GetBaseRes();
     var cols = "4,6";
 }
 
@@ -90,7 +92,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        @await Component.InvokeAsync("XgProgPath", new { names = new string[] { "流程維護" } })
+        @await Component.InvokeAsync("XgProgPath", new { names = new string[] { R0["MenuXpFlow"].Value } })
     </div>
     <div class="col-md-6" id="divEditTbar" style="padding-top: 6px; display:none">
         @await Component.InvokeAsync("XgSaveBack", new { align = "right" })
@@ -100,9 +102,9 @@
 <div class="xp-prog">
     <!-- read form -->
     <div id="divRead">
-        <form id='rform' class='xg-form' style="margin-bottom:0;">
+        <form id='rform' class='xg-form'>
             <div class="row">
-                @await Component.InvokeAsync("XiText", new { title = "流程名稱", fid = "Name", maxLen = 30, inRow = true })
+                @await Component.InvokeAsync("XiText", new { title = R["FlowName"].Value, fid = "Name", maxLen = 30, inRow = true })
                 @await Component.InvokeAsync("XgFindTbar")
             </div>
         </form>
@@ -113,10 +115,10 @@
         <table id="table1" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
-                    <th>流程代碼</th>
-                    <th>流程名稱</th>
-                    <th>資料狀態</th>
-                    <th>維護</th>
+                    <th>@R["FlowCode"]</th>
+                    <th>@R["FlowName"]</th>
+                    <th>@R0["Status"]</th>
+                    <th>@R0["Crud"]</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -127,14 +129,17 @@
     <div id="divEdit" class="xg-hide jtk-surface jtk-surface-nopan">
         <form id='eform' class='xg-form'>
             @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-            @await Component.InvokeAsync("XiText", new { fid = "Code", maxLen = 20, required = true, extClass = "xu-text", inputTip = "流程代碼" })
-            @await Component.InvokeAsync("XiText", new { fid = "Name", maxLen = 30, required = true, extClass = "xu-text", inputTip = "流程名稱" })
+            @await Component.InvokeAsync("XiText", new { fid = "Code", maxLen = 20, required = true, extClass = "xu-text", inputTip = R["FlowCode"].Value })
+            @await Component.InvokeAsync("XiText", new { fid = "Name", maxLen = 30, required = true, extClass = "xu-text", inputTip = R["FlowName"].Value })
 
-            <div class="btn-group-vertical" role="group" style="margin-left: 5px;" aria-label="button group vertical">
-                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddStartNode()" title="New Start Node">Start</button>
-                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddNormalNode()" title="New Node">Node</button>
-                @*<button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddAutoNode()" title="New Auto Node">Auto</button>*@
-                <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddEndNode()" title="New End Node">End</button>
+            <!-- add outer div for validate msg layout -->
+            <div>
+                <div class="btn-group-vertical" role="group" style="margin-left: 5px;" aria-label="button group vertical">
+                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddStartNode()" title='@R["TipStartNode"]'>@R["StartNode"]</button>
+                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddNormalNode()" title='@R["TipNode"]'>@R["Node"]</button>
+                    @*<button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddAutoNode()" title="New Auto Node">Auto</button>*@
+                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddEndNode()" title='@R["TipEndNode"]'>@R["EndNode"]</button>
+                </div>
             </div>
         </form>
     </div>
@@ -186,17 +191,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">Node Property</div>
+                <div class="modal-title">@R["NodeProp"]</div>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="eformNode" class="form-horizontal xg-form" style="padding:5px 20px;">
                     @await Component.InvokeAsync("XiHide", new { fid = "NodeType" })
                     @*await Component.InvokeAsync("XiSelect", new { title = "Node Type :", fid = "NodeType", rows = (List<IdStrDto>)ViewBag.NodeTypes, cols = cols })*@
-                    @*await Component.InvokeAsync("XiSelect", new { title = "簽核時間 :", fid = "LimitType", rows = (List<IdStrDto>)ViewBag.NodeLimitTypes, cols = cols })*@
-                    @await Component.InvokeAsync("XiText", new { title = "Node Name :", fid = "Name", maxLen = 20, required = true, cols = cols })
-                    @await Component.InvokeAsync("XiSelect", new { title = "Signer Type :", fid = "SignerType", rows = (List<IdStrDto>)ViewBag.SignerTypes, cols = cols })
-                    @await Component.InvokeAsync("XiText", new { title = "Signer Value :", fid = "SignerValue", maxLen = 30, cols = cols })
+                    @*await Component.InvokeAsync("XiSelect", new { title = "SignTime :", fid = "LimitType", rows = (List<IdStrDto>)ViewBag.NodeLimitTypes, cols = cols })*@
+                    @await Component.InvokeAsync("XiText", new { title = R["NodeName"].Value, fid = "Name", maxLen = 20, required = true, cols = cols })
+                    @await Component.InvokeAsync("XiSelect", new { title = R["SignerType"].Value, fid = "SignerType", rows = (List<IdStrDto>)ViewBag.SignerTypes, cols = cols })
+                    @await Component.InvokeAsync("XiText", new { title = R["SignerValue"].Value, fid = "SignerValue", maxLen = 30, cols = cols })
                 </form>
             </div>
             <div class="modal-footer">
@@ -212,28 +217,28 @@
     <div class="modal-dialog" style="max-width:620px;">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">Line Property</div>
+                <div class="modal-title">@R["LineProp"]</div>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="eformLine" class="form-horizontal xg-form" style="padding:0 10px;">
-                    @await Component.InvokeAsync("XiRead", new { title = "Start Node :", fid = "StartNode", cols = cols })
-                    @await Component.InvokeAsync("XiRead", new { title = "End Node :", fid = "EndNode", cols = cols })
-                    @await Component.InvokeAsync("XiNum", new { title = "執行順序 :", fid = "Sort", required = true, cols = "4,2" })
+                    @await Component.InvokeAsync("XiRead", new { title = R["StartNode"].Value + " :", fid = "StartNode", cols = cols })
+                    @await Component.InvokeAsync("XiRead", new { title = R["EndNode"].Value + " :", fid = "EndNode", cols = cols })
+                    @await Component.InvokeAsync("XiNum", new { title = R["RunOrder"].Value + " :", fid = "Sort", required = true, cols = "4,2" })
                     @*Html.XiNum("Sort", "", "Run Order :", true, cols, new PropNumModel() { IsDigit = true, MaxValue = 10, Width = "80px" })*@
-                    @*Html.XiRadios("LineType", "0", "執行種類 :", (List<IdStrDto>)ViewBag.LineTypes, 9)*@
+                    @*Html.XiRadios("LineType", "0", "Run Type :", (List<IdStrDto>)ViewBag.LineTypes, 9)*@
                     <div id="divLineCondBox" class="row xg-row">
                         <div class="col-md-12" style="margin:5px 0 2px -10px;">
-                            執行條件
-                            <button type="button" class="btn btn-sm btn-primary" onclick="_me.flow.onAddLineCond()">新增一列</button>
+                            @R["RunCond"]
+                            <button type="button" class="btn btn-sm btn-primary" onclick="_me.flow.onAddLineCond()">@br.BtnAddRow</button>
                         </div>
                         <table class="table table-bordered xg-table" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th width="104px" class="text-center"></th>
-                                    <th>欄位名稱</th>
-                                    <th width="103px">運算</th>
-                                    <th width="60px">欄位值</th>
+                                    <th>@R["FieldName"]</th>
+                                    <th width="103px">@R["Op"]</th>
+                                    <th width="85px">@R["FieldValue"]</th>
                                     <th width="85px"></th>
                                 </tr>
                             </thead>

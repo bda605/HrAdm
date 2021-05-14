@@ -27,7 +27,7 @@
                     return _date.jsToUiDt(data);
                 }},
 				{ targets: [8], render: function (data, type, full, meta) {
-                    return _crud.dtCrudFun(full.Id, '請假', true, true, true);
+                    return _crud.dtCrudFun(full.Id, 'Leave', true, true, true);
                 }},
             ],
         };

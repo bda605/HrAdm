@@ -1,0 +1,95 @@
+﻿@using Base.Models
+@using HrAdm.Services
+
+@{
+    var min = _Fun.IsDebug ? "" : ".min";   //min js 
+    var showSort = false;
+    //var menus = _Web.GetMenu();
+    var menus = new List<MenuDto>()
+    {
+        new MenuDto() { Name = "1.請假作業", Url = "/Leave/Read" },
+        new MenuDto() { Name = "2.待簽核假單", Url = "/LeaveSign/Read" },
+        new MenuDto() { Name = "3.流程維護", Url = "/XpFlow/Read" },
+        new MenuDto() { Name = "4.簽核資料查詢", Url = "/XpFlowSign/Read" },
+        new MenuDto() { Name = "5.用戶管理", Url = "/User/Read" },
+        new MenuDto() { Name = "6.角色維護", Url = "/XpRole/Read" },
+        new MenuDto() { Name = "7.功能維護", Url = "/XpProg/Read" },
+        new MenuDto() { Name = "8.用戶經歷維護", Url = "/UserExt/Read" },
+        new MenuDto() { Name = "9.自訂輸入欄位", Url = "/CustInput/Read" },
+        new MenuDto() { Name = "10.匯入用戶資料", Url = "/UserImport/Read" },
+        new MenuDto() { Name = "11.最新消息維護", Url = "/CmsMsg/Read" },
+        new MenuDto() { Name = "12.簡單報表維護", Url = "/XpEasyRpt/Read" },
+        new MenuDto() { Name = "13.異動記錄查詢", Url = "/XpTranLog/Read" },
+    };
+
+}
+
+<style>
+    .xu-body {
+        display: inline-block;
+        width: 100%;
+        height: 100vh;
+        vertical-align: top;
+        transition: 0.5s;
+    }
+</style>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@_Fun.Config.SystemName</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- css -->
+    <link rel="stylesheet" href="~/css/lib@(min).css?Ver=@(_Xp.LibVer)" />
+    <link rel="stylesheet" href="~/css/my@(min).css?ver=@(_Xp.SiteVer)" />
+    @RenderSection("styles", required: false)
+
+    <!-- js: lib -->
+    <script src="~/js/lib@(min).js?Ver=@(_Xp.LibVer)"></script>
+
+    <!-- js: this site, check debug/production mode !! -->
+    <environment include="Production">
+        <script src="~/js/my@(min).js?ver=@(_Xp.SiteVer)"></script>
+    </environment>
+    <environment include="Development">
+        <!-- tail ver will load failed !! -->
+        <script asp-src-include="~/js/base/*.js"></script>
+        <script asp-src-include="~/js/view/_*.js"></script>
+    </environment>
+
+    <!-- js: local -->
+    <script src="~/js/zh-TW@(min).js?ver=@(_Xp.SiteVer)"></script>
+
+    @RenderSection("scripts", required: false)
+
+    <!-- put here !! -->
+    <script type="text/javascript">
+        $(function () {
+            _fun.locale = 'zh-TW';
+            _xp.init();
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Top -->
+    <partial name="_Top.cshtml" />
+
+    @* set height=100% in parent , so that menu be fine for ie & firefox !! *@
+    <div class="d-flex align-items-stretch" style="height:100%">
+        <!-- left menu -->
+        @await Component.InvokeAsync("XgLeftMenu", new { rows = menus, showSort = showSort })
+
+        <!-- work area -->
+        <div class="xu-body">
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- tool component -->
+    @await Component.InvokeAsync("XgTool")
+
+</body>
+</html>

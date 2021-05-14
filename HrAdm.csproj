@@ -64,18 +64,33 @@
     <Content Remove="wwwroot\js\base\_valid.js" />
     <Content Remove="wwwroot\js\lib\zz_jquery.validate-1.19.1.js" />
     <Content Remove="wwwroot\js\lib\zz_jquery.validate-1.19.1.min.js" />
+    <Content Remove="wwwroot\js\view\LeaveSign.j_old" />
     <Content Remove="wwwroot\js\view\User - 複製.js" />
+    <Content Remove="wwwroot\js\view\UserExt.j_old" />
+    <Content Remove="wwwroot\js\view\XpFlowSign.j_old" />
+    <Content Remove="wwwroot\js\view\XpImport.j_old" />
     <Content Remove="wwwroot\locale\zh-TW\_BR.js" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Controllers\CustInputController.cs%281%29" />
     <None Remove="Controllers\CustInputController.cs%282%29" />
+    <None Remove="Views\CustInput\Edit.cshtml_old" />
+    <None Remove="Views\LeaveSign\Edit.cshtml_old" />
+    <None Remove="Views\Leave\Edit.cshtml_old" />
+    <None Remove="Views\UserExt\Edit.cshtml_old" />
+    <None Remove="Views\User\Edit.cshtml_old" />
+    <None Remove="Views\XpCms\Edit.cshtml_old" />
+    <None Remove="Views\XpEasyRpt\Edit.cshtml_old" />
+    <None Remove="Views\XpFlowSign\Edit.cshtml_old" />
     <None Remove="Views\XpFlow\Edit.cshtml_old" />
+    <None Remove="Views\XpProg\Edit.cshtml_old" />
+    <None Remove="Views\XpRole\Edit.cshtml_old" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
@@ -192,6 +207,12 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Views\CustInput\Read.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties bundleconfig_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

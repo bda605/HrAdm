@@ -51,7 +51,7 @@ var _crud = {
         return "" +
             "<label class='xi-check xg-no-label'>" +
             "   <input " + attr + " type='checkbox'>" +
-            "   <span></span>" +
+            "   <span class='xi-cspan'></span>" +
             "</label>";
     },
     /*
@@ -92,6 +92,10 @@ var _crud = {
         return (value == '1')
             ? '<div>' + _BR.StatusYes + '</div>'
             : '<div class="text-danger">' + _BR.StatusNo + '</div>';
+    },
+
+    dtYesEmpty: function (value) {
+        return (value == '1') ? _BR.Yes : '';
     },
 
     /**
@@ -300,8 +304,8 @@ var _crud = {
             //to edit(U/V) mode
             _crud.swap(false);  //call first
             _prog.setPath(funType);
+            _crud.loadJson(data);   //load first
             _crud.setEditStatus(funType);
-            _crud.loadJson(data);
             _crud._afterOpenEdit(funType, data);
         });
     },
@@ -309,6 +313,7 @@ var _crud = {
     //set edit form status
     //fun: C,U,V
     setEditStatus: function (fun) {
+        debugger;
         var isView = (fun == _fun.FunV);
         var run = (_me.nowFun == _fun.FunV && !isView) ? true :
             (_me.nowFun != _fun.FunV && isView) ? true :

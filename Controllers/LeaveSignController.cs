@@ -46,7 +46,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         public JsonResult SignRow(string id, string status, string note)
         {
-            return Json(_Flow.SignRow(id, (status == "Y"), note, "Leave"));
+            return Json(_XpFlow.SignRow(id, (status == "Y"), note, "Leave"));
         }
 
         //TODO: add your code

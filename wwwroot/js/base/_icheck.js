@@ -64,7 +64,7 @@ var _icheck = $.extend({}, _ibase, {
         fid = fid || _icheck.Check0Id;
         var ary = [];
         _obj.getF(_fun.fidFilter(fid) + ':checked', form).each(function (i) {
-            ary[i] = $(_icheck).data('value');
+            ary[i] = $(this).data('value');
         });
         return ary;
     },

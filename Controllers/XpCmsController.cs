@@ -22,6 +22,7 @@ namespace HrAdm.Controllers
         public ActionResult Read()
         {			
             ViewBag.ProgName = ProgName;
+            ViewBag.CmsType = CmsType;
             return View("~/Views/XpCms/Read.cshtml", EditDto); //public view
         }
 

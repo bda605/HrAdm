@@ -78,25 +78,6 @@
         }
     },
 
-    /*
-    onCreate: function () {
-        _crud.onCreate();
-        _me.setEditTbar(true);
-    },
-    onUpdate: function (key) {
-        _crud.onUpdate(key);
-        _me.setEditTbar(true);
-    },
-    onSave: function () {
-        _crud.onSave();
-        _me.setEditTbar(false);
-    },
-    onToRead: function () {
-        _crud.onToRead();
-        _me.setEditTbar(false);
-    },
-    */
-
     //#region mNode/mLine custom function
     //load nodes
     mNode_loadJson: function (json) {

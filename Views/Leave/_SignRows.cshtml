@@ -1,13 +1,14 @@
 ﻿@model List<SignRowDto>
+@inject IViewLocalizer R
 
 <table class="table table-bordered xg-table" cellspacing="0">
     <thead>
         <tr>
-            <th>節點名稱</th>
-            <th>簽核人</th>
-            <th>簽核狀態</th>
-            <th>簽核時間</th>
-            <th>備註</th>
+            <th>@R["NodeName"]</th>
+            <th>@R["Signer"]</th>
+            <th>@R["SignStatus"]</th>
+            <th>@R["SignTime"]</th>
+            <th>@R["Note"]</th>
         </tr>
     </thead>
     <tbody>

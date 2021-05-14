@@ -1,27 +1,42 @@
 ﻿@using Base.Models
 @using HrAdm.Services
+@inject IHtmlLocalizer<HrAdm.R0> R
 
 @{
-    var min = _Fun.IsDebug ? "" : ".min";   //min js 
-    var showSort = false;
-    //var menus = _Web.GetMenu();
+    _Fun.Config.SystemName = R["SystemName"].Value;
+    var locale = _Fun.GetLocaleByUser();
+    var min = _Fun.IsDebug ? "" : ".min";   //min js
+    //var showSort = false;
+    //var menus = SetMenuName(_Web.GetMenu());  //by user right
     var menus = new List<MenuDto>()
     {
-        new MenuDto() { Name = "1.請假作業", Url = "/Leave/Read" },
-        new MenuDto() { Name = "2.待簽核假單", Url = "/LeaveSign/Read" },
-        new MenuDto() { Name = "3.用戶管理", Url = "/User/Read" },
-        new MenuDto() { Name = "4.用戶經歷維護", Url = "/UserExt/Read" },
-        new MenuDto() { Name = "5.角色維護", Url = "/XpRole/Read" },
-        new MenuDto() { Name = "6.功能維護", Url = "/XpProg/Read" },
-        new MenuDto() { Name = "7.流程維護", Url = "/XpFlow/Read" },
-        new MenuDto() { Name = "8.簽核資料查詢", Url = "/XpFlowSign/Read" },
-        new MenuDto() { Name = "9.自訂輸入欄位", Url = "/CustInput/Read" },
-        new MenuDto() { Name = "10.匯入用戶資料", Url = "/UserImport/Read" },
-        new MenuDto() { Name = "11.最新消息維護", Url = "/CmsMsg/Read" },
-        new MenuDto() { Name = "12.簡單報表維護", Url = "/XpEasyRpt/Read" },
-        new MenuDto() { Name = "13.異動記錄", Url = "/XpTranLog/Read" },
+        new MenuDto() { Name = R["MenuLeave"].Value, Url = "/Leave/Read" },
+        new MenuDto() { Name = R["MenuLeaveSign"].Value, Url = "/LeaveSign/Read" },
+        new MenuDto() { Name = R["MenuXpFlow"].Value, Url = "/XpFlow/Read" },
+        new MenuDto() { Name = R["MenuXpFlowSign"].Value, Url = "/XpFlowSign/Read" },
+        new MenuDto() { Name = R["MenuUser"].Value, Url = "/User/Read" },
+        new MenuDto() { Name = R["MenuXpRole"].Value, Url = "/XpRole/Read" },
+        new MenuDto() { Name = R["MenuXpProg"].Value, Url = "/XpProg/Read" },
+        new MenuDto() { Name = R["MenuUserExt"].Value, Url = "/UserExt/Read" },
+        new MenuDto() { Name = R["MenuCustInput"].Value, Url = "/CustInput/Read" },
+        new MenuDto() { Name = R["MenuUserImport"].Value, Url = "/UserImport/Read" },
+        new MenuDto() { Name = R["MenuCmsMsg"].Value, Url = "/CmsMsg/Read" },
+        new MenuDto() { Name = R["MenuXpEasyRpt"].Value, Url = "/XpEasyRpt/Read" },
+        new MenuDto() { Name = R["MenuTranLog"].Value, Url = "/XpTranLog/Read" },
     };
+}
 
+@functions {
+    //set menu.Name
+    public List<MenuDto> SetMenuName(List<MenuDto> menus)
+    {
+        if (menus == null)
+            return null;
+
+        foreach(var menu in menus)
+            menu.Name = R["Menu" + menu.Code].Value;
+        return menus;
+    }
 }
 
 <style>
@@ -60,14 +75,14 @@
     </environment>
 
     <!-- js: local -->
-    <script src="~/js/zh-TW@(min).js?ver=@(_Xp.SiteVer)"></script>
+    <script src="~/js/@(locale+min).js?ver=@(_Xp.SiteVer)"></script>
 
     @RenderSection("scripts", required: false)
 
     <!-- put here !! -->
     <script type="text/javascript">
         $(function () {
-            _fun.locale = 'zh-TW';
+            _fun.locale = '@(locale)';
             _xp.init();
         });
     </script>
@@ -80,7 +95,7 @@
     @* set height=100% in parent , so that menu be fine for ie & firefox !! *@
     <div class="d-flex align-items-stretch" style="height:100%">
         <!-- left menu -->
-        @await Component.InvokeAsync("XgLeftMenu", new { rows = menus, showSort = showSort })
+        @await Component.InvokeAsync("XgLeftMenu", new { rows = menus })
 
         <!-- work area -->
         <div class="xu-body">

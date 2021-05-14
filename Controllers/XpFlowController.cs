@@ -30,13 +30,13 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new FlowRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return Content(new XpFlowRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
         public ContentResult GetJson(string key)
         {
-            return Content(new FlowEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return Content(new XpFlowEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
         }
 
         [HttpPost]
@@ -48,19 +48,19 @@ namespace HrAdm.Controllers
         [HttpPost]
         public JsonResult Create(string json)
         {
-            return Json(new FlowEdit().Create(_Json.StrToJson(json), MySetNewKey));
+            return Json(new XpFlowEdit().Create(_Json.StrToJson(json), MySetNewKey));
         }
 
         [HttpPost]
         public JsonResult Update(string key, string json)
         {
-            return Json(new FlowEdit().Update(key, _Json.StrToJson(json), MySetNewKey));
+            return Json(new XpFlowEdit().Update(key, _Json.StrToJson(json), MySetNewKey));
         }
 
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(new FlowEdit().Delete(key));
+            return Json(new XpFlowEdit().Delete(key));
         }
 
         /// <summary>

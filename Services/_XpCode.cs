@@ -22,11 +22,11 @@ namespace HrAdm.Services
         }
         public static List<IdStrDto> GetRoles(Db db = null)
         {
-            return TableToList("Role", db);
+            return TableToList("XpRole", db);
         }
         public static List<IdStrDto> GetProgs(Db db = null)
         {
-            return TableToList("Prog", db);
+            return TableToList("XpProg", db);
         }
         #endregion
 

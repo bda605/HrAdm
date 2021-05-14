@@ -20,6 +20,7 @@ namespace HrAdm.Tables
 
         public virtual DbSet<Cms> Cms { get; set; }
         public virtual DbSet<CustInput> CustInput { get; set; }
+        public virtual DbSet<Dept> Dept { get; set; }
         public virtual DbSet<Leave> Leave { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserJob> UserJob { get; set; }
@@ -28,7 +29,6 @@ namespace HrAdm.Tables
         public virtual DbSet<UserSchool> UserSchool { get; set; }
         public virtual DbSet<UserSkill> UserSkill { get; set; }
         public virtual DbSet<XpCode> XpCode { get; set; }
-        public virtual DbSet<XpDept> XpDept { get; set; }
         public virtual DbSet<XpEasyRpt> XpEasyRpt { get; set; }
         public virtual DbSet<XpFlow> XpFlow { get; set; }
         public virtual DbSet<XpFlowLine> XpFlowLine { get; set; }
@@ -130,6 +130,22 @@ namespace HrAdm.Tables
                 entity.Property(e => e.FldTextarea)
                     .IsRequired()
                     .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<Dept>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MgrId)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(30);
             });
 
             modelBuilder.Entity<Leave>(entity =>
@@ -368,22 +384,6 @@ namespace HrAdm.Tables
                     .HasMaxLength(30);
 
                 entity.Property(e => e.Note).HasMaxLength(255);
-            });
-
-            modelBuilder.Entity<XpDept>(entity =>
-            {
-                entity.Property(e => e.Id)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.MgrId)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(30);
             });
 
             modelBuilder.Entity<XpEasyRpt>(entity =>

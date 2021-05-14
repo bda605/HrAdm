@@ -53,3 +53,16 @@
     font-size: 16px;
     color: gray;
 }
+
+.xg-mt-0 {
+    margin-top: 0;
+}
+.xg-mt-5 {
+    margin-top: 5px;
+}
+.xg-mt-10 {
+    margin-top: 10px;
+}
+.xg-mb-0 {
+    margin-bottom: 0;
+}

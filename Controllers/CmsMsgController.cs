@@ -1,6 +1,7 @@
 ﻿using HrAdm.Enums;
 using HrAdm.Models;
 using HrAdm.Services;
+using Microsoft.Extensions.Localization;
 
 namespace HrAdm.Controllers
 {
@@ -8,20 +9,20 @@ namespace HrAdm.Controllers
     public class CmsMsgController : XpCmsController
     {
         //constructor
-        public CmsMsgController()
+        public CmsMsgController(IStringLocalizer<CmsMsgController> R)
         {
-            ProgName = "最新消息維護";
+            //ProgName = "最新消息維護";
             CmsType = CmsTypeEstr.Msg;
             DirUpload = _Xp.DirCmsType(CmsType);
             EditDto = new CmsEditDto()
             {
-                Title = "主旨",
-                Text = "內容",
+                Title = R["Title"].Value,
+                Text = R["Text"].Value,
                 //Html = "Html",
-                Note = "備註",
-                FileName = "上傳檔案",
-                StartTime = "發佈起日",
-                EndTime = "發佈迄日",
+                Note = R["Note"].Value,
+                FileName = R["FileName"].Value,
+                StartTime = R["StartTime"].Value,
+                EndTime = R["EndTime"].Value,
             };
         }
 

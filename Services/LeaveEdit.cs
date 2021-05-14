@@ -40,7 +40,7 @@ where l.Id='{0}'
                     new EitemDto { Fid = "FileName" },
                     new EitemDto { Fid = "FlowLevel", Value = "1" },
                     new EitemDto { Fid = "FlowStatus", Value = "0" },
-					new EitemDto { Fid = "Status" },
+					new EitemDto { Fid = "Status", Value = 1 },
                 },
             };
         }
@@ -62,7 +62,7 @@ where l.Id='{0}'
         private string FnCreateSignRows(Db db, JObject newKeyJson)
         {
             var newKey = _Str.ReadNewKeyJson(newKeyJson);
-            return _Flow.CreateSignRows(_inputRow, "UserId", "Leave", newKey, db);
+            return _XpFlow.CreateSignRows(_inputRow, "UserId", "Leave", newKey, db);
         }
 
         //TODO: add your code

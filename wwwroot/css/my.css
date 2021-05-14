@@ -448,7 +448,7 @@ path, .jtk-endpoint { cursor:pointer; }
 .xg-form {
     font-size: 15px;
     border: none;
-    margin-bottom: 20px;
+    /*margin-bottom: 0px;*/
 }
 
     .xg-form .xg-row {
@@ -985,6 +985,19 @@ body.xg-show-wait .xg-wait {
     color: gray;
 }
 
+.xg-mt-0 {
+    margin-top: 0;
+}
+.xg-mt-5 {
+    margin-top: 5px;
+}
+.xg-mt-10 {
+    margin-top: 10px;
+}
+.xg-mb-0 {
+    margin-bottom: 0;
+}
+
 @charset "utf-8";
 
 /* === 修改預設 style === */
@@ -1001,7 +1014,7 @@ body, label {
 
 /* button 和後面的 icon 的間距*/
 .btn > i {
-    padding-left: 1px;
+    padding-left: 3px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -1043,6 +1056,18 @@ textarea.form-control {
     background-color: #eee; 
 }
 */
+
+/* placeholder color */
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: lightgrey !important;
+    opacity: 1; /* Firefox */
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: lightgrey !important;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: lightgrey !important;
+}
 
 /* 筆數起迄&合計 */
 .dataTables_info {

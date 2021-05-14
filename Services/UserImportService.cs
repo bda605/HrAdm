@@ -34,14 +34,14 @@ namespace HrAdm.Services
         private List<string> SaveImportRows(List<UserImportVo> okRows)
         {
             var db = _Xp.GetDb();
-            var deptIds = db.XpDept.Select(a => a.Id).ToList();
+            var deptIds = db.Dept.Select(a => a.Id).ToList();
             var results = new List<string>();
             foreach (var row in okRows)
             {
                 //check deptId
                 if (!deptIds.Contains(row.DeptId))
                 {
-                    results.Add("DeptId有誤");
+                    results.Add("DeptId wrong");
                     continue;
                 }
 

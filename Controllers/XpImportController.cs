@@ -18,7 +18,8 @@ namespace HrAdm.Controllers
         public ActionResult Read()
         {			
             ViewBag.ProgName = ProgName;
-            return View("~/Views/XpImport/Read.cshtml"); //public view
+            ViewBag.ImportType = ImportType;
+            return View("/Views/XpImport/Read.cshtml"); //public view
         }
 
         [HttpPost]
