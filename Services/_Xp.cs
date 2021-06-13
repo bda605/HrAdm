@@ -2,6 +2,7 @@
 using BaseWeb.Services;
 using HrAdm.Tables;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace HrAdm.Services
 {
@@ -10,7 +11,7 @@ namespace HrAdm.Services
     {
         //public const string SiteVer = "20201228f";     //for my.js/css
         public static string SiteVer = _Date.NowSecStr();
-        public const string LibVer = "20210515";    //for lib.js/css
+        public const string LibVer = "20210605s";    //for lib.js/css
 
         public static string NoImagePath = _Fun.DirRoot + "/wwwroot/images/noImage.jpg";
 
@@ -76,6 +77,11 @@ namespace HrAdm.Services
         }
         #endregion
 
+        public static string GetLocale0()
+        {
+            return _Fun.GetLocaleByUser(false);
+        }
+        
         /*
         //constructor
         static _Xp()

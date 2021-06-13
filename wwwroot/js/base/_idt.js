@@ -42,57 +42,6 @@ var _idt = $.extend({}, _idate, {
         _iselect.setEditO(_idt._boxGetMin(obj), status);
     },
 
-    /**
-     * initial, called by _crud.js
-     * param box {object}
-     * param fid {string} optional
-    init: function (box, fid) {
-        var obj = _str.isEmpty(fid)
-            ? $(_idate.BoxFilter)
-            : _obj.get(fid, box).closet(_idate.BoxFilter);
-        if (obj.length > 0)
-            _idate.initO(obj);
-    },
-
-    //initial by object(s)
-    //initO: function (obj, fnOnChange) {
-    initO: function (obj) {
-
-        //initial
-        obj.datepicker({
-            //format: _BR.UiDateFormat,
-            language: _fun.locale,
-            autoclose: true,
-            showOnFocus: false,
-            //startDate: '-3d'            
-        }).on('changeDate', function (e) {
-        });
-
-        //skip event listen, otherwise it will show calendar when reset(jquery 3.21 will listen) !!
-        obj.find('.input-group-addon').off('click');
-    },
-     */
-
-    /**
-     * element to date box
-     * return {object}
-    elmToBox: function (elm) {
-        return $(elm).closest(_idate.BoxFilter);
-    },
-
-    //show/hide datepicker
-    onToggle: function (btn) {
-        //$(btn).parent().parent().find('input').trigger('focus');
-        _idate.elmToBox(btn).datepicker('show');
-    },
-
-    //reset value
-    onReset: function (btn) {
-        _idate.elmToBox(btn).datepicker('update', '');
-    },
-     */
-
-
     //=== private function below ===
     /**
      * get date input object(not date box)

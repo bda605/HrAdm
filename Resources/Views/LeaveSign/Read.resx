@@ -130,4 +130,7 @@
   <data name="Audit" xml:space="preserve">
     <value>Audit</value>
   </data>
+  <data name="NodeName" xml:space="preserve">
+    <value>Node Name</value>
+  </data>
 </root>

@@ -120,16 +120,16 @@
   <data name="Text" xml:space="preserve">
     <value>文字</value>
   </data>
-  <data name="Int" xml:space="preserve">
+  <data name="NumInt" xml:space="preserve">
     <value>整數</value>
   </data>
-  <data name="Dec" xml:space="preserve">
+  <data name="NumDec" xml:space="preserve">
     <value>小數</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>日期</value>
   </data>
-  <data name="Datetime" xml:space="preserve">
+  <data name="Dt" xml:space="preserve">
     <value>日期時間</value>
   </data>
   <data name="Textarea" xml:space="preserve">

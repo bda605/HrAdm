@@ -18,7 +18,7 @@
 @await Component.InvokeAsync("XgProgPath", new { names = new string[] { progName } })
 <div class="xp-prog">
     <div id="divRead">
-        <form id='rform' class='xg-form'>
+        <form id='formRead' class='xg-form'>
             <div class="row">
                 @await Component.InvokeAsync("XiText", new { title = Model.Title, fid = "Title", inRow = true })
                 @await Component.InvokeAsync("XgFindTbar")
@@ -28,7 +28,7 @@
         <div class='xg-btns-box'>
             @await Component.InvokeAsync("XgCreate")
         </div>
-        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+        <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
                     <th>@Model.Title</th>
@@ -77,10 +77,14 @@
             }
 
             @await Component.InvokeAsync("XiCheck", new { title = R0["Status"].Value, fid = "Status", label = R0["Active"].Value })
-            @await Component.InvokeAsync("XiRead", new { title = R0["Creator"].Value, fid = "CreatorName" })
-            @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value, fid = "Created", format = BrFormatEstr.Dt })
-            @await Component.InvokeAsync("XiRead", new { title = R0["Reviser"].Value, fid = "ReviserName" })
-            @await Component.InvokeAsync("XiRead", new { title = R0["Revised"].Value, fid = "Revised", format = BrFormatEstr.Dt })
+            <div class="row">
+                @await Component.InvokeAsync("XiRead", new { title = R0["Creator"].Value, fid = "CreatorName", inRow = true, cols = "2,3" })
+                @await Component.InvokeAsync("XiRead", new { title = R0["Reviser"].Value, fid = "ReviserName", inRow = true, cols = "2,3" })
+            </div>
+            <div class="row">
+                @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value, fid = "Created", format = BrFormatEstr.Dt, inRow = true, cols = "2,3" })
+                @await Component.InvokeAsync("XiRead", new { title = R0["Revised"].Value, fid = "Revised", format = BrFormatEstr.Dt, inRow = true, cols = "2,3" })
+            </div>
         </form>
 
         @await Component.InvokeAsync("XgSaveBack")

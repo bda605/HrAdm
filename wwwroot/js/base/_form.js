@@ -77,9 +77,9 @@ var _form = {
     },
 
     /**
-     * set form inputs editable or not
+     * set form inputs edit status
      * param form {object} jquery form/box
-     * param status {bool} editable or not
+     * param status {bool} edit status
      */
     setEdit: function (form, status) {
         //text & textArea

@@ -340,14 +340,15 @@ var _crud = {
 
     //=== jQuery datatables(dt) start ===
     /**
-     * datatable layout
+     * default datatable layout
+     * toolbar layout:l(length),f(filter),r(processing),t(table),i(info),p(page)
      */
     dtDom: '<"toolbar">t<li>p',
 
     /**
-     * datatable column config
+     * default datatable column define
      */ 
-    dtColConfig: {
+    dtColDef: {
         className: 'xg-center',
         orderable: false,
         targets: '_all',
@@ -446,14 +447,15 @@ var _crud = {
     //=== jQuery datatables end ===    
 
     /**
-     * initial, 傳入簡化的edits[]
-     * dtConfig {Object} datatables config
-     * edits {Array} 維護畫面設定{object},
-     *   1.null: 表示單一table, 固定捉取eform
-     *   2.多個edit object, 如果第一個陣列為null, 則使用new EditOne()
+     * initial CRUD
+     * param dtConfig {Object} datatables config
+     * param edits {object Array} for edit form
+     *   1.null: means one table, get eform
+     *   2.many edit object, if ary0 is null, then call new EditOne()
+     * param updName {string} update name, default to _BR.Update
      */
-    init: function (dtConfig, edits) {
-        //set _me.edits[]
+    init: function (dtConfig, edits, updName) {
+        //#region 1.set _me.edits[]
         var Childs = _crud.Childs;  //constant
         var edit0 = null;  //master edit object
         if (edits == null) {
@@ -469,32 +471,38 @@ var _crud = {
                     edit0[Childs][i - 1] = edits[i];
             }
         }
+        //#endregion
 
-        //set variables
-        //_me.row = null; //edit0時從後端傳回
+        //#region 2.set instance variables
         _me.nowFun = '';    //now fun of edit0 form
+        _me.updName = updName;
         _me.divRead = $('#divRead');
-        //_me.divReadTool = $('#divReadTool');
         _me.divEdit = $('#divEdit');
-        _me.rform = $('#rform');
-        _me.rform2 = $('#rform2');
+        _me.rform = $('#formRead');
+        if (_me.rform.length === 0)
+            _me.rform = null;
+        _me.rform2 = $('#formRead2');
         if (_me.rform2.length === 0)
             _me.rform2 = null;
-        //_me.eform = $('#eform');
+        if (_me.rform != null)
+            _idate.init(_me.rform);
+        if (_me.rform2 != null)
+            _idate.init(_me.rform2);
 
         _me.edit0 = edit0;
         _me.hasChild = (_fun.hasValue(_me.edit0[Childs]) && _me.edit0[Childs].length > 0);
         //_me.editLen = _me.edits.length;
 
-        //initial forms(recursive)
-        _crud.initForm(_me.edit0);
-
         //for xgOpenModal
         _me.modal = null;
+        //#endregion
 
-        //table div id固定為 table1, 後端固定呼叫 GetPage
-        _me.dt = new Datatable('#table1', 'GetPage', dtConfig);
+        //3.initial forms(recursive)
+        _crud.initForm(_me.edit0);
         _prog.init();   //prog path
+
+        //4.Create Datatable object
+        _me.dt = new Datatable('#tableRead', 'GetPage', dtConfig);
     },
 
     /**
@@ -618,7 +626,7 @@ var _crud = {
         _crud.getJsonAndSetMode(key, _fun.FunV);
     },
 
-    getJsonAndSetMode: function (key, funType) {
+    getJsonAndSetMode: function (key, fun) {
         if (_str.isEmpty(key)) {
             _log.error('error: key is empty !');
             return;
@@ -626,34 +634,59 @@ var _crud = {
 
         //_crud.toUpdateMode(key);
         _ajax.getJson('GetJson', { key: key }, function (data) {
-            //to edit(U/V) mode
-            _crud.swap(false);  //call first
-            _prog.setPath(funType);
-            _crud.loadJson(data);   //load first
-            _crud.setEditStatus(funType);
-            _crud._afterOpenEdit(funType, data);
+            _crud.toEditMode(fun, data);
         });
+    },
+
+    //to edit(U/V) mode
+    toEditMode: function (fun, data) {
+        _crud.swap(false);  //call first
+        _prog.setPath(fun, _me.updName);
+        _crud.loadJson(data);   //load first
+        _crud.setEditStatus(fun);
+        _crud._afterOpenEdit(fun, data);
     },
 
     //set edit form status
     //fun: C,U,V
     setEditStatus: function (fun) {
-        debugger;
-        var isView = (fun == _fun.FunV);
-        var run = (_me.nowFun == _fun.FunV && !isView) ? true :
-            (_me.nowFun != _fun.FunV && isView) ? true :
-                false;
+        if (fun === _me.nowFun)
+            return;
 
+        /*
+        var isView = (fun == _fun.FunV);
+        var run = (isView && _me.nowFun != _fun.FunV) ? true :
+            (!isView && _me.nowFun == _fun.FunV) ? true :
+            false;
+        */
         //set variables
         _me.nowFun = fun;
+        //if (!run)
+        //    return;
 
-        if (run) {
-            var div = _me.divEdit;
-            div.find('input, textarea, select, button').prop('disabled', isView);
-            if (isView)
-                div.find('#btnToRead').prop('disabled', false);
-            //div.find('input', '').prop('disabled', isView); //for selected
+        var box = _me.divEdit;
+        var items = box.find('input, textarea, select, button');
+        if (fun == _fun.FunV) {
+            items.prop('disabled', true)
+            box.find('#btnToRead').prop('disabled', false);
+            _ihtml.setEdits(box, '', false);
+        } else if (fun == _fun.FunC) {
+            var dataEdit = '[data-edit=U]';
+            items.prop('disabled', false)
+            items.filter(dataEdit).prop('disabled', true)
+            _ihtml.setEdits(box, '', true);
+            _ihtml.setEdits(box, dataEdit, false);
+        } else if (fun == _fun.FunU) {
+            var dataEdit = '[data-edit=C]';
+            items.prop('disabled', false)
+            items.filter(dataEdit).prop('disabled', true)
+            _ihtml.setEdits(box, '', true);
+            _ihtml.setEdits(box, dataEdit, false);
         }
+
+        //enable btnToRead for view fun
+        //if (isView)
+        //    box.find('#btnToRead').prop('disabled', false);
     },
 
     /**
@@ -802,12 +835,20 @@ var _crud = {
         return data;
     },
 
-    //傳入edit
+    /**
+     * get edit child len
+     * param edit {object} edit object
+     */ 
     getEditChildLen: function (edit) {
         var fid = _crud.Childs;
         return (edit[fid] == null) ? 0 : edit[fid].length; 
     },
-    //傳入edit
+
+    /**
+     * get edit child
+     * param edit {object} edit object
+     * param childIdx {int} child index, base 0
+     */ 
     getEditChild: function (edit, childIdx) {
         return edit[_crud.Childs][childIdx];
     },
@@ -896,8 +937,8 @@ var _crud = {
     */
 
     /**
-     * on click save, 有上傳檔案時, 後端參數名稱固定為T(n)+FieldName
-     * 傳送到後端的資料包含以下欄位:  
+     * on click save, when upload file, server side file variable is t(n)_FieldName
+     * below variables are sent to backend:  
      *   key, row(包含_childs, _deletes, _fileNo), files
      */
     onSave: function () {
@@ -951,7 +992,7 @@ var _crud = {
         }
     },
 
-    //recursive remove null
+    //recursive remove null for json object
     //level: for debug
     _removeNull: function (level, obj) {
         //debugger;
@@ -1011,7 +1052,7 @@ var _crud = {
     },
 
     /**
-     * 展開查詢畫面的額外欄位
+     * after save
      * data: ResultDto
      */
     afterSave: function (data) {
@@ -1632,9 +1673,9 @@ var _form = {
     },
 
     /**
-     * set form inputs editable or not
+     * set form inputs edit status
      * param form {object} jquery form/box
-     * param status {bool} editable or not
+     * param status {bool} edit status
      */
     setEdit: function (form, status) {
         //text & textArea
@@ -2149,12 +2190,12 @@ var _html = {
     
 };
 
-//base class of all input field
+//base class of all input field, use 'this' instead of '_ibase'
 //must loaded first, or will got error !!
 var _ibase = {
 
     /**
-     * get value by fid
+     * get value by fid, get -> getF -> getO
      * param fid {string}
      * param box {object}
      * return {string}
@@ -2171,20 +2212,13 @@ var _ibase = {
         return obj.val();
     },
 
-    /*
-    //get value by name
-    getN: function (fid, box) {
-        return this.getO(_obj.getN(fid, box));
-    },
-    */
-
     //get input border for show red border
     //default return this, drive class could rewrite.
     getBorder: function (obj) {
         return obj;
     },
 
-    //set value
+    //set value, set -> setF -> setO
     set: function (fid, value, box) {
         this.setO(_obj.get(fid, box), value)
     },
@@ -2194,11 +2228,6 @@ var _ibase = {
     setO: function (obj, value) {
         obj.val(value);
     },
-    /*
-    setN: function (fid, value, box) {
-        this.setO(_obj.getN(fid, box), value)
-    },
-    */
 
     //set edit status
     setEdit: function (fid, status, box) {
@@ -2210,11 +2239,6 @@ var _ibase = {
     setEditO: function (obj, status) {
         obj.prop('readonly', !status);
     },
-    /*
-    setEditN: function (fid, status, box) {
-        this.setEditO(_obj.getN(fid, box), status);
-    },
-    */
 
 };//class
 //for checkbox(use html checkbox)
@@ -2400,13 +2424,8 @@ var _idate = $.extend({}, _ibase, {
         var obj = _str.isEmpty(fid)
             ? box.find(_idate.BoxFilter)
             : _obj.get(fid, box).closet(_idate.BoxFilter);
-        if (obj.length > 0)
-            _idate.initO(obj);
-    },
-
-    //initial by object(s)
-    //initO: function (obj, fnOnChange) {
-    initO: function (obj) {
+        if (obj.length == 0)
+            return;
 
         //initial
         obj.datepicker({
@@ -2427,16 +2446,9 @@ var _idate = $.extend({}, _ibase, {
             */
         });
 
-        //skip event listen, otherwise it will show calendar when reset(jquery 3.21 will listen) !!
+        //stop event, or it will popup when reset(jquery 3.21) !!
         obj.find('.input-group-addon').off('click');
     },
-
-    /*
-    //for 多筆區域
-    initByBox: function (box, fnOnChange) {
-        _idate.initO(box.find(_idate.BoxFilter), fnOnChange);
-    },
-    */
 
     //show/hide datepicker
     onToggle: function (btn) {
@@ -2446,9 +2458,16 @@ var _idate = $.extend({}, _ibase, {
 
     //reset value
     onReset: function (btn) {
-        _idate._boxSetDate(_idate._elmToBox(btn), '');
+        //check input status first
+        var box = _idate._elmToBox(btn);
+        if (_idate.getEditO(_idate._boxGetInput(box)))
+            _idate._boxSetDate(box, '');
     },    
 
+    //get edit status, return bool
+    getEditO: function (obj) {
+        return !obj.is(':disabled');
+    },
 
     //=== private function below ===
     /**
@@ -2461,6 +2480,10 @@ var _idate = $.extend({}, _ibase, {
 
     _boxSetDate: function (box, date) {
         box.datepicker('update', date);
+    },
+
+    _boxGetInput: function (box) {
+        return box.find('input');
     },
 
 }); //class
@@ -2507,57 +2530,6 @@ var _idt = $.extend({}, _idate, {
         _iselect.setEditO(_idt._boxGetHour(obj), status);
         _iselect.setEditO(_idt._boxGetMin(obj), status);
     },
-
-    /**
-     * initial, called by _crud.js
-     * param box {object}
-     * param fid {string} optional
-    init: function (box, fid) {
-        var obj = _str.isEmpty(fid)
-            ? $(_idate.BoxFilter)
-            : _obj.get(fid, box).closet(_idate.BoxFilter);
-        if (obj.length > 0)
-            _idate.initO(obj);
-    },
-
-    //initial by object(s)
-    //initO: function (obj, fnOnChange) {
-    initO: function (obj) {
-
-        //initial
-        obj.datepicker({
-            //format: _BR.UiDateFormat,
-            language: _fun.locale,
-            autoclose: true,
-            showOnFocus: false,
-            //startDate: '-3d'            
-        }).on('changeDate', function (e) {
-        });
-
-        //skip event listen, otherwise it will show calendar when reset(jquery 3.21 will listen) !!
-        obj.find('.input-group-addon').off('click');
-    },
-     */
-
-    /**
-     * element to date box
-     * return {object}
-    elmToBox: function (elm) {
-        return $(elm).closest(_idate.BoxFilter);
-    },
-
-    //show/hide datepicker
-    onToggle: function (btn) {
-        //$(btn).parent().parent().find('input').trigger('focus');
-        _idate.elmToBox(btn).datepicker('show');
-    },
-
-    //reset value
-    onReset: function (btn) {
-        _idate.elmToBox(btn).datepicker('update', '');
-    },
-     */
-
 
     //=== private function below ===
     /**
@@ -2740,7 +2712,7 @@ var _ifile = $.extend({}, _ibase, {
 var _ihtml = $.extend({}, _ibase, {
 
     //constant
-    //BoxFilter: '.date',
+    Filter: '[data-type=html]',
 
     getO: function (obj) {
         //return obj.html();
@@ -2755,6 +2727,11 @@ var _ihtml = $.extend({}, _ibase, {
         //obj.val(value);
     },
 
+    //set edit status
+    setEditO: function (obj, status) {
+        obj.summernote(status ? 'enable' : 'disable');
+    },
+
     /**
      * init html editor
      * param obj {objects} html input object array
@@ -2764,7 +2741,7 @@ var _ihtml = $.extend({}, _ibase, {
      */
     init: function (box, prog, height, fnFileName) {
         height = height || 250;
-        box.find('[data-type=html]').summernote({
+        box.find(_ihtml.Filter).summernote({
             height: height,
             //new version use callbacks
             callbacks: {
@@ -2796,6 +2773,7 @@ var _ihtml = $.extend({}, _ibase, {
             },
 
             //=== add image ext attr start ===
+            lang: _fun.locale,
             popover: {
                 image: [
                     ['custom', ['imageAttributes']],
@@ -2804,7 +2782,6 @@ var _ihtml = $.extend({}, _ibase, {
                     ['remove', ['removeMedia']]
                 ],
             },
-            lang: _fun.locale,
             imageAttributes: {
                 imageDialogLayout: 'default', // default|horizontal
                 icon: '<i class="note-icon-pencil"/>',
@@ -2821,6 +2798,14 @@ var _ihtml = $.extend({}, _ibase, {
         });
     },
 
+    //set edit status for all html input
+    setEdits: function (box, subFilter, status) {
+        var items = box.find(_ihtml.Filter + subFilter);
+        if (items.length > 0)
+            items.summernote(status ? 'enable' : 'disable');
+    },
+
+    /*
     //see: https://stackoverflow.com/questions/14346414/how-do-you-do-html-encode-using-javascript
     encode: function (value) {
         return $('<div/>').text(value).html();
@@ -2841,8 +2826,9 @@ var _ihtml = $.extend({}, _ibase, {
 
     //更新html欄位內容, 讀取 text()
     update: function(fid, box) {
-        var filter = '#' + fid;
-        var obj = (box === undefined) ? $(filter) : box.find(filter);
+        //var filter = '#' + fid;
+        //var obj = (box === undefined) ? $(filter) : box.find(filter);
+        var obj = _obj.get(fid, box);
         //obj.text(value);
         //obj.summernote('code', $(filter).text());
         //debugger;
@@ -2852,7 +2838,8 @@ var _ihtml = $.extend({}, _ibase, {
         for (var i = 0; i < fids.length; i++)
             _ihtml.update(fids[i], box);
     },
-    
+    */
+
 }); //class
 
 //link file
@@ -2866,6 +2853,7 @@ var _ilinkFile = {
     getO: function (obj) {
         return obj.text();
     },
+
     set: function (fid, value, form) {
         this.setO(_obj.get(fid, form), value);   //use data-fid
     },
@@ -2960,15 +2948,10 @@ var _input = {
                 _ifile.setO(obj, value);
                 break;
             case 'textarea':
-                //value = _ihtml.decode(value);
-                //obj.html(value);
                 _itextarea.setO(obj, value);
                 break;
             case 'html':
                 _ihtml.setO(obj, value);
-                //value = _ihtml.decode(value);
-                //obj.html(value);
-                //obj.val(value);     //也要設定這個屬性 !!
                 break;
             case 'read':
                 var format = obj.data('format');
@@ -2979,7 +2962,7 @@ var _input = {
             case 'linkFile':
                 return _ilinkFile.setO(obj, value);
             default:
-                //text, textarea
+                //text
                 obj.val(value);
                 break;
         }
@@ -3152,10 +3135,14 @@ var _input = {
 var _iradio = $.extend({}, _ibase, {
 
     //=== get ===
+    //get checked data-value by fid
     get: function (fid, box) {
         return _iradio._getByName(fid, box);
     },
-    //obj could be multiple
+    /**
+     * get checked data-value by fid
+     * param obj {object} single object
+     */ 
     getO: function (obj, box) {
         return _iradio._getByName(_obj.getName(obj), box);
     },
@@ -3183,8 +3170,8 @@ var _iradio = $.extend({}, _ibase, {
 
     //set checked status by name & data-value
     _setByName: function (name, value, box) {
-        var obj2 = _obj.getF('[name=' + name + '][data-value=' + value + ']', box);
-        obj2.prop('checked', true);
+        var obj = _obj.getF('[name=' + name + '][data-value=' + value + ']', box);
+        obj.prop('checked', true);
     },
 
     //set status by name
@@ -3808,8 +3795,8 @@ var _obj = {
     /**
      * get object by name
      */
-    getN: function (val, box) {
-        return _obj.getF('[name=' + val + ']', box);
+    getN: function (name, box) {
+        return _obj.getF('[name=' + name + ']', box);
     },
 
     /**
@@ -3879,18 +3866,16 @@ var _obj = {
     },
 
 }; //class
-
 //SPA pjax
 var _pjax = {
 
     /**
      * initial
-     * param {string} filter : filter of pjax container, ex: '.xu-body'
+     * param {string} boxFt : box(container) filter, ex: '.xu-body'
      */
-    init: function (filter) {
-        //box = box || '.xd-body';
+    init: function (boxFt) {
         //if skip 'POST', it will trigger twice !!
-        $(document).pjax('[data-pjax]', filter, { type: 'POST' });
+        $(document).pjax('[data-pjax]', boxFt, { type: 'POST' });
 
         /*
         $(document).on('ready pjax:success', box, function () {
@@ -4004,14 +3989,22 @@ var _prog = {
      * set program path
      * param fun {string} fun mode
      */
-    setPath: function (fun) {
+    setPath: function (fun, updName) {
         var name = (fun == _fun.FunC) ? _BR.Create :
-            (fun == _fun.FunU) ? _BR.Update :
             (fun == _fun.FunV) ? _BR.View :
-            '??';
-        _prog.me.text(_prog.oriPath + '-' + name);
+            (fun != _fun.FunU) ? '??' :
+            _str.isEmpty(updName) ? _BR.Update :
+            updName;
+        _prog.setFunName(name);
     },
 
+    /**
+     * set fun name
+     * param name {string} fun name
+     */
+    setFunName: function (name) {
+        _prog.me.text(_prog.oriPath + '-' + name);
+    },
 };
 
 //https://github.com/davidshimjs/qrcodejs
@@ -4424,35 +4417,34 @@ var _var = {
 };
 
 /**
- * 建立 jQuery dataTables
- * selector {string} datatable selector
- * url {string} backend action url
- * dtConfig {json} datatables config
- * findJson {json} 初始化時的查詢條件
- * fnOk {function}: 查詢成功時的callback, 如果空白, 則顯示成功訊息
- * tbarHtml {string}: datatable toolbar html for 增加額外的功能按鈕
+ * create jQuery dataTables object
+ * param selector {string} datatable selector
+ * param url {string} backend action url
+ * param dtConfig {json} datatables config
+ * param findJson {json} (optional) find condition when initial
+ * param fnOk {function} (optional) callback after query ok, if empty then show successful msg
+ * param tbarHtml {string} (optional) datatable toolbar html for extra button
  */
 function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
 
     //public property 
-    this.dt = null;             //datatable object
-    this.findJson = findJson;   //查詢條件
-    //this.findStr = '';          //快速查詢字串    
-    this.recordsFiltered = -1;  //查詢筆數, -1表重新計算, 名稱配合DataTables
-    this.defaultShowOk = true;  //是否顯示查詢成功訊息, default value
+    this.dt = null;             //jquery datatables object
+    this.findJson = findJson;   //find condition
+    this.recordsFiltered = -1;  //found count, -1 for recount, name map to DataTables
+    this.defaultShowOk = true;  //whethor show find ok msg, default value
 
     //private
-    //從上次查詢的頁次開始, false(查詢), true(儲存後重整UI)
+    //keep start row idx, false(find), true(save reload)
     this._keepStart = false;
 
-    //記錄目前的開始行數, 因為在 ajax.dataSrc() 無法得到(會得0)
+    //now start row idx, coz ajax.dataSrc() always get 0 !!
     this._start = 0;
 
-    //(目前)是否顯示查詢成功訊息
+    //(now)show find ok msg or not
     this._nowShowOk = this.defaultShowOk;      
         
     /**
-     * 重新計算筆數
+     * reset found count
      */ 
     this.resetCount = function () {
         //var count = reset ? -1 : this.dt.recordsFiltered;
@@ -4460,16 +4452,14 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
     };
 
     /**
-     * 查詢資料
-     * findJson {json} 查詢條件
-     * search {string} 搜尋字串
+     * find rows
+     * param findJson {json} find condition
      */
     this.find = function (findJson) {
 
-        //debugger;
         this.findJson = findJson;
         //this.findStr = findStr || '';
-        this.resetCount();   //重新計算條件下的筆數
+        this.resetCount();   //recount first
 
         //trigger dataTables search event
         //this.dt.search(this.findStr).draw();
@@ -4477,12 +4467,12 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
     };
 
     /**
-     * 用相同的條件再查詢一次, 用於資料更新之後
-     * 不顯示 "查詢成功" 訊息
+     * refind with same condition for refresh form
+     * not show find ok msg
      */ 
     this.reload = function () {
         this._keepStart = true;
-        this._nowShowOk = false;  //不顯示成功訊息
+        this._nowShowOk = false;  //not show find ok msg
         this.find(this.findJson);
     };
 
@@ -4493,29 +4483,29 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
         
         //default config for dataTables
         var config = {
-            processing: false,  //使用自定義的處理中訊息
+            processing: false,  //use custom processing msg
             serverSide: true,   //server pagination
-            jQueryUI: false,    //可載入Jquery UI主題  
-            //stateSave: true,    //
-            //ordering: false,
-            filter: false,      //搜尋            
-            paginate: true,     //翻頁功能            
-            lengthChange: true, //改變每頁顯示數據數量            
-            info: true,         //顯示表格的相關資訊，包括當前頁面紀錄，以及總記錄頁面數量。
-            sorting: [],        //default not sorting, 否則datatable會使用第一個欄位排序 !!
+            jQueryUI: false,
+            filter: false,      //find string            
+            paginate: true,     //paging          
+            lengthChange: true, //set page rows
+            info: true,         //show page info, include now page, total pages
+            sorting: [],        //default not sorting, or datatable will sort by first column !!
             pagingType: "full_numbers",
+            //stateSave: true,
+            //ordering: false,
 
-            //多國語
+            //locale
             language: {
                 url: "../locale/" + _fun.locale + "/dataTables.txt",
             },
 
-            //自訂工具列
-            dom: 'l<"toolbar">frtip',
+            //default toolbar layout
+            dom: _crud.dtDom,
 
-            //dataTables完成初始化之後會呼叫這個函式
-            //1.增加 toolbar button list if need
-            //2.改變查詢欄位的行為, 按下 enter 時才執行查詢
+            //call after dataTables initialize
+            //1.add toolbar button list if need
+            //2.change find action: find after enter !!
             initComplete: function (settings, json) {
                 //1.toolbar
                 if (tbarHtml)
@@ -4543,7 +4533,7 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
                 }
             }.bind(this),
 
-            //ajax config(不是標準的 jquery ajax !!)
+            //ajax config(not standard jquery ajax !!)
             //me: this,
             ajax: {
                 //config
@@ -4551,22 +4541,19 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
                 type: 'POST',
                 dataType: 'json',
 
-                //增加傳入參數 for datatables
+                //add input parameter for datatables
                 data: function (arg) {
-                    //debugger;
-                    arg.findJson = _json.toStr(this.findJson);    //以字串型式傳入
+                    arg.findJson = _json.toStr(this.findJson);    //string type
                     arg.recordsFiltered = this.recordsFiltered;
                     if (this._keepStart)
                         arg.start = this._start;
                 }.bind(this),                
 
-                //on success
-                //cannot use success, see dataTables document !!
+                //on success (cannot use success event), see DataTables document !!
                 dataSrc: function (result) {
                     this._start = this.dt.page.info().start;
                     this._keepStart = false; //reset
 
-                    //debugger;
                     //data is mapping to backend ErrorModel
                     if (result.ErrorMsg != null && result.ErrorMsg != "") {
                         _tool.msg(result.ErrorMsg);
@@ -4594,7 +4581,6 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
 
                 //on error
                 error: function (xhr, ajaxOptions, thrownError) {
-                    //debugger;
                     _tool.hideWait();
                     _tool.msg('Datatable.js error.');
                     if (xhr != null) {
@@ -4605,20 +4591,26 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
             },
         };
 
-        //add custom config
-        if (dtConfig)
+        //add custom columnDefs
+        if (dtConfig) {
+            if (!_var.isEmpty(dtConfig.columnDefs)) {
+                var colDefs = dtConfig.columnDefs;
+                colDefs[colDefs.length] = _crud.dtColDef;
+            }
             config = _json.copy(dtConfig, config);
+        }
         
         //before/after ajax call, show/hide waiting msg
         var dt = $(selector);
         dt.on('preXhr.dt', function (e, settings, data) { _tool.showWait(); });
         dt.on('xhr.dt', function (e, settings, data) { _tool.hideWait(); });
         this.dt = dt.DataTable(config);
+
         //.DataTables() will return DataTable API instance, but .dataTable() only return jQuery object !!
         //return { datatable: dt.DataTable(config), findJson: {} };
     };
 
-    //必須放最後面
+    //must put last
     this.init(selector, url, dtConfig, fnOk, tbarHtml);
 
 } //class
@@ -4699,6 +4691,9 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
         this.resetDeleted();
     };
 
+    /**
+     * reset deleted rows
+     */
     this.resetDeleted = function () {
         this.deletedRows = [];
     };
@@ -4719,7 +4714,7 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
     };
 
     /**
-     * load json rows into UI by userRole mode(urm)
+     * load json rows into UI by UserRole Mode(urm)
      * param json {json} 
      */
     this.urmLoadJson = function (json, rowsBox, fids) {
@@ -5332,8 +5327,8 @@ function EditOne(kid, eformId) {
     };
 
     /**
-     * set form to editable or not
-     * param status {bool} editable or not
+     * set form edit status
+     * param status {bool} edit status
      */
     this.setEdit = function (status) {
         _form.setEdit(this.eform, status);
@@ -5943,17 +5938,6 @@ function Flow(boxId, mNode, mLine) {
         return (sourceType == this.StartNode || sourceType == this.AutoNode);
     };
 
-    /*
-    this.isLineCondMode = function (lineType) {
-        return (lineType === '2');
-    };
-
-    //is node type editable or not
-    this.isNodeTypeEditable = function (nodeType) {
-        return (nodeType === this.NormalNode || nodeType === this.AutoNode);
-    };
-    */
-
     /**
      * get line property: style, label
      * return {json} 
@@ -6129,12 +6113,6 @@ function Flow(boxId, mNode, mLine) {
         var node = this.elmToNode(this.nowElm);
         var row = this.boxGetValues(node, ['NodeType', 'Name', 'SignerType', 'SignerValue']);
         _form.loadJson(this.modalNodeProp, row);
-        /*
-        //set NodeType field
-        var obj = _obj.get('NodeType', form);
-        _iselect.setO(obj, nodeType);
-        _iselect.setEditO(obj, this.isNodeTypeEditable(nodeType));
-        */
 
         //show modal
         _modal.showO(this.modalNodeProp);   //.modal('show');
@@ -6356,9 +6334,6 @@ function Flow(boxId, mNode, mLine) {
 
 }//class
 var _xp = {
-
-    //middle variables
-    temp: {},
 
     //initial application
     init: function () {

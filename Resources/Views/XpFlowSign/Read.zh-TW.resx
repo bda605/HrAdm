@@ -121,7 +121,7 @@
     <value>代理人</value>
   </data>
   <data name="Asker" xml:space="preserve">
-    <value>請假人</value>
+    <value>申請人</value>
   </data>
   <data name="EndTime" xml:space="preserve">
     <value>結束時間</value>
@@ -140,5 +140,11 @@
   </data>
   <data name="StartTime" xml:space="preserve">
     <value>開始時間</value>
+  </data>
+  <data name="SignTime" xml:space="preserve">
+    <value>簽核時間</value>
+  </data>
+  <data name="Flow" xml:space="preserve">
+    <value>流程</value>
   </data>
 </root>

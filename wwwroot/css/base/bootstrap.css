@@ -19,11 +19,16 @@
     font-size: 14px;
 }
 
-/* 縮小欄位高度, 38 -> 36 */
+/* change height, 38 -> 36 */
 .form-control, select.form-control {
+    font-size: 16px !important;
     height: 36px !important;
     /*padding: 3px 6px !important;*/
 }
+
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #eee !important;
+    }
 
 textarea.form-control {
     height: auto !important;

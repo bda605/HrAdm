@@ -127,7 +127,7 @@
     <value>開始節點</value>
   </data>
   <data name="Node" xml:space="preserve">
-    <value>節點</value>
+    <value>一般節點</value>
   </data>
   <data name="EndNode" xml:space="preserve">
     <value>結束節點</value>

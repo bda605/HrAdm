@@ -565,17 +565,6 @@ function Flow(boxId, mNode, mLine) {
         return (sourceType == this.StartNode || sourceType == this.AutoNode);
     };
 
-    /*
-    this.isLineCondMode = function (lineType) {
-        return (lineType === '2');
-    };
-
-    //is node type editable or not
-    this.isNodeTypeEditable = function (nodeType) {
-        return (nodeType === this.NormalNode || nodeType === this.AutoNode);
-    };
-    */
-
     /**
      * get line property: style, label
      * return {json} 
@@ -751,12 +740,6 @@ function Flow(boxId, mNode, mLine) {
         var node = this.elmToNode(this.nowElm);
         var row = this.boxGetValues(node, ['NodeType', 'Name', 'SignerType', 'SignerValue']);
         _form.loadJson(this.modalNodeProp, row);
-        /*
-        //set NodeType field
-        var obj = _obj.get('NodeType', form);
-        _iselect.setO(obj, nodeType);
-        _iselect.setEditO(obj, this.isNodeTypeEditable(nodeType));
-        */
 
         //show modal
         _modal.showO(this.modalNodeProp);   //.modal('show');

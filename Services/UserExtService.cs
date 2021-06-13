@@ -61,6 +61,7 @@ namespace HrAdm.Services
                 .ToList();
 
             var langLevel = "LangLevel";
+            var locale = _Xp.GetLocale0();
             var userLangs = (from a in db.UserLang
                              join c1 in db.XpCode on new { Type = langLevel, Value = a.ListenLevel } equals new { c1.Type, c1.Value }
                              join c2 in db.XpCode on new { Type = langLevel, Value = a.SpeakLevel } equals new { c2.Type, c2.Value }
@@ -71,10 +72,10 @@ namespace HrAdm.Services
                              select new
                              {
                                  a.LangName,
-                                 ListenLevel = c1.Name,
-                                 SpeakLevel = c2.Name,
-                                 ReadLevel = c3.Name,
-                                 WriteLevel = c4.Name,
+                                 ListenLevel = _XpCode.GetValue(c1, locale),
+                                 SpeakLevel = _XpCode.GetValue(c2, locale),
+                                 ReadLevel = _XpCode.GetValue(c3, locale),
+                                 WriteLevel = _XpCode.GetValue(c4, locale),
                              })
                              .ToList();
 

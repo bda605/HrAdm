@@ -3,13 +3,11 @@
     init: function () {        
         //datatable config
         var config = {
-            dom: _crud.dtDom,
             columns: [
                 { data: 'Name' },
                 { data: '_Fun' },
             ],
             columnDefs: [
-                _crud.dtColConfig,
 				{ targets: [1], render: function (data, type, full, meta) {
                     return _crud.dtCrudFun(full.Id, full.Name, true, true, true);
                 }},

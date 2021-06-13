@@ -150,4 +150,7 @@
   <data name="Audit" xml:space="preserve">
     <value>審核</value>
   </data>
+  <data name="NodeName" xml:space="preserve">
+    <value>關卡名稱</value>
+  </data>
 </root>

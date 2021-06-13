@@ -54,15 +54,24 @@
     color: gray;
 }
 
-.xg-mt-0 {
-    margin-top: 0;
+.xg-h10 {
+    height: 10px !important;
 }
-.xg-mt-5 {
-    margin-top: 5px;
+
+.xg-mt0 {
+    margin-top: 0 !important;
 }
-.xg-mt-10 {
-    margin-top: 10px;
+.xg-mt5 {
+    margin-top: 5px !important;
 }
-.xg-mb-0 {
-    margin-bottom: 0;
+.xg-mt10 {
+    margin-top: 10px !important;
+}
+.xg-mb0 {
+    margin-bottom: 0 !important;
+}
+
+/* match datepicker.css .date setting, for keep input width same to date at query form */
+.xg-date-w {
+    width: 180px !important;
 }

@@ -9,6 +9,7 @@ namespace HrAdm.Services
     {
         public List<SignRowDto> GetSignRows(string id)
         {
+            var locale = _Xp.GetLocale0();
             var db = _Xp.GetDb();
             return (from s in db.XpFlowSign
                     join f in db.XpFlow on s.FlowId equals f.Id
@@ -20,7 +21,7 @@ namespace HrAdm.Services
                     {
                         NodeName = s.NodeName,
                         SignerName = s.SignerName,
-                        SignStatusName = c.Name,
+                        SignStatusName = _XpCode.GetValue(c, locale),
                         SignTime = (s.SignTime == null) 
                             ? "" : s.SignTime.Value.ToString(_Fun.CsDtFormat),
                         Note = s.Note,

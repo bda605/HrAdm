@@ -1,5 +1,6 @@
 ﻿using Base.Enums;
 using Base.Models;
+using Base.Services;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +12,13 @@ namespace HrAdm.Controllers
     {
         public ActionResult Read()
         {
-			//for read view
-			ViewBag.LeaveTypes = _XpCode.GetLeaveTypes();
-			ViewBag.SignStatuses = _XpCode.GetSignStatuses();
-			//for edit view
-			ViewBag.Users = _XpCode.GetUsers();
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
+            //for read view
+            var locale0 = _Xp.GetLocale0();
+            //ViewBag.LeaveTypes = _XpCode.GetLeaveTypes(locale0);
+			//ViewBag.SignStatuses = _XpCode.GetSignStatuses(locale0);
+            ViewBag.SignStatuses2 = _XpCode.GetSignStatuses2(locale0);
+            //for edit view
+            //ViewBag.Users = _XpCode.GetUsers();
             return View();
         }
 
@@ -39,7 +37,7 @@ namespace HrAdm.Controllers
         /// <summary>
         /// sign one row
         /// </summary>
-        /// <param name="id">FlowSign.Id</param>
+        /// <param name="id">XpFlowSign.Id</param>
         /// <param name="status">signStatus</param>
         /// <param name="note">sign note</param>
         /// <returns>ResultDto</returns>

@@ -132,8 +132,8 @@
         //for xgOpenModal
         _me.modal = null;
 
-        //table div id固定為 table1, 後端固定呼叫 GetPage
-        _me.dt = new Datatable('#table1', 'GetPage', dtConfig);
+        //table div id固定為 tableRead, 後端固定呼叫 GetPage
+        _me.dt = new Datatable('#tableRead', 'GetPage', dtConfig);
         _prog.init();   //prog path
     },
 

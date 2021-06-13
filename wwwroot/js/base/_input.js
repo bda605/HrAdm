@@ -84,15 +84,10 @@ var _input = {
                 _ifile.setO(obj, value);
                 break;
             case 'textarea':
-                //value = _ihtml.decode(value);
-                //obj.html(value);
                 _itextarea.setO(obj, value);
                 break;
             case 'html':
                 _ihtml.setO(obj, value);
-                //value = _ihtml.decode(value);
-                //obj.html(value);
-                //obj.val(value);     //也要設定這個屬性 !!
                 break;
             case 'read':
                 var format = obj.data('format');
@@ -103,7 +98,7 @@ var _input = {
             case 'linkFile':
                 return _ilinkFile.setO(obj, value);
             default:
-                //text, textarea
+                //text
                 obj.val(value);
                 break;
         }

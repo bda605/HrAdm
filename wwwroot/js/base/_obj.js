@@ -23,8 +23,8 @@ var _obj = {
     /**
      * get object by name
      */
-    getN: function (val, box) {
-        return _obj.getF('[name=' + val + ']', box);
+    getN: function (name, box) {
+        return _obj.getF('[name=' + name + ']', box);
     },
 
     /**

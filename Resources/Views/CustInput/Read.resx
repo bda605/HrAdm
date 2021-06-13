@@ -100,16 +100,16 @@
   <data name="Text" xml:space="preserve">
     <value>Text</value>
   </data>
-  <data name="Int" xml:space="preserve">
+  <data name="NumInt" xml:space="preserve">
     <value>Integer</value>
   </data>
-  <data name="Dec" xml:space="preserve">
+  <data name="NumDec" xml:space="preserve">
     <value>Decimal</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Date</value>
   </data>
-  <data name="Datetime" xml:space="preserve">
+  <data name="Dt" xml:space="preserve">
     <value>Datetime</value>
   </data>
   <data name="Textarea" xml:space="preserve">

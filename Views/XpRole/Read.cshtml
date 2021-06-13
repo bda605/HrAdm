@@ -11,7 +11,7 @@
 @await Component.InvokeAsync("XgProgPath", new { names = new string[] { R0["MenuXpRole"].Value } })
 <div class="xp-prog">
     <div id="divRead">
-        <form id='rform' class='xg-form'>
+        <form id='formRead' class='xg-form'>
             <div class="row">
                 @await Component.InvokeAsync("XiText", new { title = R["RoleName"].Value, fid = "Name", maxLen = 30, inRow = true })
                 @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
@@ -21,7 +21,7 @@
         <div class='xg-btns-box'>
             @await Component.InvokeAsync("XgCreate")
         </div>
-        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+        <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
                     <th>@R["RoleName"]</th>

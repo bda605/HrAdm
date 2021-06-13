@@ -5,8 +5,7 @@
 @{
     _Fun.Config.SystemName = R["SystemName"].Value;
     var locale = _Fun.GetLocaleByUser();
-    var min = _Fun.IsDebug ? "" : ".min";   //min js
-    //var showSort = false;
+    var min = _Fun.IsDebug() ? "" : ".min";   //min js
     //var menus = SetMenuName(_Web.GetMenu());  //by user right
     var menus = new List<MenuDto>()
     {
@@ -27,7 +26,7 @@
 }
 
 @functions {
-    //set menu.Name
+    //re-set menu.Name(add locale)
     public List<MenuDto> SetMenuName(List<MenuDto> menus)
     {
         if (menus == null)
@@ -56,15 +55,15 @@
     <title>@_Fun.Config.SystemName</title>
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <!-- css -->
+    <!-- 1.load css -->
     <link rel="stylesheet" href="~/css/lib@(min).css?Ver=@(_Xp.LibVer)" />
     <link rel="stylesheet" href="~/css/my@(min).css?ver=@(_Xp.SiteVer)" />
     @RenderSection("styles", required: false)
 
-    <!-- js: lib -->
+    <!-- 2.load lib js -->
     <script src="~/js/lib@(min).js?Ver=@(_Xp.LibVer)"></script>
 
-    <!-- js: this site, check debug/production mode !! -->
+    <!-- 3.load my site js(debug/production mode) !! -->
     <environment include="Production">
         <script src="~/js/my@(min).js?ver=@(_Xp.SiteVer)"></script>
     </environment>
@@ -74,12 +73,12 @@
         <script asp-src-include="~/js/view/_*.js"></script>
     </environment>
 
-    <!-- js: local -->
+    <!-- 4.load local js -->
     <script src="~/js/@(locale+min).js?ver=@(_Xp.SiteVer)"></script>
 
     @RenderSection("scripts", required: false)
 
-    <!-- put here !! -->
+    <!-- 5.initial -->
     <script type="text/javascript">
         $(function () {
             _fun.locale = '@(locale)';
@@ -88,6 +87,7 @@
     </script>
 </head>
 
+<!-- 6.show view -->
 <body>
     <!-- Top -->
     <partial name="_Top.cshtml" />

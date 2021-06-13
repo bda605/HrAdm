@@ -13,9 +13,10 @@ namespace HrAdm.Controllers
     {
         public ActionResult Read()
         {
-			//for read view
-			ViewBag.LeaveTypes = _XpCode.GetLeaveTypes();
-			ViewBag.SignStatuses = _XpCode.GetSignStatuses();
+            //for read view
+            var locale0 = _Xp.GetLocale0();
+            ViewBag.LeaveTypes = _XpCode.GetLeaveTypes(locale0);
+			ViewBag.SignStatuses = _XpCode.GetSignStatuses(locale0);
 			//for edit view
 			ViewBag.Users = _XpCode.GetUsers();
             return View();

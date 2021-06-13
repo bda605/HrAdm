@@ -11,22 +11,22 @@
 @await Component.InvokeAsync("XgProgPath", new { names = new string[] { R0["MenuCustInput"].Value } })
 <div class="xp-prog">
     <div id="divRead">
-        <form id='rform' class='xg-form'>
+        <form id='formRead' class='xg-form'>
             <div class="row">
-                @await Component.InvokeAsync("XiText", new { title = R["Text"].Value, fid = "FldText", maxLen = 20, inRow = true })
-                @await Component.InvokeAsync("XgFindTbar", new { })
+                <vc:xi-text dto="@(new XiTextDto { Title = R["Text"].Value, Fid = "FldText", InRow = true })"></vc:xi-text>
+                @await Component.InvokeAsync("XgFindTbar")
             </div>
         </form>
 
         <div class='xg-btns-box'>
             @await Component.InvokeAsync("XgCreate")
         </div>
-        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+        <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
                     <th>@R["Text"]</th>
-                    <th>@R["Int"]</th>
-                    <th>@R["Dec"]</th>
+                    <th>@R["NumInt"]</th>
+                    <th>@R["NumDec"]</th>
                     <th>@R0["Crud"]</th>
                 </tr>
             </thead>
@@ -36,21 +36,21 @@
 
     <div id="divEdit" class="xg-hide">
         <form id='eform' class='xg-form'>
-            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-
-            @await Component.InvokeAsync("XiText", new { title = R["Text"].Value, fid = "FldText", maxLen = 20, required = true })
-            @await Component.InvokeAsync("XiNum", new { title = R["Int"].Value, fid = "FldNum", required = true, cols = "2,2" })
-            @await Component.InvokeAsync("XiNum", new { title = R["Dec"].Value, fid = "FldNum2", required = true, isDigit = false, cols = "2,2" })
-            @await Component.InvokeAsync("XiCheck", new { title = "CheckBox", fid = "FldCheck" })
-            @await Component.InvokeAsync("XiRadios", new { title = "Radio", fid = "FldRadio", rows = (List<IdStrDto>)ViewBag.Radios, label = "Radios" })
-            @await Component.InvokeAsync("XiSelect", new { title = "Select", fid = "FldSelect", rows = (List<IdStrDto>)ViewBag.Selects, required = true })
-            @await Component.InvokeAsync("XiDate", new { title = R["Date"].Value, fid = "FldDate", required = true })
-            @await Component.InvokeAsync("XiDt", new { title = R["Datetime"].Value, fid = "FldDatetime", required = true, cols = "2,8" })
-            @await Component.InvokeAsync("XiFile", new { title = R0["UpdFile"].Value, fid = "FldFile", required = true })
-            @await Component.InvokeAsync("XiTextArea", new { title = R["Textarea"].Value, fid = "FldTextarea", maxLen = 255, required = true, cols = "2,9" })
-            @await Component.InvokeAsync("XiHtml", new { title = "Html", fid = "FldHtml", required = true, cols = "2,9" })
+            <vc:xi-check dto="@(new XiCheckDto { Title = "XiCheck", Fid = "FldCheck", Edit = "C", LabelTip = "CheckBox Input" })"></vc:xi-check>
+            <vc:xi-date dto="@(new XiDateDto { Title = "XiDate", Fid = "FldDate", Required = true, LabelTip = "Date Input" })"></vc:xi-date>
+            <vc:xi-dt dto="@(new XiDtDto { Title = "XiDt", Fid = "FldDt", Required = true, Cols = "2,8", Edit = "C" })"></vc:xi-dt>
+            <vc:xi-file dto="@(new XiFileDto { Title = "XiFile", Fid = "FldFile", Required = true })"></vc:xi-file>
+            <vc:xi-hide dto="@(new XiHideDto { Fid = "Id" })"></vc:xi-hide>
+            <vc:xi-html dto="@(new XiHtmlDto { Title = "XiHtml", Fid = "FldHtml", Required = true, Cols = "2,9", Edit = "C" })"></vc:xi-html>
+            <vc:xi-link dto="@(new XiLinkDto { Title = "XiLinkFile", Fid = "FldLinkFile" })"></vc:xi-link>
+            <vc:xi-int dto="@(new XiIntDto { Title = "XiInt", Fid = "FldNumInt", Required = true, Cols = "2,2" })"></vc:xi-int>
+            <vc:xi-dec dto="@(new XiDecDto { Title = "XiDec", Fid = "FldNumDec", Required = true, Cols = "2,2" })"></vc:xi-dec>
+            <vc:xi-radio dto="@(new XiRadioDto { Title = "XiRadios", Fid = "FldRadio", Rows = (List<IdStrDto>)ViewBag.Radios })"></vc:xi-radio>
+            <vc:xi-read dto="@(new XiReadDto { Title = "XiRead", Fid = "FldRead", Value = "label" })"></vc:xi-read>
+            <vc:xi-select dto="@(new XiSelectDto { Title = "XiSelect", Fid = "FldSelect", Rows = (List<IdStrDto>)ViewBag.Selects, Required = true })"></vc:xi-select>
+            <vc:xi-ta dto="@(new XiTaDto { Title = "XiTextArea", Fid = "FldTextarea", MaxLen = 255, Required = true, Cols = "2,9" })"></vc:xi-ta>
+            <vc:xi-text dto="@(new XiTextDto { Title = "XiText", Fid = "FldText", MaxLen = 20, Required = true })"></vc:xi-text>
         </form>
-
         @await Component.InvokeAsync("XgSaveBack")
     </div>
 </div>

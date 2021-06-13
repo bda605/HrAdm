@@ -10,7 +10,6 @@
         init: function () {
             //datatable config
             var config = {
-                dom: _crud.dtDom,
                 columns: [
                     { data: 'Account' },
                     { data: 'Name' },
@@ -20,7 +19,6 @@
                     { data: '_F2' },
                 ],
                 columnDefs: [
-                    _crud.dtColConfig,
                     { targets: [3], render: function (data, type, full, meta) {
                          return _crud.dtStatusName(data);
                     }},
@@ -64,7 +62,7 @@
 @await Component.InvokeAsync("XgProgPath", new { names = new string[] { R0["MenuUserExt"].Value } })
 <div class="xp-prog">
     <div id="divRead">
-        <form id='rform' class='xg-form'>
+        <form id='formRead' class='xg-form'>
             <div class="row">
                 @await Component.InvokeAsync("XiText", new { title = R["Account"].Value, fid = "Account", maxLen = 20, inRow = true })
                 @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
@@ -75,7 +73,7 @@
 
         <div class='xg-btns-box'>
         </div>
-        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+        <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
                     <th>@R["Account"]</th>

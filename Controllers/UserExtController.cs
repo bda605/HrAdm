@@ -17,7 +17,7 @@ namespace HrAdm.Controllers
 			//for read view
 			ViewBag.Depts = _XpCode.GetDepts();
 			//for edit view
-			ViewBag.LangLevels = _XpCode.GetLangLevels();
+			ViewBag.LangLevels = _XpCode.GetLangLevels(_Xp.GetLocale0());
             return View();
         }
 

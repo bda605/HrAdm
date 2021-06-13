@@ -1,10 +1,10 @@
 ﻿
-//base class of all input field
+//base class of all input field, use 'this' instead of '_ibase'
 //must loaded first, or will got error !!
 var _ibase = {
 
     /**
-     * get value by fid
+     * get value by fid, get -> getF -> getO
      * param fid {string}
      * param box {object}
      * return {string}
@@ -21,20 +21,13 @@ var _ibase = {
         return obj.val();
     },
 
-    /*
-    //get value by name
-    getN: function (fid, box) {
-        return this.getO(_obj.getN(fid, box));
-    },
-    */
-
     //get input border for show red border
     //default return this, drive class could rewrite.
     getBorder: function (obj) {
         return obj;
     },
 
-    //set value
+    //set value, set -> setF -> setO
     set: function (fid, value, box) {
         this.setO(_obj.get(fid, box), value)
     },
@@ -44,11 +37,6 @@ var _ibase = {
     setO: function (obj, value) {
         obj.val(value);
     },
-    /*
-    setN: function (fid, value, box) {
-        this.setO(_obj.getN(fid, box), value)
-    },
-    */
 
     //set edit status
     setEdit: function (fid, status, box) {
@@ -60,10 +48,5 @@ var _ibase = {
     setEditO: function (obj, status) {
         obj.prop('readonly', !status);
     },
-    /*
-    setEditN: function (fid, status, box) {
-        this.setEditO(_obj.getN(fid, box), status);
-    },
-    */
 
 };//class

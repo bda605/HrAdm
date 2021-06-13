@@ -10,16 +10,8 @@ namespace HrAdm.Controllers
     {
         public ActionResult Read()
         {
-			//for read view
-			ViewBag.LeaveTypes = _XpCode.GetLeaveTypes();
-			ViewBag.SignStatuses = _XpCode.GetSignStatuses();
-			//for edit view
-			ViewBag.Users = _XpCode.GetUsers();
-            return View();
-        }
-
-        public ActionResult Edit()
-        {
+            //for read view
+            ViewBag.Flows = _XpCode.GetFlows();
             return View();
         }
 
@@ -30,12 +22,11 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public ContentResult GetJson(string key)
+        public ContentResult GetJson(string flowCode, string key)
         {
-            return Content(new XpFlowSignEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return Content(new XpFlowSignEdit().GetJson(flowCode, key).ToString(), ContentTypeEstr.Json);
         }
 
-        //TODO: add your code
         //get file/image
         public FileContentResult GetFile(string table, string fid, string key)
         {

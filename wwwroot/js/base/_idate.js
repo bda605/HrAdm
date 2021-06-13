@@ -33,13 +33,8 @@ var _idate = $.extend({}, _ibase, {
         var obj = _str.isEmpty(fid)
             ? box.find(_idate.BoxFilter)
             : _obj.get(fid, box).closet(_idate.BoxFilter);
-        if (obj.length > 0)
-            _idate.initO(obj);
-    },
-
-    //initial by object(s)
-    //initO: function (obj, fnOnChange) {
-    initO: function (obj) {
+        if (obj.length == 0)
+            return;
 
         //initial
         obj.datepicker({
@@ -60,16 +55,9 @@ var _idate = $.extend({}, _ibase, {
             */
         });
 
-        //skip event listen, otherwise it will show calendar when reset(jquery 3.21 will listen) !!
+        //stop event, or it will popup when reset(jquery 3.21) !!
         obj.find('.input-group-addon').off('click');
     },
-
-    /*
-    //for 多筆區域
-    initByBox: function (box, fnOnChange) {
-        _idate.initO(box.find(_idate.BoxFilter), fnOnChange);
-    },
-    */
 
     //show/hide datepicker
     onToggle: function (btn) {
@@ -79,9 +67,16 @@ var _idate = $.extend({}, _ibase, {
 
     //reset value
     onReset: function (btn) {
-        _idate._boxSetDate(_idate._elmToBox(btn), '');
+        //check input status first
+        var box = _idate._elmToBox(btn);
+        if (_idate.getEditO(_idate._boxGetInput(box)))
+            _idate._boxSetDate(box, '');
     },    
 
+    //get edit status, return bool
+    getEditO: function (obj) {
+        return !obj.is(':disabled');
+    },
 
     //=== private function below ===
     /**
@@ -94,6 +89,10 @@ var _idate = $.extend({}, _ibase, {
 
     _boxSetDate: function (box, date) {
         box.datepicker('update', date);
+    },
+
+    _boxGetInput: function (box) {
+        return box.find('input');
     },
 
 }); //class

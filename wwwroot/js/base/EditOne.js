@@ -84,8 +84,8 @@ function EditOne(kid, eformId) {
     };
 
     /**
-     * set form to editable or not
-     * param status {bool} editable or not
+     * set form edit status
+     * param status {bool} edit status
      */
     this.setEdit = function (status) {
         _form.setEdit(this.eform, status);

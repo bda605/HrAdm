@@ -15,7 +15,6 @@
         init: function () {        
             //datatable config
             var config = {
-                dom: _crud.dtDom,
                 columns: [
                     { data: 'OkCount' },
                     { data: 'FailCount' },
@@ -25,7 +24,6 @@
                     { data: 'Created' },
                 ],
                 columnDefs: [
-                    _crud.dtColConfig,
 				    { targets: [1], render: function (data, type, full, meta) {
                         return (data > 0)
                             ? _str.format('<a href="GetFail?id={0}&name={1}">{2}</a>', full.Id, full.FileName, data)
@@ -75,7 +73,7 @@
 @await Component.InvokeAsync("XgProgPath", new { names = new string[] { progName } })
 <div class="xp-prog">
     <div id="divRead">
-        <form id='rform' class='xg-form'>
+        <form id='formRead' class='xg-form'>
             <div class="row">
                 @await Component.InvokeAsync("XiText", new { title = R["FileName"].Value, fid = "FileName", inRow = true })
                 @await Component.InvokeAsync("XgFindTbar")
@@ -86,7 +84,7 @@
             <button type="button" class="btn xg-btn" onclick="_me.onOpenImport()">@R["ImportExcel"]</button>
             <a class="btn xg-btn" href="Template">@R["DownloadTpl"]</a>
         </div>
-        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+        <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
                     <th>@R["OkRows"]</th>

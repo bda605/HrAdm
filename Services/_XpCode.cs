@@ -1,5 +1,6 @@
 ﻿using Base.Models;
 using Base.Services;
+using HrAdm.Tables;
 using System.Collections.Generic;
 
 namespace HrAdm.Services
@@ -28,42 +29,59 @@ namespace HrAdm.Services
         {
             return TableToList("XpProg", db);
         }
+        public static List<IdStrDto> GetFlows(Db db = null)
+        {
+            return TableToList("XpFlow", db);
+        }
         #endregion
 
 
         #region get from XpCode table
-        public static List<IdStrDto> GetLangLevels(Db db = null)
+        public static List<IdStrDto> GetLangLevels(string locale, Db db = null)
         {
-            return TypeToList("LangLevel", db);
+            return TypeToList(locale, "LangLevel", db);
         }
-        public static List<IdStrDto> GetLeaveTypes(Db db = null)
+        public static List<IdStrDto> GetLeaveTypes(string locale, Db db = null)
         {
-            return TypeToList("LeaveType", db);
+            return TypeToList(locale, "LeaveType", db);
         }
-        public static List<IdStrDto> GetSignStatuses(Db db = null)
+        public static List<IdStrDto> GetSignStatuses(string locale, Db db = null)
         {
-            return TypeToList("SignStatus", db);
+            return TypeToList(locale, "SignStatus", db);
+        }
+
+        public static List<IdStrDto> GetSignStatuses2(string locale, Db db = null)
+        {
+            var sql = $@"
+select 
+    Value as Id, Name_{locale} as Str
+from dbo.XpCode
+where Type='SignStatus'
+and Ext='1'
+order by Sort";
+            return SqlToList(sql, db);
         }
         #endregion
 
         #region for flow
-        public static List<IdStrDto> GetNodeTypes(Db db = null)
+        public static List<IdStrDto> GetNodeTypes(string locale, Db db = null)
         {
-            return TypeToList("NodeType", db);
+            return TypeToList(locale, "NodeType", db);
         }
-        public static List<IdStrDto> GetSignerTypes(Db db = null)
+        public static List<IdStrDto> GetSignerTypes(string locale, Db db = null)
         {
-            return TypeToList("SignerType", db);
+            return TypeToList(locale, "SignerType", db);
         }
-        public static List<IdStrDto> GetAndOrs(Db db = null)
+        public static List<IdStrDto> GetAndOrs(string locale, Db db = null)
         {
-            return TypeToList("AndOr", db);
+            return TypeToList(locale, "AndOr", db);
         }
-        public static List<IdStrDto> GetLineOps(Db db = null)
+        public static List<IdStrDto> GetLineOps(string locale, Db db = null)
         {
-            return TypeToList("LineOp", db);
+            return TypeToList(locale, "LineOp", db);
         }
 
+        /*
         public static List<IdStrDto> GetSignTypes()
         {
             return new List<IdStrDto>()
@@ -72,6 +90,7 @@ namespace HrAdm.Services
                 new IdStrDto(){ Id = "N", Str = "不同意" },
             };
         }
+        */
         #endregion
 
         #region others
@@ -114,15 +133,21 @@ order by Id
         }
 
         //get code table rows for 下拉式欄位
-        private static List<IdStrDto> TypeToList(string type, Db db = null)
+        private static List<IdStrDto> TypeToList(string locale, string type, Db db = null)
         {
             var sql = $@"
 select 
-    Value as Id, Name as Str
+    Value as Id, Name_{locale} as Str
 from dbo.XpCode
 where Type='{type}'
 order by Sort";
             return SqlToList(sql, db);           
+        }
+        public static string GetValue(XpCode row, string locale)
+        {
+            var name = "Name_" + locale;
+            //return _Linq.FnGetValue<XpCode>(name).ToString();
+            return _Model.GetValue<XpCode>(row, name).ToString();
         }
 
         /*

@@ -379,7 +379,11 @@ namespace HrAdm.Tables
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.Name_enUS).HasMaxLength(50);
+
+                entity.Property(e => e.Name_zhCN).HasMaxLength(30);
+
+                entity.Property(e => e.Name_zhTW)
                     .IsRequired()
                     .HasMaxLength(30);
 
@@ -493,6 +497,10 @@ namespace HrAdm.Tables
 
             modelBuilder.Entity<XpFlowSign>(entity =>
             {
+                entity.HasIndex(e => e.FlowLevel, "XpFlowSign_FlowLevel");
+
+                entity.HasIndex(e => e.SignTime, "XpFlowSign_SignTime");
+
                 entity.Property(e => e.Id)
                     .HasMaxLength(10)
                     .IsUnicode(false);

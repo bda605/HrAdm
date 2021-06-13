@@ -9,22 +9,19 @@ namespace HrAdm.Services
     {
         private ReadDto dto = new ReadDto()
         {
-            ReadSql = $@"
-select l.Id,
-  l.StartTime, l.EndTime, l.Hours, l.Created,
-  FlowStatusName=c2.Name,
-  UserName=u.Name,
-  LeaveName=c.Name 
-from dbo.Leave l
-join dbo.[User] u on l.UserId=u.Id
-join dbo.XpCode c on c.Type='LeaveType' and l.LeaveType=c.Value 
-join dbo.XpCode c2 on c2.Type='FlowStatus' and l.FlowStatus=c2.Value 
-order by l.Created
+            ReadSql = @"
+select a.SourceId, a.SignerName, a.SignTime,
+	FlowCode=f.Code, FlowName=f.Name
+from dbo.XpFlowSign a
+join dbo.XpFlow f on a.FlowId=f.Id
+where a.FlowLevel=0
+order by a.SignTime
 ",            
+            TableAs = "a",
             Items = new [] {
-                new QitemDto { Fid = "StartTime", Type = QitemTypeEnum.Date },
-                new QitemDto { Fid = "LeaveType" },
-                new QitemDto { Fid = "FlowStatus" },
+                new QitemDto { Fid = "SignTime", Type = QitemTypeEnum.Date },
+                new QitemDto { Fid = "FlowId", Col = "f.Id" },
+                //new QitemDto { Fid = "FlowStatus" },
             },
         };
 

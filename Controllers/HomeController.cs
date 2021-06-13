@@ -41,7 +41,7 @@ namespace HrAdmin.Controllers
                 goto lab_exit;
             }
 
-            //check password
+            //check password & get user info
             var sql = @"
 select u.Id as UserId, u.Name as UserName, u.Pwd,
     u.DeptId, d.Name as DeptName
@@ -76,11 +76,7 @@ where u.Account=@Account
             #endregion
 
             //set session of base user info
-            var session = _Web.GetSession();
-            session.Set(_Fun.BaseUser, userInfo);   //extension method
-
-            //set locale
-            //_Locale.SetCulture(locale);
+            _Web.GetSession().Set(_Fun.BaseUser, userInfo);   //extension method
 
             //redirect if need
             var url = string.IsNullOrEmpty(vo.FromUrl) ? "/Home/Index" : vo.FromUrl;

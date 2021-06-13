@@ -4,7 +4,7 @@
 var _ihtml = $.extend({}, _ibase, {
 
     //constant
-    //BoxFilter: '.date',
+    Filter: '[data-type=html]',
 
     getO: function (obj) {
         //return obj.html();
@@ -19,6 +19,11 @@ var _ihtml = $.extend({}, _ibase, {
         //obj.val(value);
     },
 
+    //set edit status
+    setEditO: function (obj, status) {
+        obj.summernote(status ? 'enable' : 'disable');
+    },
+
     /**
      * init html editor
      * param obj {objects} html input object array
@@ -28,7 +33,7 @@ var _ihtml = $.extend({}, _ibase, {
      */
     init: function (box, prog, height, fnFileName) {
         height = height || 250;
-        box.find('[data-type=html]').summernote({
+        box.find(_ihtml.Filter).summernote({
             height: height,
             //new version use callbacks
             callbacks: {
@@ -60,6 +65,7 @@ var _ihtml = $.extend({}, _ibase, {
             },
 
             //=== add image ext attr start ===
+            lang: _fun.locale,
             popover: {
                 image: [
                     ['custom', ['imageAttributes']],
@@ -68,7 +74,6 @@ var _ihtml = $.extend({}, _ibase, {
                     ['remove', ['removeMedia']]
                 ],
             },
-            lang: _fun.locale,
             imageAttributes: {
                 imageDialogLayout: 'default', // default|horizontal
                 icon: '<i class="note-icon-pencil"/>',
@@ -85,6 +90,14 @@ var _ihtml = $.extend({}, _ibase, {
         });
     },
 
+    //set edit status for all html input
+    setEdits: function (box, subFilter, status) {
+        var items = box.find(_ihtml.Filter + subFilter);
+        if (items.length > 0)
+            items.summernote(status ? 'enable' : 'disable');
+    },
+
+    /*
     //see: https://stackoverflow.com/questions/14346414/how-do-you-do-html-encode-using-javascript
     encode: function (value) {
         return $('<div/>').text(value).html();
@@ -105,8 +118,9 @@ var _ihtml = $.extend({}, _ibase, {
 
     //更新html欄位內容, 讀取 text()
     update: function(fid, box) {
-        var filter = '#' + fid;
-        var obj = (box === undefined) ? $(filter) : box.find(filter);
+        //var filter = '#' + fid;
+        //var obj = (box === undefined) ? $(filter) : box.find(filter);
+        var obj = _obj.get(fid, box);
         //obj.text(value);
         //obj.summernote('code', $(filter).text());
         //debugger;
@@ -116,5 +130,6 @@ var _ihtml = $.extend({}, _ibase, {
         for (var i = 0; i < fids.length; i++)
             _ihtml.update(fids[i], box);
     },
-    
+    */
+
 }); //class

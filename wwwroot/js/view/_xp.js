@@ -1,8 +1,5 @@
 ﻿var _xp = {
 
-    //middle variables
-    temp: {},
-
     //initial application
     init: function () {
         _leftmenu.init();

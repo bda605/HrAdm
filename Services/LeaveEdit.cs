@@ -13,20 +13,21 @@ namespace HrAdm.Services
     {
         private EditDto GetDto()
         {
+            var locale = _Xp.GetLocale0();
             return new EditDto
             {
 				Table = "dbo.[Leave]",
                 PkeyFid = "Id",
-                ReadSql = @"
+                ReadSql = $@"
 select l.*,
-    FlowStatusName=c.Name,
+    FlowStatusName=c.Name_{locale},
     CreatorName=u.Name,
     ReviserName=u2.Name
 from dbo.Leave l
 join dbo.XpCode c on c.Type='FlowStatus' and l.FlowStatus=c.Value
 join dbo.[User] u on l.Creator=u.Id
 left join dbo.[User] u2 on l.Reviser=u2.Id
-where l.Id='{0}'
+where l.Id='{{0}}'
 ",
                 Items = new [] 
 				{

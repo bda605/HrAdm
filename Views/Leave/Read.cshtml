@@ -11,7 +11,7 @@
 @await Component.InvokeAsync("XgProgPath", new { names = new string[] { R0["MenuLeave"].Value } })
 <div class="xp-prog">
     <div id="divRead">
-        <form id='rform' class='xg-form'>
+        <form id='formRead' class='xg-form'>
             <div class="row">
                 <div class="col-md-2 xg-label">@R["StartTime"]</div>
                 <div class="col-md-10 xg-input">
@@ -28,7 +28,7 @@
         <div class='xg-btns-box'>
             @await Component.InvokeAsync("XgCreate")
         </div>
-        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+        <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
                     <th>@R["Asker"]</th>

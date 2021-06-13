@@ -446,7 +446,8 @@ path, .jtk-endpoint { cursor:pointer; }
 
 /* form without line */
 .xg-form {
-    font-size: 15px;
+    /*font size same to .form-control*/
+    font-size: 16px;
     border: none;
     /*margin-bottom: 0px;*/
 }
@@ -482,7 +483,7 @@ path, .jtk-endpoint { cursor:pointer; }
 .xi-check {
     display: inline-block;
     position: relative;
-    margin-top: 10px;
+    margin-top: 8px;
     padding: 0 10px 0 25px; /* for label pos */
 }
     /*
@@ -583,7 +584,7 @@ path, .jtk-endpoint { cursor:pointer; }
 /* disabled style */
 .xi-check > input:disabled + span {
     /*color: #b8b8b8;*/
-    background: #e9ecef;
+    background: #eee;
     cursor: auto;
 }
 
@@ -853,6 +854,15 @@ input[type=number] {
     left: 8px !important;
 }
 
+tr input {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+}
+tr select {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+}
+
 /* toolbar */
 
 /* row list toolbar */
@@ -985,17 +995,26 @@ body.xg-show-wait .xg-wait {
     color: gray;
 }
 
-.xg-mt-0 {
-    margin-top: 0;
+.xg-h10 {
+    height: 10px !important;
 }
-.xg-mt-5 {
-    margin-top: 5px;
+
+.xg-mt0 {
+    margin-top: 0 !important;
 }
-.xg-mt-10 {
-    margin-top: 10px;
+.xg-mt5 {
+    margin-top: 5px !important;
 }
-.xg-mb-0 {
-    margin-bottom: 0;
+.xg-mt10 {
+    margin-top: 10px !important;
+}
+.xg-mb0 {
+    margin-bottom: 0 !important;
+}
+
+/* match datepicker.css .date setting, for keep input width same to date at query form */
+.xg-date-w {
+    width: 180px !important;
 }
 
 @charset "utf-8";
@@ -1037,11 +1056,16 @@ body, label {
     font-size: 14px;
 }
 
-/* 縮小欄位高度, 38 -> 36 */
+/* change height, 38 -> 36 */
 .form-control, select.form-control {
+    font-size: 16px !important;
     height: 36px !important;
     /*padding: 3px 6px !important;*/
 }
+
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #eee !important;
+    }
 
 textarea.form-control {
     height: auto !important;
@@ -1203,6 +1227,14 @@ table.dataTable thead th {
     /*color: white;*/
 }
 
+
+.note-toolbar {
+    background: #eee !important;
+}
+
+.note-editable[contenteditable=false] {
+    background: #eee !important;
+}
 
 
 /* prog path, razor 只支援 inline style */

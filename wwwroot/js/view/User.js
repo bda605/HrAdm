@@ -3,7 +3,6 @@
     init: function () {        
         //datatable config
         var config = {
-            dom: _crud.dtDom,
             columns: [
                 { data: 'Account' },
                 { data: 'Name' },
@@ -12,7 +11,6 @@
                 { data: '_Fun' },
             ],
             columnDefs: [
-                _crud.dtColConfig,
 				{ targets: [3], render: function (data, type, full, meta) {
                     //return _crud.dtSetStatus(full.Id, data);
                     return _crud.dtStatusName(data);

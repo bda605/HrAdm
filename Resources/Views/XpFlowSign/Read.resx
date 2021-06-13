@@ -121,4 +121,10 @@
   <data name="StartTime" xml:space="preserve">
     <value>Start Time</value>
   </data>
+  <data name="SignTime" xml:space="preserve">
+    <value>Sign Time</value>
+  </data>
+  <data name="Flow" xml:space="preserve">
+    <value>Flow</value>
+  </data>
 </root>

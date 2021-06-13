@@ -5,10 +5,14 @@
 var _iradio = $.extend({}, _ibase, {
 
     //=== get ===
+    //get checked data-value by fid
     get: function (fid, box) {
         return _iradio._getByName(fid, box);
     },
-    //obj could be multiple
+    /**
+     * get checked data-value by fid
+     * param obj {object} single object
+     */ 
     getO: function (obj, box) {
         return _iradio._getByName(_obj.getName(obj), box);
     },
@@ -36,8 +40,8 @@ var _iradio = $.extend({}, _ibase, {
 
     //set checked status by name & data-value
     _setByName: function (name, value, box) {
-        var obj2 = _obj.getF('[name=' + name + '][data-value=' + value + ']', box);
-        obj2.prop('checked', true);
+        var obj = _obj.getF('[name=' + name + '][data-value=' + value + ']', box);
+        obj.prop('checked', true);
     },
 
     //set status by name

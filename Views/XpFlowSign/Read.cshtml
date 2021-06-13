@@ -10,30 +10,18 @@
         init: function () {        
             //datatable config
             var config = {
-                dom: _crud.dtDom,
                 columns: [
-                    { data: 'UserName' },
-                    { data: 'LeaveName' },
-                    { data: 'StartTime' },
-                    { data: 'EndTime' },
-                    { data: 'Hours' },
-                    { data: 'FlowStatusName' },
-                    { data: 'Created' },
+                    { data: 'FlowName' },
+                    { data: 'SignerName' },
+                    { data: 'SignTime' },
                     { data: '_Fun' },
                 ],
                 columnDefs: [
-                    _crud.dtColConfig,
 				    { targets: [2], render: function (data, type, full, meta) {
-                        return _date.jsToUiDt2(data);
-                    }},
-				    { targets: [3], render: function (data, type, full, meta) {
-                        return _date.jsToUiDt2(data);
-                    }},
-				    { targets: [6], render: function (data, type, full, meta) {
                         return _date.jsToUiDt(data);
                     }},
-				    { targets: [7], render: function (data, type, full, meta) {
-                        return _str.format('<button type="button" class="btn btn-outline-secondary btn-sm" onclick="_crud.onView(\'{0}\')">@R0["View"]</button>', full.Id);
+				    { targets: [3], render: function (data, type, full, meta) {
+                        return _str.format('<button type="button" class="btn btn-outline-secondary btn-sm" onclick="_me.onView(\'{0}\', \'{1}\')">@R0["View"]</button>', full.FlowCode, full.SourceId);
                     }},
                 ],
             };
@@ -46,6 +34,14 @@
             //other variables
             _me.eform = $('#eform');
             _me.divSignRows = $('#divSignRows');
+        },
+
+        //on view row
+        onView: function (flowCode, key) {
+            _ajax.getJson('GetJson', { flowCode: flowCode, key: key }, function (data) {
+                //consider other flow types
+                _crud.toEditMode(_fun.FunV, data);
+            });
         },
 
         //onclick viewFile, called by XiFile component
@@ -67,30 +63,26 @@
 @await Component.InvokeAsync("XgProgPath", new { names = new string[] { R0["MenuXpFlowSign"].Value } })
 <div class="xp-prog">
     <div id="divRead">
-        <form id='rform' class='xg-form' style="margin-bottom:8px;">
+        <form id='formRead' class='xg-form'>
             <div class="row">
-                <div class="col-md-2 xg-label">@R["StartTime"]</div>
+                <div class="col-md-2 xg-label">@R["SignTime"]</div>
                 <div class="col-md-10 xg-input">
-                    @await Component.InvokeAsync("XiDate", new { fid = "StartTime", inRow = true, extClass = "xg-inline" })
+                    @await Component.InvokeAsync("XiDate", new { fid = "SignTime", inRow = true, extClass = "xg-inline" })
                     <span>～</span>
-                    @await Component.InvokeAsync("XiDate", new { fid = "StartTime2", inRow = true, extClass = "xg-inline" })
+                    @await Component.InvokeAsync("XiDate", new { fid = "SignTime2", inRow = true, extClass = "xg-inline" })
                     @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
                 </div>
             </div>
-            @await Component.InvokeAsync("XiSelect", new { title = R["LeaveType"].Value, fid = "LeaveType", rows = (List<IdStrDto>)ViewBag.LeaveTypes })
-            @await Component.InvokeAsync("XiSelect", new { title = R["FlowStatus"].Value, fid = "FlowStatus", rows = (List<IdStrDto>)ViewBag.SignStatuses })
+            @await Component.InvokeAsync("XiSelect", new { title = R["Flow"].Value, fid = "FlowId", rows = (List<IdStrDto>)ViewBag.Flows, extClass = "xg-date-w" })
+            @*await Component.InvokeAsync("XiSelect", new { title = R["FlowStatus"].Value, fid = "FlowStatus", rows = (List<IdStrDto>)ViewBag.SignStatuses })*@
         </form>
 
-        <table id="table1" class="table table-bordered xg-table" cellspacing="0">
+        <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
             <thead>
                 <tr>
+                    <th>@R["Flow"]</th>
                     <th>@R["Asker"]</th>
-                    <th>@R["LeaveType"]</th>
-                    <th>@R["StartTime"]</th>
-                    <th>@R["EndTime"]</th>
-                    <th>@R["Hours"]</th>
-                    <th>@R["FlowStatus"]</th>
-                    <th>@R0["Created"]</th>
+                    <th>@R["SignTime"]</th>
                     <th></th>
                 </tr>
             </thead>
@@ -101,17 +93,17 @@
     <div id="divEdit" class="xg-hide">
         <form id='eform' class='xg-form'>
             @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-            @await Component.InvokeAsync("XiRead", new { title = R["Asker"].Value, fid = "UserName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["Agent"].Value, fid = "AgentName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["LeaveType"].Value, fid = "LeaveName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["StartTime"].Value, fid = "StartTime", format = BrFormatEstr.Dt2 })
-            @await Component.InvokeAsync("XiRead", new { title = R["EndTime"].Value, fid = "EndTime", format = BrFormatEstr.Dt2 })
-            @await Component.InvokeAsync("XiRead", new { title = R["Hours"].Value, fid = "Hours" })
-            @await Component.InvokeAsync("XiLinkFile", new { title = R0["UpdFile"].Value, fid = "FileName" })
-            @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value, fid = "Created", format = BrFormatEstr.Dt })
+            @await Component.InvokeAsync("XiRead", new { title = R["Asker"].Value + " :", fid = "UserName" })
+            @await Component.InvokeAsync("XiRead", new { title = R["Agent"].Value + " :", fid = "AgentName" })
+            @await Component.InvokeAsync("XiRead", new { title = R["LeaveType"].Value + " :", fid = "LeaveName" })
+            @await Component.InvokeAsync("XiRead", new { title = R["StartTime"].Value + " :", fid = "StartTime", format = BrFormatEstr.Dt2 })
+            @await Component.InvokeAsync("XiRead", new { title = R["EndTime"].Value + " :", fid = "EndTime", format = BrFormatEstr.Dt2 })
+            @await Component.InvokeAsync("XiRead", new { title = R["Hours"].Value + " :", fid = "Hours" })
+            @await Component.InvokeAsync("XiLinkFile", new { title = R0["UpdFile"].Value + " :", fid = "FileName" })
+            @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value + " :", fid = "Created", format = BrFormatEstr.Dt })
 
             <div class="row">
-                <div class="col-md-2 xg-label">@R["SignRows"]</div>
+                <div class="col-md-2 xg-label">@R["SignRows"] :</div>
                 <div class="col-md-8 xg-input" id="divSignRows"></div>
             </div>
         </form>

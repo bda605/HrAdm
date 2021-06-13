@@ -3,7 +3,6 @@
     init: function () {        
         //datatable config
         var config = {
-            dom: _crud.dtDom,
             columns: [
                 { data: 'UserName' },
                 { data: 'AgentName' },
@@ -16,7 +15,6 @@
                 { data: '_Fun' },
             ],
             columnDefs: [
-                _crud.dtColConfig,
 				{ targets: [3], render: function (data, type, full, meta) {
                     return _date.jsToUiDt2(data);
                 }},

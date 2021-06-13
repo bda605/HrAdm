@@ -2,12 +2,10 @@ using Base.Enums;
 using Base.Models;
 using Base.Services;
 using BaseWeb.Services;
-using HrAdm.Tables;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -58,26 +56,29 @@ namespace HrAdm
             
             //7.session (memory cache)
             services.AddDistributedMemoryCache();
+            //services.AddStackExchangeRedisCache(opts => { opts.Configuration = "127.0.0.1:6379"; });
             services.AddSession(opts =>
             {
-                //opts.IdleTimeout = TimeSpan.FromSeconds(10);
                 opts.Cookie.HttpOnly = true;
                 opts.Cookie.IsEssential = true;
+                opts.IdleTimeout = TimeSpan.FromMinutes(60);
             });
 
-            //8.initial _Fun by mssql
-            IServiceProvider di = services.BuildServiceProvider();
-            _Fun.Init(di, DbTypeEnum.MSSql, AuthTypeEnum.Ctrl);
 
-			//9.set locale
-            _Locale.SetCulture(_Fun.Config.Locale);
+            //8.initial _Fun by mssql
+            //IServiceProvider di = services.BuildServiceProvider();
+            //_Fun.Init(di, DbTypeEnum.MSSql, AuthTypeEnum.Ctrl);
+
+            //9.set locale
+            //_Locale.SetCulture(_Fun.Config.Locale);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //set global
-            _Fun.IsDebug = env.IsDevelopment();
+            //initial & set locale
+            _Fun.Init(env.IsDevelopment(), app.ApplicationServices, DbTypeEnum.MSSql, AuthTypeEnum.Ctrl);
+            _Locale.SetCulture(_Fun.Config.Locale);
 
             if (env.IsDevelopment())
             {
