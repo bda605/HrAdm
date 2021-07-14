@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
-    public class CustInputEdit
+    public class CustInputEdit : MyEdit
     {
-        private EditDto GetDto()
+        public CustInputEdit(string ctrl) : base(ctrl) { }
+
+        override public EditDto GetDto()
         {
             return new EditDto
             {
@@ -23,29 +25,19 @@ namespace HrAdm.Services
                     new EitemDto { Fid = "FldCheck", Required = true },
                     new EitemDto { Fid = "FldDate", Required = true },
                     new EitemDto { Fid = "FldDt", Required = true },
+                    new EitemDto { Fid = "FldDec", Required = true },
+                    new EitemDto { Fid = "FldInt", Required = true },
                     new EitemDto { Fid = "FldFile", Required = true },
                     new EitemDto { Fid = "FldHtml", Required = true },
-                    new EitemDto { Fid = "FldLinkFile", Col = "FldFile", Create = false, Update = false },
-                    new EitemDto { Fid = "FldNumInt", Required = true },
-					new EitemDto { Fid = "FldNumDec", Required = true },
+                    new EitemDto { Fid = "FldLink", Col = "FldFile" },
 					new EitemDto { Fid = "FldRadio", Required = true },
-                    new EitemDto { Fid = "FldRead", Col = "FldText", Create = false, Update = false },
+                    new EitemDto { Fid = "FldRead", Col = "FldText" },
                     new EitemDto { Fid = "FldSelect", Required = true },
-                    new EitemDto { Fid = "FldText", Required = true },
                     new EitemDto { Fid = "FldTextarea", Required = true },
+                    new EitemDto { Fid = "FldText", Required = true },
 					//new EitemDto { Fid = "FldColor", Required = true },
                 },
             };
-        }
-
-        private CrudEdit Service()
-        {
-            return new CrudEdit(GetDto());
-        }
-
-        public JObject GetJson(string key)
-        {
-            return Service().GetJson(key);
         }
 
         public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_FldFile)
@@ -66,11 +58,6 @@ namespace HrAdm.Services
             if (_Valid.ResultStatus(result))
                 await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), _Xp.DirCustInput, t0_FldFile, nameof(t0_FldFile));
             return result;
-        }
-
-        public ResultDto Delete(string key)
-        {
-            return Service().Delete(key);
         }
 
     } //class

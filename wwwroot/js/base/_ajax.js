@@ -119,10 +119,16 @@ var _ajax = {
             //traditional: true,
             //async: false,
             success: function (data) {
-                //data maps to ResultDto
-                if (data && data.ErrorMsg) {
+                //data maps to ResultDto/JObject
+                if (!data)
+                    return;
+
+                if (data.ErrorMsg || data.ErrorBrFid) {
+                    var msg = data.ErrorMsg ? data.ErrorMsg :
+                        _BR[data.ErrorBrFid] ? _BR[data.ErrorBrFid] :
+                        _str.format('_ajax._call() failed, no ErrorBrFid={0}', data.ErrorBrFid);
                     if (fnError == null)
-                        _tool.msg(data.ErrorMsg);
+                        _tool.msg(msg);
                     else
                         fnError(data);
                 } else if (fnOk) {

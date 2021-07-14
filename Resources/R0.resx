@@ -208,4 +208,7 @@
   <data name="Import" xml:space="preserve">
     <value>Import</value>
   </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

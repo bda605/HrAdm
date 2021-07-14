@@ -10,11 +10,13 @@ var _file = {
     },
 
     /**
-     * get file ext without '.'
+     * get file ext without '.' in lowerCase, ex: txt
      */
     getFileExt: function (path) {
-        return _str.getTail(path, '.');
+        return _str.getTail(path, '.').toLowerCase();
     },
 
-
+    isImageExt: function (ext) {
+        return (",jpg,jpeg,png,gif,tif,tiff,").indexOf("," + ext + ",") >= 0;
+    }
 };//class

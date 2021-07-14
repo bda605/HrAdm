@@ -1,13 +1,13 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
-using Newtonsoft.Json.Linq;
 
 namespace HrAdm.Services
 {
-    public class UserEdit
+    public class UserEdit : MyEdit
     {
-        private EditDto GetDto()
+        public UserEdit(string ctrl) : base(ctrl) { }
+
+        override public EditDto GetDto()
         {
             return new EditDto
             {
@@ -40,31 +40,6 @@ namespace HrAdm.Services
                     },
                 },
             };
-        }
-
-        private CrudEdit Service()
-        {
-            return new CrudEdit(GetDto());
-        }
-
-        public JObject GetJson(string key)
-        {
-            return Service().GetJson(key);
-        }
-
-        public ResultDto Create(JObject json)
-        {
-            return Service().Create(json);
-        }
-
-        public ResultDto Update(string key, JObject json)
-        {
-            return Service().Update(key, json);
-        }
-
-        public ResultDto Delete(string key)
-        {
-            return Service().Delete(key);
         }
 
     } //class

@@ -62,7 +62,7 @@ where u.Account=@Account
             #region set base user info
             var userId = row["UserId"].ToString();
             //var authType = AuthTypeEnum.Ctrl;
-            var authList = _XpProg.GetAuthList(userId);
+            //var authList = _XpProg.GetAuthList(userId);
             var userInfo = new BaseUserDto()
             {
                 UserId = userId,
@@ -70,7 +70,7 @@ where u.Account=@Account
                 DeptId = row["DeptId"].ToString(),
                 DeptName = row["DeptName"].ToString(),
                 Locale = _Fun.Config.Locale,
-                ProgAuthStrs = _XpProg.GetAuthStrs(authList),
+                ProgAuthStrs = _XpProg.GetAuthStrs(userId),
                 IsLogin = true,
             };
             #endregion

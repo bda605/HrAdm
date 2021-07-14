@@ -1,18 +1,18 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
-    public class UserExtEdit
+    public class UserExtEdit : MyEdit
     {
-        private EditDto GetDto()
+        public UserExtEdit(string ctrl) : base(ctrl) { }
+
+        override public EditDto GetDto()
         {
             return new EditDto
             {
@@ -120,16 +120,6 @@ namespace HrAdm.Services
             };
         }
 
-        private CrudEdit Service()
-        {
-            return new CrudEdit(GetDto());
-        }
-
-        public JObject GetJson(string key)
-        {
-            return Service().GetJson(key);
-        }
-
         //TODO: add your code
         //t03_FileName: t + table serial _ + fid
         public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
@@ -158,11 +148,6 @@ namespace HrAdm.Services
                 await _WebFile.SaveCrudFilesAsnyc(json, newKeyJson, _Xp.DirUserLicense, t03_FileName, nameof(t03_FileName));
             }
             return result;
-        }
-
-        public ResultDto Delete(string key)
-        {
-            return Service().Delete(key);
         }
 
     } //class

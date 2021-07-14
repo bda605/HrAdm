@@ -5,23 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
+    //1.inherit
     //[XgProgAuth]
     public class UserImportController : XpImportController
     {
-        //constructor
+        //2.constructor
         public UserImportController()
         {
-            //ProgName = "匯入用戶資料";
+            //ProgName = "Import User";
             ImportType = ImportTypeEstr.User;
-            PathTpl = _Xp.DirTpl + "/UserImport.xlsx";
+            TplPath = _Xp.DirTpl + "/UserImport.xlsx";
             DirUpload = _Xp.DirUserImport;
         }
 
-        //overwrite
+        //3.override
         [HttpPost]
         override public JsonResult Import(IFormFile file)
         {
-            return Json(new UserImportService().Import(file));
+            return Json(new UserImportService().Import(file, this.DirUpload));
         }
 
     }//class

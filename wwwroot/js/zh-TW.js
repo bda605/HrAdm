@@ -2,11 +2,10 @@
 var _BR = {
 
     //=== moment.js convert these to UI format ===
-    UiDateFormat: 'YYYY/MM/DD',
+    MmUiDateFmt: 'YYYY/MM/DD',          //match datepicker format
+    MmUiDtFmt: 'YYYY/MM/DD HH:mm:ss',    
+    MmUiDt2Fmt: 'YYYY/MM/DD HH:mm',     //no second
     //DateShowFormat: 'YYYY年MM月DD日',
-    UiDtFormat: 'YYYY/MM/DD HH:mm:ss',
-    //no second
-    UiDt2Format: 'YYYY/MM/DD HH:mm',
 
     //row status
     StatusYes: '正常',
@@ -46,6 +45,9 @@ var _BR = {
     SureDeleteRow: '是否確定刪除這筆資料?',
     SureDeleteSelected: '是否確定刪除選取的資料?',
 
+    NoAuthUser: '您只能存取個人資料，請聯絡管理者。',
+    NoAuthDept: '您只能存取同部門資料，請聯絡管理者。',
+
 };
 /**
  * Traditional Chinese translation for bootstrap-datepicker
@@ -60,7 +62,6 @@ var _BR = {
 		months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
 		monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 		today: "今天",
-		//match to _BR.UiDateFormat
 		//format: "yyyy年mm月dd日",
 		format: "yyyy/mm/dd",
 		weekStart: 1,

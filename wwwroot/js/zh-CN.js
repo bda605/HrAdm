@@ -2,11 +2,9 @@
 var _BR = {
 
     //=== moment.js convert these to UI format ===
-    UiDateFormat: 'YYYY/MM/DD',
-    //DateShowFormat: 'YYYY年MM月DD日',
-    UiDtFormat: 'YYYY/MM/DD HH:mm:ss',
-    //no second
-    UiDt2Format: 'YYYY/MM/DD HH:mm',
+    MmUiDateFmt: 'YYYY/MM/DD',
+    MmUiDtFmt: 'YYYY/MM/DD HH:mm:ss',
+    MmUiDt2Fmt: 'YYYY/MM/DD HH:mm',     //no second
 
     //row status
     StatusYes: '正常',
@@ -46,6 +44,7 @@ var _BR = {
     SureDeleteRow: '是否确定删除这笔资料?',
     SureDeleteSelected: '是否确定删除选取的资料?',
 
+    NoAuthRow: '您没有权限存取这笔资料，请联络管理者。',
 };
 /**
  * Simplified Chinese translation for bootstrap-datepicker

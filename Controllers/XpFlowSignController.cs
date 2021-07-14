@@ -1,12 +1,13 @@
 ﻿using Base.Enums;
 using Base.Models;
+using BaseWeb.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpFlowSignController : Controller
+    public class XpFlowSignController : MyController
     {
         public ActionResult Read()
         {
@@ -18,19 +19,30 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new XpFlowSignRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new XpFlowSignRead().GetPage(Ctrl, dt));
+        }
+
+        private XpFlowSignEdit EditService(string flowCode)
+        {
+            return new XpFlowSignEdit(Ctrl, flowCode);
         }
 
         [HttpPost]
-        public ContentResult GetJson(string flowCode, string key)
+        public ContentResult GetUpdateJson(string flowCode, string key)
         {
-            return Content(new XpFlowSignEdit().GetJson(flowCode, key).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(EditService(flowCode).GetUpdateJson(key));
+        }
+
+        [HttpPost]
+        public ContentResult GetViewJson(string flowCode, string key)
+        {
+            return JsonToCnt(EditService(flowCode).GetViewJson(key));
         }
 
         //get file/image
-        public FileContentResult GetFile(string table, string fid, string key)
+        public FileResult ViewFile(string table, string fid, string key, string ext)
         {
-            return _Xp.FileLeave(key);
+            return _Xp.ViewLeave(fid, key, ext);
         }
 
         /// <summary>

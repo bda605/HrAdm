@@ -27,7 +27,13 @@ namespace HrAdm.Services
         }
         public static List<IdStrDto> GetProgs(Db db = null)
         {
-            return TableToList("XpProg", db);
+            //return TableToList("XpProg", db);
+            var sql = @"
+select 
+    Id, (case when AuthRow=1 then '*' else '' end)+Name as Str
+from dbo.XpProg
+order by Id";
+            return SqlToList(sql, db);
         }
         public static List<IdStrDto> GetFlows(Db db = null)
         {
@@ -48,6 +54,10 @@ namespace HrAdm.Services
         public static List<IdStrDto> GetSignStatuses(string locale, Db db = null)
         {
             return TypeToList(locale, "SignStatus", db);
+        }
+        public static List<IdStrDto> GetAuthRanges(string locale, Db db = null)
+        {
+            return TypeToList(locale, "AuthRange", db);
         }
 
         public static List<IdStrDto> GetSignStatuses2(string locale, Db db = null)

@@ -19,7 +19,7 @@
 function EditOne(kid, eformId) {
 
     /**
-     * initial
+     * initial & and instance variables (this.validator by _valid.init())
      */
     this.init = function () {
         this.kid = kid || 'Id';
@@ -119,9 +119,9 @@ function EditOne(kid, eformId) {
      * param fid {string}
      * param elm {element} link element
      */
-    this.onViewImage = function (table, fid, elm) {
+    this.onViewFile = function (table, fid, elm) {
         var key = this.getKey();
-        _edit.viewImage(table, fid, elm, key);
+        _edit.viewFile(table, fid, elm, key);
     };
 
     //call last

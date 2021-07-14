@@ -1,12 +1,12 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
+using BaseWeb.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
-    public class XpEasyRptController : Controller
+    public class XpEasyRptController : MyController
     {
         public ActionResult Read()
         {
@@ -16,31 +16,42 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new XpEasyRptRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new XpEasyRptRead().GetPage(Ctrl, dt));
+        }
+
+        private XpEasyRptEdit EditService()
+        {
+            return new XpEasyRptEdit(Ctrl);
         }
 
         [HttpPost]
-        public ContentResult GetJson(string key)
+        public ContentResult GetUpdateJson(string key)
         {
-            return Content(new XpEasyRptEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(EditService().GetUpdateJson(key));
+        }
+
+        [HttpPost]
+        public ContentResult GetViewJson(string key)
+        {
+            return JsonToCnt(EditService().GetViewJson(key));
         }
 
         [HttpPost]
         public JsonResult Create(string json)
         {
-            return Json(new XpEasyRptEdit().Create(_Json.StrToJson(json)));
+            return Json(EditService().Create(_Json.StrToJson(json)));
         }
 
         [HttpPost]
         public JsonResult Update(string key, string json)
         {
-            return Json(new XpEasyRptEdit().Update(key, _Json.StrToJson(json)));
+            return Json(EditService().Update(key, _Json.StrToJson(json)));
         }
 
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(new CustInputEdit().Delete(key));
+            return Json(EditService().Delete(key));
         }
 
     }//class

@@ -6,18 +6,18 @@ var _idate = $.extend({}, _ibase, {
     BoxFilter: '.date',
 
     //=== get/set start ===
+    //get ymd with format _fun.MmDateFmt
     getO: function (obj) {
-        return _date.uiToJsDate(obj.val());
+        return _date.uiToMmDate(obj.val());
     },
 
     /**
      * set input value
      * param obj {object} date object
-     * param value {string}
+     * param value {string} format: _fun.MmDateFmt
      */
     setO: function (obj, value) {
-        //obj.val(_date.jsToUiDate(value));
-        _idate._boxSetDate(_idate._elmToBox(obj), _date.jsToUiDate(value));
+        _idate._boxSetDate(_idate._objToBox(obj), _date.mmToUiDate(value));
     },
 
     setEditO: function (obj, status) {
@@ -38,7 +38,7 @@ var _idate = $.extend({}, _ibase, {
 
         //initial
         obj.datepicker({
-            //format: _BR.UiDateFormat,
+            //format in bootstrap-datepicker.js
             language: _fun.locale,
             autoclose: true,
             showOnFocus: false,
@@ -84,7 +84,10 @@ var _idate = $.extend({}, _ibase, {
      * return {object}
      */
     _elmToBox: function (elm) {
-        return $(elm).closest(_idate.BoxFilter);
+        return _idate._objToBox($(elm));
+    },
+    _objToBox: function (obj) {
+        return obj.closest(_idate.BoxFilter);
     },
 
     _boxSetDate: function (box, date) {

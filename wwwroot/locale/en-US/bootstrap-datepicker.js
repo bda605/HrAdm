@@ -12,6 +12,6 @@
 		monthsTitle: "Months",
 		clear: "Clear",
 		weekStart: 0,
-		format: "m/d/yyyy"
+		format: "M-d-yyyy"
 	};
 }(jQuery));

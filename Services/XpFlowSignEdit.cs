@@ -1,16 +1,21 @@
 ﻿using Base.Models;
 using Base.Services;
-using Newtonsoft.Json.Linq;
 
 namespace HrAdm.Services
 {
-    public class XpFlowSignEdit
+    public class XpFlowSignEdit : MyEdit
     {
-        public JObject GetJson(string flowCode, string key)
+        private string _flowCode;
+        public XpFlowSignEdit(string ctrl, string flowCode) : base(ctrl) 
+        {
+            _flowCode = flowCode;
+        }
+
+        override public EditDto GetDto()
         {
             string sql = "";
             var locale = _Xp.GetLocale0();
-            if (flowCode == "Leave")
+            if (_flowCode == "Leave")
             {
                 sql = $@"
 select
@@ -27,8 +32,8 @@ where l.Id='{{0}}'
 ";
             }
 
-            var dto = new EditDto() { ReadSql = sql };
-            return new CrudEdit(dto).GetJson(key);
+            return new EditDto() { ReadSql = sql };
+            //return new CrudEdit(dto).GetJson(key);
         }
 
     } //class

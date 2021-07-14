@@ -16,13 +16,13 @@
             ],
             columnDefs: [
 				{ targets: [3], render: function (data, type, full, meta) {
-                    return _date.jsToUiDt2(data);
+                    return _date.mmToUiDt2(data);
                 }},
 				{ targets: [4], render: function (data, type, full, meta) {
-                    return _date.jsToUiDt2(data);
+                    return _date.mmToUiDt2(data);
                 }},
 				{ targets: [7], render: function (data, type, full, meta) {
-                    return _date.jsToUiDt(data);
+                    return _date.mmToUiDt(data);
                 }},
 				{ targets: [8], render: function (data, type, full, meta) {
                     return _crud.dtCrudFun(full.Id, 'Leave', true, true, true);
@@ -41,8 +41,8 @@
 
     //TODO: add your code
     //onclick viewFile, called by XiFile component
-    onViewFile: function (fid, elm) {
-        _me.edit0.onViewImage('', fid, elm);
+    onViewFile: function (table, fid, elm) {
+        _me.edit0.onViewFile(table, fid, elm);
     },
 
     edit0_afterOpenEdit: function (fun, json) {

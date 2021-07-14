@@ -1,6 +1,6 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
+using BaseWeb.Controllers;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace HrAdm.Controllers
 {
-    public class XpFlowController : Controller
+    public class XpFlowController : MyController
     {
         public ActionResult Read()
         {
@@ -26,13 +26,24 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new XpFlowRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new XpFlowRead().GetPage(Ctrl, dt));
+        }
+
+        private XpFlowEdit EditService()
+        {
+            return new XpFlowEdit(Ctrl);
         }
 
         [HttpPost]
-        public ContentResult GetJson(string key)
+        public ContentResult GetUpdateJson(string key)
         {
-            return Content(new XpFlowEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(EditService().GetUpdateJson(key));
+        }
+
+        [HttpPost]
+        public ContentResult GetViewJson(string key)
+        {
+            return JsonToCnt(EditService().GetViewJson(key));
         }
 
         /*
@@ -46,19 +57,19 @@ namespace HrAdm.Controllers
         [HttpPost]
         public JsonResult Create(string json)
         {
-            return Json(new XpFlowEdit().Create(_Json.StrToJson(json), FnSetNewKey));
+            return Json(EditService().Create(_Json.StrToJson(json), FnSetNewKey));
         }
 
         [HttpPost]
         public JsonResult Update(string key, string json)
         {
-            return Json(new XpFlowEdit().Update(key, _Json.StrToJson(json), FnSetNewKey));
+            return Json(EditService().Update(key, _Json.StrToJson(json), FnSetNewKey));
         }
 
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(new XpFlowEdit().Delete(key));
+            return Json(EditService().Delete(key));
         }
 
         /// <summary>

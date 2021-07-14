@@ -78,9 +78,9 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
             //stateSave: true,
             //ordering: false,
 
-            //locale
+            //set locale file
             language: {
-                url: "../locale/" + _fun.locale + "/dataTables.txt",
+                url: "/locale/" + _fun.locale + "/dataTables.txt",
             },
 
             //default toolbar layout

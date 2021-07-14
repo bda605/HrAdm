@@ -20,7 +20,8 @@
 function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 
     /**
-     * initial, call by this
+     * initial & and instance variables (this.validator by _valid.init())
+     * call by this
      */ 
     this.init = function () {
 
@@ -455,9 +456,9 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
      * param fid {string}
      * param elm {element} link element
      */
-    this.onViewImage = function (table, fid, elm) {
+    this.onViewFile = function (table, fid, elm) {
         var key = this.getKey(this.elmToRowBox(elm));
-        _edit.viewImage(table, fid, elm, key);
+        _edit.viewFile(table, fid, elm, key);
     };
 
     /**

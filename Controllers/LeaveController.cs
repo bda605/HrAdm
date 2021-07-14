@@ -1,6 +1,8 @@
 ﻿using Base.Enums;
 using Base.Models;
 using Base.Services;
+using BaseWeb.Attributes;
+using BaseWeb.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class LeaveController : Controller
+    public class LeaveController : MyController
     {
         public ActionResult Read()
         {
@@ -23,46 +25,56 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
+        [XgProgAuth(CrudEnum.Read)]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new LeaveRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new LeaveRead().GetPage(Ctrl, dt));
         }
 
-        [HttpPost]
-        public ContentResult GetJson(string key)
+        private LeaveEdit EditService()
         {
-            return Content(new LeaveEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return new LeaveEdit(Ctrl);
         }
 
         [HttpPost]
-        public JsonResult SetStatus(string key, bool status)
-        {
-            return Json(_Db.SetRowStatus("dbo.[Leave]", "Id", key, status));
-        }
-
-        [HttpPost]
+        [XgProgAuth(CrudEnum.Create)]
         public async Task<JsonResult> Create(string json, IFormFile t0_FileName)
         {
-            return Json(await new LeaveEdit().CreateAsnyc(_Json.StrToJson(json), t0_FileName));
+            return Json(await EditService().CreateAsnyc(_Json.StrToJson(json), t0_FileName));
         }
 
         [HttpPost]
+        [XgProgAuth(CrudEnum.Update)]
+        public ContentResult GetUpdateJson(string key)
+        {
+            return JsonToCnt(EditService().GetUpdateJson(key));
+        }
+
+        [HttpPost]
+        [XgProgAuth(CrudEnum.Update)]
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FileName)
         {
-            return Json(await new LeaveEdit().UpdateAsnyc(key, _Json.StrToJson(json), t0_FileName));
-        }
-
-        //TODO: add your code
-        //get file/image
-        public FileContentResult GetFile(string table, string fid, string key)
-        {
-            return _Xp.FileLeave(key);
+            return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_FileName));
         }
 
         [HttpPost]
+        [XgProgAuth(CrudEnum.Delete)]
         public JsonResult Delete(string key)
         {
-            return Json(new LeaveEdit().Delete(key));
+            return Json(EditService().Delete(key));
+        }
+
+        [HttpPost]
+        [XgProgAuth(CrudEnum.View)]
+        public ContentResult GetViewJson(string key)
+        {
+            return JsonToCnt(EditService().GetViewJson(key));
+        }
+
+        //get file/image
+        public FileResult ViewFile(string table, string fid, string key, string ext)
+        {
+            return _Xp.ViewLeave(fid, key, ext);
         }
 
         /// <summary>

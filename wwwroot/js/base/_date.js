@@ -9,12 +9,6 @@
 var _date = {
 
     /**
-     * Constant, moment.js datetime format, match to cs _Fun.CsDtFormat, _Fun.DbDtFormat
-     */ 
-    JsDateFormat: 'YYYY/MM/DD',
-    JsDtFormat: 'YYYY/MM/DD HH:mm:ss',
-
-    /**
       ?? 傳回起迄日期(json) for 日期欄位查詢
       param {string} start 開始日期欄位id
       param {string} end 結束日期欄位id
@@ -26,13 +20,13 @@ var _date = {
     },
 
     /**
-     * get today date string in UI format
-     */ 
+     * ??get today date string in UI format
     uiToday: function(){
         //var date = new Date();
         //return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-        return moment().format(_BR.UiDateFormat);
+        return moment().format(_BR.MmDateFmt);
     },
+     */
 
     /**
      * get current year
@@ -46,21 +40,10 @@ var _date = {
      * param ds {string} js date string
      * return {string} ui date string
      */ 
-    jsToUiDate: function (ds) {
+    mmToUiDate: function (ds) {
         return (_str.isEmpty(ds))
             ? ''
-            : moment(ds, _date.JsDateFormat).format(_BR.UiDateFormat);
-    },
-
-    /**
-     * ui date string to js date string
-     * param ds {string} ui date string
-     * return {string} js date string
-     */
-    uiToJsDate: function (ds) {
-        return (_str.isEmpty(ds))
-            ? ''
-            : moment(ds, _BR.UiDateFormat).format(_date.JsDateFormat);
+            : moment(ds, _fun.MmDateFmt).format(_BR.MmUiDateFmt);
     },
 
     /**
@@ -68,22 +51,46 @@ var _date = {
      * param dts {string} js datetime string
      * return {string} ui datetime2 string(no second)
      */ 
-    jsToUiDt2: function (dts) {
+    mmToUiDt2: function (dts) {
         return (_str.isEmpty(dts))
             ? ''
-            : moment(dts, _date.JsDtFormat).format(_BR.UiDt2Format);
+            : moment(dts, _fun.MmDtFmt).format(_BR.MmUiDt2Fmt);
     },
 
-    jsToUiDt: function (dts) {
+    mmToUiDt: function (dts) {
         return (_str.isEmpty(dts))
             ? ''
-            : moment(dts, _date.JsDtFormat).format(_BR.UiDtFormat);
+            : moment(dts, _fun.MmDtFmt).format(_BR.MmUiDtFmt);
     },
 
-    jsToFormat: function (dts, format) {
+    mmToFormat: function (dts, format) {
         return (_str.isEmpty(dts))
             ? ''
-            : moment(dts, _date.JsDtFormat).format(format);
+            : moment(dts, _fun.MmDtFmt).format(format);
+    },
+
+    //get value for compare
+    mmToValue: function (dts) {
+        return (_str.isEmpty(dts))
+            ? 0
+            : moment(dts, _fun.MmDtFmt).valueOf();
+    },
+
+    mmToMoment: function (dts) {
+        return (_str.isEmpty(dts))
+            ? null
+            : moment(dts, _fun.MmDtFmt);
+    },
+
+    /**
+     * ui date string to js date string
+     * param ds {string} ui date string
+     * return {string} js date string
+     */
+    uiToMmDate: function (ds) {
+        var date = _str.isEmpty(ds)
+            ? '' : moment(ds, _BR.MmUiDateFmt).format(_fun.MmDateFmt);
+        return date;
     },
 
     /**
@@ -94,7 +101,7 @@ var _date = {
     tsToUiDt: function (ts) {
         return (ts == '')
             ? ''
-            : moment(parseInt(ts) * 1000).format(_BR.UiDtFormat);
+            : moment(parseInt(ts) * 1000).format(_BR.MmUiDtFmt);
     },
 
     /**
@@ -125,7 +132,7 @@ var _date = {
      */
     isBig: function(ds1, ds2) {
         //return (Date.parse(date1) > Date.parse(date2));
-        return moment(ds1, _date.JsDtFormat).isAfter(moment(ds2, _date.JsDtFormat));
+        return moment(ds1, _fun.MmDtFmt).isAfter(moment(ds2, _fun.MmDtFmt));
     },
 
     /**
@@ -137,7 +144,7 @@ var _date = {
     getMonthDiff: function (ds1, ds2) {
         return (_str.isEmpty(start) || _str.isEmpty(end))
             ? 0
-            : _date.getMonthDiffByDate(moment(ds1, _date.JsDtFormat), moment(ds2, _date.JsDtFormat));
+            : _date.getMonthDiffByDate(moment(ds1, _fun.MmDtFmt), moment(ds2, _fun.MmDtFmt));
     },
 
     /**
@@ -159,7 +166,7 @@ var _date = {
      */ 
     jsDateAddYear: function (ds, year) {
         //return (parseInt(date.substring(0, 4)) + year) + date.substring(4);
-        return moment(ds, _date.JsDtFormat).add(year, 'y').format(_date.JsDtFormat);
+        return moment(ds, _fun.MmDtFmt).add(year, 'y').format(_fun.MmDtFmt);
     },
 
 }; //class

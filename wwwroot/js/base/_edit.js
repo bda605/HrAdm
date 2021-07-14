@@ -42,29 +42,33 @@ var _edit = {
     */
 
     //called by: EditOne.js, EditMany.js
-    //不設定 mapId
+    //not set mapId
     getUpdRow: function (kid, fidTypes, box) {
-        //如果key value為空白, 則傳回整列資料
+        //if key empty then return row
         var key = _input.get(kid, box);
         if (_str.isEmpty(key))
             return _form.toJson(box);
 
         var diff = false;
         var row = {};
-        var fid, ftype, value, obj;
+        var fid, ftype, value, obj, old;
         for (var j = 0; j < fidTypes.length; j = j + 2) {
             //skip read only type
             ftype = fidTypes[j + 1];
-            if (ftype === 'read')
+            if (ftype === 'link' || ftype === 'read')
                 continue;
 
             fid = fidTypes[j];
-            obj = (ftype === 'radio')
-                ? _iradio.getObj(fid, box)
-                : _obj.get(fid, box);
+            obj = (ftype === 'radio') ? _iradio.getObj(fid, box) : _obj.get(fid, box);
             value = _input.getO(obj, box, ftype);
-            //如果使用完全比對, 字串和數字會不相等!!
-            if (value != obj.data(_edit.DataOld)) {
+            old = obj.data(_edit.DataOld);
+            //if fully compare, string will not equal numeric !!
+            if (value != old) {
+                //date/dt old value has more length
+                if ((ftype === 'date' || ftype === 'dt') &&
+                    _date.mmToValue(value) === _date.mmToValue(old))
+                    continue;
+
                 row[fid] = value;
                 diff = true;
             }
@@ -154,11 +158,15 @@ var _edit = {
      * param elm {element} link element
      * param key {string} row key
      */
-    viewImage: function (table, fid, elm, key) {
-        if (_edit.isNewKey(key))
+    viewFile: function (table, fid, elm, key) {
+        if (_edit.isNewKey(key)) {
             _tool.msg(_BR.NewFileNotView);
-        else
-            _tool.showImage(elm.innerHTML, _str.format('GetFile?table={0}&fid={1}&key={2}', table, fid, key));
+            return;
+        } else {
+            var ext = _file.getFileExt(elm.innerText);
+            if (_file.isImageExt(ext))
+                _tool.showImage(elm.innerHTML, _str.format('ViewFile?table={0}&fid={1}&key={2}&ext={3}', table, fid, key, ext));
+        }
     },
 
     /**

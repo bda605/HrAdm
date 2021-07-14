@@ -8,7 +8,7 @@ namespace HrAdm.Controllers
     //[XgProgAuth]
     public class CmsMsgController : XpCmsController
     {
-        //constructor
+        //constructor, localization syntax
         public CmsMsgController(IStringLocalizer<CmsMsgController> R)
         {
             //ProgName = "最新消息維護";

@@ -28,9 +28,9 @@ order by l.Created
             };
         }
 
-        public JObject GetPage(DtDto dt)
+        public JObject GetPage(string ctrl, DtDto dt)
         {
-            return new CrudRead().GetPage(GetDto(), dt);
+            return new CrudRead().GetPage(ctrl, GetDto(), dt);
         }
 
     } //class

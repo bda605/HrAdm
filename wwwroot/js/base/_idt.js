@@ -6,7 +6,8 @@ var _idt = $.extend({}, _idate, {
 
     //=== get/set start ===
     getO: function (obj) {        
-        var date = _date.uiToJsDate(_idate.getO(_idt._boxGetDate(obj)));
+        //var date = _date.uiToMmDate(_idate.getO(_idt._boxGetDate(obj)));
+        var date = _idate.getO(_idt._boxGetDate(obj));
         return _str.isEmpty(date)
             ? ''
             : date + ' ' +
@@ -17,7 +18,7 @@ var _idt = $.extend({}, _idate, {
     /**
      * set input value
      * param obj {object} datetime box object
-     * param value {string} _fun.JsDtFormat
+     * param value {string} _fun.MmDtFmt
      */
     setO: function (obj, value) {
         var date, hour, min;
@@ -26,7 +27,6 @@ var _idt = $.extend({}, _idate, {
             hour = 0;
             min = 0;
         } else {
-            //date = _date.jsToUiDate(value);
             date = value;   //_idate will set
             hour = parseInt(_str.getMid(value, ' ', ':'));
             min = parseInt(_str.getMid(value, ':', ':'));

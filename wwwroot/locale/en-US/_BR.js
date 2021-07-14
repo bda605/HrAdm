@@ -1,12 +1,10 @@
 ﻿//resource for js base component
 var _BR = {
 
-    //=== moment.js convert these to UI format ===
-    UiDateFormat: 'YYYY/MM/DD',
-    //DateShowFormat: 'YYYY年MM月DD日',
-    UiDtFormat: 'YYYY/MM/DD HH:mm:ss',
-    //no second
-    UiDt2Format: 'YYYY/MM/DD HH:mm',
+    //=== moment.js ymd format ===
+    MmUiDateFmt: 'MMM-D-YYYY',          //match datepicker format
+    MmUiDtFmt: 'MMM-D-YYYY HH:mm:ss', 
+    MmUiDt2Fmt: 'MMM-D-YYYY HH:mm',     //no second
 
     //row status
     StatusYes: 'Active',
@@ -36,7 +34,7 @@ var _BR = {
     TipView: 'View this Row.',
 
     //message-upload file
-    UploadFileNotBig: 'Upload File Size Should Less Than{0}M !',
+    UploadFileNotBig: 'Upload File Size Should Less Than {0}M !',
     UploadFileNotMatch: 'Upload File Type Not Match !',
     NewFileNotView: 'Save First Then View !',
 
@@ -46,4 +44,5 @@ var _BR = {
     SureDeleteRow: 'Sure to Delete Row ?',
     SureDeleteSelected: 'Sure to Delete Selected ?',
 
+    NoAuthRow: 'No right for this row, Please connect Admin.',
 };

@@ -20,7 +20,7 @@
     <div id="divRead">
         <form id='formRead' class='xg-form'>
             <div class="row">
-                @await Component.InvokeAsync("XiText", new { title = Model.Title, fid = "Title", inRow = true })
+                @await Component.InvokeAsync("XiText", new XiTextDto { Title = Model.Title, Fid = "Title", InRow = true })
                 @await Component.InvokeAsync("XgFindTbar")
             </div>
         </form>
@@ -45,45 +45,45 @@
 
     <div id="divEdit" class="xg-hide">
         <form id='eform' class='xg-form'>
-            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
+            @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
 
             @if (Model.Title != null)
             {
-                @await Component.InvokeAsync("XiText", new { title = Model.Title, fid = "Title", maxLen = 255, required = true, cols = cols })
+                @await Component.InvokeAsync("XiText", new XiTextDto { Title = Model.Title, Fid = "Title", MaxLen = 255, Required = true, Cols = cols })
             }
             @if (Model.Text != null)
             {
-                @await Component.InvokeAsync("XiTextArea", new { title = Model.Text, fid = "Text", required = true, cols = cols })
+                @await Component.InvokeAsync("XiTextarea", new XiTextareaDto { Title = Model.Text, Fid = "Text", Required = true, Cols = cols })
             }
             @if (Model.Html != null)
             {
-                @await Component.InvokeAsync("XiHtml", new { title = Model.Html, fid = "Html", required = true, cols = cols })
+                @await Component.InvokeAsync("XiHtml", new XiHtmlDto { Title = Model.Html, Fid = "Html", Required = true, Cols = cols })
             }
             @if (Model.Note != null)
             {
-                @await Component.InvokeAsync("XiTextArea", new { title = Model.Note, fid = "Note", cols = cols })
+                @await Component.InvokeAsync("XiTextarea", new XiTextareaDto { Title = Model.Note, Fid = "Note", Cols = cols })
             }
             @if (Model.FileName != null)
             {
-                @await Component.InvokeAsync("XiFile", new { title = Model.FileName, fid = "FileName", required = true })
+                @await Component.InvokeAsync("XiFile", new XiFileDto { Title = Model.FileName, Fid = "FileName", Required = true })
             }
             @if (Model.StartTime != null)
             {
-                @await Component.InvokeAsync("XiDt", new { title = Model.StartTime, fid = "StartTime", required = true, cols = cols })
+                @await Component.InvokeAsync("XiDt", new XiDtDto { Title = Model.StartTime, Fid = "StartTime", Required = true, Cols = cols })
             }
             @if (Model.EndTime != null)
             {
-                @await Component.InvokeAsync("XiDt", new { title = Model.EndTime, fid = "EndTime", required = true, cols = cols })
+                @await Component.InvokeAsync("XiDt", new XiDtDto { Title = Model.EndTime, Fid = "EndTime", Required = true, Cols = cols })
             }
 
-            @await Component.InvokeAsync("XiCheck", new { title = R0["Status"].Value, fid = "Status", label = R0["Active"].Value })
+            @await Component.InvokeAsync("XiCheck", new XiCheckDto { Title = R0["Status"].Value, Fid = "Status", Label = R0["Active"].Value })
             <div class="row">
-                @await Component.InvokeAsync("XiRead", new { title = R0["Creator"].Value, fid = "CreatorName", inRow = true, cols = "2,3" })
-                @await Component.InvokeAsync("XiRead", new { title = R0["Reviser"].Value, fid = "ReviserName", inRow = true, cols = "2,3" })
+                @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R0["Creator"].Value, Fid = "CreatorName", InRow = true, Cols = "2,3" })
+                @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R0["Reviser"].Value, Fid = "ReviserName", InRow = true, Cols = "2,3" })
             </div>
             <div class="row">
-                @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value, fid = "Created", format = BrFormatEstr.Dt, inRow = true, cols = "2,3" })
-                @await Component.InvokeAsync("XiRead", new { title = R0["Revised"].Value, fid = "Revised", format = BrFormatEstr.Dt, inRow = true, cols = "2,3" })
+                @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R0["Created"].Value, Fid = "Created", Format = BrFormatEstr.Dt, InRow = true, Cols = "2,3" })
+                @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R0["Revised"].Value, Fid = "Revised", Format = BrFormatEstr.Dt, InRow = true, Cols = "2,3" })
             </div>
         </form>
 

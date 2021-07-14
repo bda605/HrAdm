@@ -1,8 +1,6 @@
 ﻿using Base.Models;
 using Base.Services;
 using BaseWeb.Services;
-using DocumentFormat.OpenXml.Packaging;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,9 +13,9 @@ namespace HrAdm.Services
         /// generate word docu
         /// </summary>
         /// <param name="userId">User.Id</param>
-        public void GenDocu(string userId)
+        public void GenWord(string userId)
         {
-            #region check data
+            #region 1.check data && template file
             var error = "";
             if (string.IsNullOrEmpty(userId))
             {
@@ -33,7 +31,7 @@ namespace HrAdm.Services
             }
             #endregion
 
-            #region read row/rows
+            #region 2.read row/rows by Linq
             var db = _Xp.GetDb();
             var user = db.User
                 .Select(a => a)
@@ -85,23 +83,25 @@ namespace HrAdm.Services
                 .ToList();
             #endregion
 
-            #region ms stream for echo
-            //model為anonymous type, 必須使用 IEnumerable
+            //3.put rows into childs property(IEnumerable type !!)
             var childs = new List<IEnumerable<dynamic>>() 
             {
                 userJobs, userSchools, userLicenses, 
                 userLangs, userSkills
             };
+
+            //4.prepare image list
             var images = new List<WordImageDto>()
             {
-                new WordImageDto(){ Code = "Photo", FilePath = _Xp.PathUserExt(user.Id) },
+                new WordImageDto(){ Code = "Photo", FilePath = _Xp.PathUserExt(user.Id, _File.GetFileExt(user.PhotoFile)) },
             };
+
+            //5.call public method
             _WebWord.ExportByTplRow(tplPath, "UserExt.docx", user, childs, images);
             return;
-            #endregion
 
         lab_error:
-            _Log.Error("UserExtService.cs GenDocu() failed: " + error);
+            _Log.Error("UserExtService.cs GenWord() failed: " + error);
             return;
         }
 

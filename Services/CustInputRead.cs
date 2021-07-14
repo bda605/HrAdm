@@ -1,5 +1,4 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
 using Newtonsoft.Json.Linq;
 
@@ -18,9 +17,9 @@ order by Id
             },
         };
 
-        public JObject GetPage(DtDto dt)
+        public JObject GetPage(string ctrl, DtDto dt)
         {
-            return new CrudRead().GetPage(dto, dt);
+            return new CrudRead().GetPage(ctrl, dto, dt);
         }
 
     } //class

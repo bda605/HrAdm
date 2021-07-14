@@ -1,12 +1,13 @@
 ﻿using Base.Models;
 using Base.Services;
-using Newtonsoft.Json.Linq;
 
 namespace HrAdm.Services
 {
-    public class LeaveSignEdit
+    public class LeaveSignEdit : MyEdit
     {
-        private EditDto GetDto()
+        public LeaveSignEdit(string ctrl) : base(ctrl) { }
+
+        override public EditDto GetDto()
         {
             var locale = _Xp.GetLocale0();
             return new EditDto
@@ -27,16 +28,6 @@ join dbo.XpCode c on c.Type='LeaveType' and l.LeaveType=c.Value
 where s.Id='{{0}}'
 ",
             };
-        }
-
-        private CrudEdit Service()
-        {
-            return new CrudEdit(GetDto());
-        }
-
-        public JObject GetJson(string key)
-        {
-            return Service().GetJson(key);
         }
 
     } //class

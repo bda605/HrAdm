@@ -189,7 +189,7 @@ var _crud = {
             return;
 
         _idate.init(edit.eform);  //init all date inputs
-        _valid.init(edit.eform);
+        edit.validator = _valid.init(edit.eform);   //set valid variables for _ihtml.js !!
         var childLen = _crud.getEditChildLen(edit);
         for (var i = 0; i < childLen; i++)
             _crud.initForm(_crud.getEditChild(edit, i));
@@ -262,8 +262,8 @@ var _crud = {
      * onclick export excel
      */
     onExport: function () {
-        var cond = _crud.getFindCond();
-        window.location = 'Export?cond=' + _json.toStr(cond);
+        var find = _crud.getFindCond();
+        window.location = 'Export?find=' + _json.toStr(find);
     },
 
     /**
@@ -290,7 +290,7 @@ var _crud = {
      * param key {string} row key
      */
     onUpdate: function (key) {
-        _crud.getJsonAndSetMode(key, _fun.FunU);
+        _crud._getJsonAndSetMode(key, _fun.FunU);
     },
 
     /**
@@ -298,17 +298,19 @@ var _crud = {
      * param key {string} row key
      */
     onView: function (key) {
-        _crud.getJsonAndSetMode(key, _fun.FunV);
+        _crud._getJsonAndSetMode(key, _fun.FunV);
     },
 
-    getJsonAndSetMode: function (key, fun) {
+    _getJsonAndSetMode: function (key, fun) {
         if (_str.isEmpty(key)) {
             _log.error('error: key is empty !');
             return;
         }
 
         //_crud.toUpdateMode(key);
-        _ajax.getJson('GetJson', { key: key }, function (data) {
+        var act = (fun == _fun.FunU) ? 'GetUpdateJson' : 
+            (fun == _fun.FunV) ? 'GetViewJson' : '';
+        _ajax.getJson(act, { key: key }, function (data) {
             _crud.toEditMode(fun, data);
         });
     },
@@ -633,13 +635,13 @@ var _crud = {
             }
         }
 
-        //debugger;
         //get saving row
         var formData = new FormData();  //for upload files if need
         var row = _crud.getUpdJson(formData);
-
-        //temp add
-        //return;
+        if (row == null) {
+            _tool.msg(_BR.SaveNone);
+            return;
+        }
 
         //save rows, call backend Save action
         var isNew = edit0.isNewRow();
@@ -761,14 +763,14 @@ var _crud = {
     },
 
     /**
-     * click Delete, 刪除一筆資料, 後端固定呼叫 Delete()
+     * onclick Delete, call backend Delete()
      * key {string} row key
-     * rowName {string} 資料列名稱
+     * rowName {string} for confirm
      */
     onDelete: function (key, rowName) {
         _crud.temp.data = { key: key };
         _tool.ans(_BR.SureDeleteRow + ' (' + rowName + ')', function () {
-            _ajax.getStr('Delete', { key: key }, function (msg) {
+            _ajax.getJson('Delete', { key: key }, function (msg) {
                 _tool.alert(_BR.DeleteOk);
                 _me.dt.reload();
             });

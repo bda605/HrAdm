@@ -23,7 +23,7 @@ namespace HrAdm.Services
                         SignerName = s.SignerName,
                         SignStatusName = _XpCode.GetValue(c, locale),
                         SignTime = (s.SignTime == null) 
-                            ? "" : s.SignTime.Value.ToString(_Fun.CsDtFormat),
+                            ? "" : s.SignTime.Value.ToString(_Fun.CsDtFmt),
                         Note = s.Note,
                     })
                     .ToList();

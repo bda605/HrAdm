@@ -132,4 +132,7 @@
   <data name="Role" xml:space="preserve">
     <value>角色</value>
   </data>
+  <data name="AuthRow" xml:space="preserve">
+    <value>資料等級權限</value>
+  </data>
 </root>

@@ -33,7 +33,7 @@
                         return _str.format('<a href="GetSource?id={0}&name={1}">{2}</a>', full.Id, full.FileName, data);
                     }},
 				    { targets: [5], render: function (data, type, full, meta) {
-                        return _date.jsToUiDt(data);
+                        return _date.mmToUiDt(data);
                     }},
                 ],
             };
@@ -75,7 +75,8 @@
     <div id="divRead">
         <form id='formRead' class='xg-form'>
             <div class="row">
-                @await Component.InvokeAsync("XiText", new { title = R["FileName"].Value, fid = "FileName", inRow = true })
+                @*await Component.InvokeAsync("XiText", new { title = R["FileName"].Value, fid = "FileName", inRow = true })*@
+                <vc:xi-text dto="@(new XiTextDto { Title = R["FileName"].Value, Fid = "FileName", InRow = true })"></vc:xi-text>
                 @await Component.InvokeAsync("XgFindTbar")
             </div>
         </form>

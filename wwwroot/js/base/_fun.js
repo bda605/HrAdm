@@ -1,22 +1,13 @@
 ﻿
-//var RB = null;  //resource base
 var _fun = {
 
-    //=== constant start(大camel) ===
-    //Fid: 'name',            //data-fid
-
-    //for moment.js
-    //JsDateFormat: 'YYYY/MM/DD',
-    //JsDtFormat: 'YYYY/MM/DD HH:mm:ss',
+    //=== constant start(big camel) ===
+    //constant, for moment.js, match to _Fun.cs CsDtFormat
+    MmDateFmt: 'YYYY/MM/DD',
+    MmDtFmt: 'YYYY/MM/DD HH:mm:ss',
 
     //input field error validation, need match server side _Web.cs
     //jsPath: '../Scripts/',      //js path for load
-    //errTail: '_err',            //error label 欄位id後面會加上這個字元
-    //XdRequired: 'xd-required',
-
-    //errCls: 'xg-error',           //欄位驗証錯誤時會加上這個 class name
-    //errLabCls: 'xg-error-label',     //error label 的 class name
-    //errBoxCls: 'xg-errorbox', //??_box欄位驗証錯誤時會加上這個 class name
 
     //constant for mapping to backend
     FunC: 'C',     //create

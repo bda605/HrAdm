@@ -23,6 +23,8 @@ var _input = {
         switch (type) {
             case 'text':
                 return _itext.getO(obj);
+            case 'textarea':
+                return _itextarea.getO(obj);
             case 'check':
                 return _icheck.getO(obj);
             case 'radio':
@@ -35,14 +37,12 @@ var _input = {
                 return _idt.getO(obj);
             case 'file':
                 return _ifile.getO(obj);
-            case 'textarea':
-                return _itextarea.getO(obj);
             case 'html':
                 return _ihtml.getO(obj);
             case 'read':
                 return _iread.getO(obj);
-            case 'linkFile':
-                return _ilinkFile.getO(obj);
+            case 'link':
+                return _ilink.getO(obj);
             default:
                 //text, textarea
                 return obj.val();
@@ -92,11 +92,11 @@ var _input = {
             case 'read':
                 var format = obj.data('format');
                 if (!_str.isEmpty(format) && !_str.isEmpty(_BR[format]))
-                    value = _date.jsToFormat(value, _BR[format]);
+                    value = _date.mmToFormat(value, _BR[format]);
                 _iread.setO(obj, value);
                 break;
-            case 'linkFile':
-                return _ilinkFile.setO(obj, value);
+            case 'link':
+                return _ilink.setO(obj, value);
             default:
                 //text
                 obj.val(value);

@@ -1,32 +1,34 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
-    public class LeaveEdit
+    public class LeaveEdit : MyEdit
     {
-        private EditDto GetDto()
+        public LeaveEdit(string ctrl) : base(ctrl) { }
+
+        override public EditDto GetDto()
         {
             var locale = _Xp.GetLocale0();
             return new EditDto
             {
-				Table = "dbo.[Leave]",
+				Table = "dbo.Leave",
                 PkeyFid = "Id",
                 ReadSql = $@"
 select l.*,
     FlowStatusName=c.Name_{locale},
     CreatorName=u.Name,
-    ReviserName=u2.Name
+    ReviserName=u2.Name,
+    {_Fun.UserFid}=u3.Id, {_Fun.DeptFid}=u3.DeptId
 from dbo.Leave l
 join dbo.XpCode c on c.Type='FlowStatus' and l.FlowStatus=c.Value
 join dbo.[User] u on l.Creator=u.Id
 left join dbo.[User] u2 on l.Reviser=u2.Id
+join dbo.[User] u3 on l.UserId=u3.Id
 where l.Id='{{0}}'
 ",
                 Items = new [] 
@@ -46,16 +48,6 @@ where l.Id='{{0}}'
             };
         }
 
-        private CrudEdit Service()
-        {
-            return new CrudEdit(GetDto());
-        }
-
-        public JObject GetJson(string key)
-        {
-            return Service().GetJson(key);
-        }
-
         //private string _newKey;
         private JObject _inputRow;
 
@@ -66,8 +58,6 @@ where l.Id='{{0}}'
             return _XpFlow.CreateSignRows(_inputRow, "UserId", "Leave", newKey, db);
         }
 
-        //TODO: add your code
-        //t03_FileName: t + table serial _ + fid
         public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_FileName)
         {
             _inputRow = _Json.ReadInputJson0(json);
@@ -80,8 +70,6 @@ where l.Id='{{0}}'
             return result;
         }
 
-        //TODO: add your code
-        //t03_FileName: t + table serial _ + fid
         public async Task<ResultDto> UpdateAsnyc(string key, JObject json, IFormFile t0_FileName)
         {
             var service = Service();
@@ -91,12 +79,6 @@ where l.Id='{{0}}'
                 await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), _Xp.DirLeave, t0_FileName, nameof(t0_FileName));
             }
             return result;
-        }
-
-
-        public ResultDto Delete(string key)
-        {
-            return Service().Delete(key);
         }
 
     } //class

@@ -1,12 +1,12 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
+using BaseWeb.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpTranLogController : Controller
+    public class XpTranLogController : MyController
     {
         public ActionResult Read()
         {
@@ -16,16 +16,8 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new XpTranLogRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new XpTranLogRead().GetPage(Ctrl, dt));
         }
-
-        /*
-        [HttpPost]
-        public ContentResult GetJson(string key)
-        {
-            return Content(new XpTranLogEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
-        }
-        */
 
     }//class
 }

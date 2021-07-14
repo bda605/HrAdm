@@ -4,8 +4,8 @@
 
 @{
     _Fun.Config.SystemName = R["SystemName"].Value;
-    var locale = _Fun.GetLocaleByUser();
-    var min = _Fun.IsDebug() ? "" : ".min";   //min js
+    var locale = _Locale.GetLocaleByUser();
+    var min = _Fun.IsDebug ? "" : ".min";   //min js
     //var menus = SetMenuName(_Web.GetMenu());  //by user right
     var menus = new List<MenuDto>()
     {

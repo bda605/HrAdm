@@ -2,6 +2,8 @@
 //input file
 var _ifile = $.extend({}, _ibase, {
 
+    //object: file input
+
     //=== overwrite start ===
     /**
      * get border object
@@ -53,8 +55,8 @@ var _ifile = $.extend({}, _ibase, {
 
         //check file ext
         var exts = fileObj.data('exts').toLowerCase();
-        if (!_str.isEmpty(exts)) {
-            var ext = _file.getFileExt(value).toLowerCase();
+        if (!_str.isEmpty(exts) && exts !== '*') {
+            var ext = _file.getFileExt(value);
             exts = ',' + exts + ',';
             if (exts.indexOf(',' + ext + ',') < 0) {
                 _tool.msg(_BR.UploadFileNotMatch);

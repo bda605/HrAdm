@@ -1,7 +1,6 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
-using BaseWeb.Services;
+using BaseWeb.Controllers;
 using HrAdm.Models;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Http;
@@ -11,38 +10,41 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //CMS base controller
-    abstract public class XpCmsController : Controller 
+    abstract public class XpCmsController : MyController 
     {
-        public string ProgName;     //program name
+        //public string ProgName;     //program name
         public string CmsType;   //map to ImportLog.Type
-        //public string PathTpl;      //template file path
         public string DirUpload;    //upload dir, no right slash
         public CmsEditDto EditDto;
 
         public ActionResult Read()
         {			
-            ViewBag.ProgName = ProgName;
+            //ViewBag.ProgName = ProgName;
             ViewBag.CmsType = CmsType;
-            return View("~/Views/XpCms/Read.cshtml", EditDto); //public view
+            return View("/Views/XpCms/Read.cshtml", EditDto); //public view
         }
 
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            //call public method
-            return Content(new XpCmsRead(CmsType).GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new XpCmsRead(CmsType).GetPage(Ctrl, dt));
+        }
+
+        private XpCmsEdit EditService()
+        {
+            return new XpCmsEdit(Ctrl);
         }
 
         [HttpPost]
         public async Task<JsonResult> Create(string json, IFormFile t0_FileName)
         {
-            return Json(await new XpCmsEdit().CreateAsnyc(_Json.StrToJson(json), t0_FileName, DirUpload, CmsType));
+            return Json(await EditService().CreateAsnyc(_Json.StrToJson(json), t0_FileName, DirUpload, CmsType));
         }
 
         [HttpPost]
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FileName)
         {
-            return Json(await new XpCmsEdit().UpdateAsnyc(key, _Json.StrToJson(json), t0_FileName, DirUpload));
+            return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_FileName, DirUpload));
         }
 
         /*
@@ -53,21 +55,27 @@ namespace HrAdm.Controllers
         }
         */
 
-        public FileContentResult GetFile(string table, string fid, string key)
+        public FileResult ViewFile(string table, string fid, string key, string ext)
         {
-            return _Xp.FileCmsType(key, CmsType);
+            return _Xp.ViewCmsType(fid, key, ext, CmsType);
         }
 
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(new XpCmsEdit().Delete(key));
+            return Json(EditService().Delete(key));
         }
 
         [HttpPost]
-        public ContentResult GetJson(string key)
+        public ContentResult GetUpdateJson(string key)
         {
-            return Content(new XpCmsEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(EditService().GetUpdateJson(key));
+        }
+
+        [HttpPost]
+        public ContentResult GetViewJson(string key)
+        {
+            return JsonToCnt(EditService().GetViewJson(key));
         }
 
     }//class

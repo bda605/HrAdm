@@ -1,6 +1,6 @@
 ﻿
 //link file
-var _ilinkFile = {
+var _ilink = {
 
     //value by fid
     get: function (fid, form) {

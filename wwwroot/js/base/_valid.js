@@ -7,29 +7,29 @@ var _valid = {
     //validClass: 'valid',
 
     /**
-     * initial
-     * param form {object}
-     * param inputCfg {json} config
+     * initial jQuery Validation
+     * param form {object} form object
+     * return {object} validator object
      */
     init: function (form) {
-
         //remove data first
         form.removeData('validator');
-        //form.removeData('unobtrusiveValidation');
 
-        //default config
-        //this keyword not work inside !!
+        //config
         var config = {
+            ignore: ':hidden:not([data-type=html]),.note-editable.card-block',   //or summernote got error
+            errorElement: 'span',
+            errorPlacement: function (error, elm) {
+                error.insertAfter(_valid._getBox(elm));
+                return false;
+            }
             /*
+            ignore: '',     //xiFile has hidden input need validate
+            onclick: false, //checkbox, radio, and select
             unhighlight: function (elm, errorClass, validClass) {
                 var me = $(elm);
                 me.data('edit', 1);    //註記此欄位有異動
             }
-            */
-            ignore: '',     //xiFile has hidden input need validate
-            errorElement: 'span',
-            //onclick: false, //checkbox, radio, and select
-            /*
             highlight: function (elm) {
                 _valid._getError(elm).addClass(_valid.errorClass);
                 return false;
@@ -40,15 +40,7 @@ var _valid = {
             },
             */
             //errorClass: 'label label-danger',
-            errorPlacement: function (error, elm) {
-                error.insertAfter(_valid._getBox(elm));
-                return false;
-            }
         };
-
-        //加入外部傳入的自定義組態
-        //if (inputCfg)
-        //    config = _json.copy(inputCfg, config);
 
         return form.validate(config);
     },

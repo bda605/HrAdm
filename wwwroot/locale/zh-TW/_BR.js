@@ -2,11 +2,10 @@
 var _BR = {
 
     //=== moment.js convert these to UI format ===
-    UiDateFormat: 'YYYY/MM/DD',
+    MmUiDateFmt: 'YYYY/MM/DD',          //match datepicker format
+    MmUiDtFmt: 'YYYY/MM/DD HH:mm:ss',    
+    MmUiDt2Fmt: 'YYYY/MM/DD HH:mm',     //no second
     //DateShowFormat: 'YYYY年MM月DD日',
-    UiDtFormat: 'YYYY/MM/DD HH:mm:ss',
-    //no second
-    UiDt2Format: 'YYYY/MM/DD HH:mm',
 
     //row status
     StatusYes: '正常',
@@ -45,5 +44,8 @@ var _BR = {
     PlsSelectRows: '請先選取資料。',
     SureDeleteRow: '是否確定刪除這筆資料?',
     SureDeleteSelected: '是否確定刪除選取的資料?',
+
+    NoAuthUser: '您只能存取個人資料，請聯絡管理者。',
+    NoAuthDept: '您只能存取同部門資料，請聯絡管理者。',
 
 };

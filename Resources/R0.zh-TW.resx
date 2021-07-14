@@ -228,4 +228,7 @@
   <data name="Import" xml:space="preserve">
     <value>匯入</value>
   </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
 </root>

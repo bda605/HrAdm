@@ -13,16 +13,16 @@
             ],
             columnDefs: [
 				{ targets: [1], render: function (data, type, full, meta) {
-                    return _date.jsToUiDt2(data);
+                    return _date.mmToUiDt2(data);
                 }},
 				{ targets: [2], render: function (data, type, full, meta) {
-                    return _date.jsToUiDt2(data);
+                    return _date.mmToUiDt2(data);
                 }},
 				{ targets: [3], render: function (data, type, full, meta) {
                     return _crud.dtStatusName(data);
                 }},
 				{ targets: [4], render: function (data, type, full, meta) {
-                    return _date.jsToUiDt(data);
+                    return _date.mmToUiDt(data);
                 }},
 				{ targets: [5], render: function (data, type, full, meta) {
                     return _crud.dtCrudFun(full.Id, '', true, true, true);
@@ -34,11 +34,11 @@
         _crud.init(config);
 
         //initial html editor
-        _ihtml.init($('#eform'), 'Html');
+        _ihtml.init($('#eform'), 'Html', _me.edit0);
     },
 
-    onViewFile: function (fid, elm) {
-        _me.edit0.onViewImage('', fid, elm);
+    onViewFile: function (table, fid, elm) {
+        _me.edit0.onViewFile(table, fid, elm);
     },
 
 }; //class

@@ -2,7 +2,6 @@
 using BaseWeb.Services;
 using HrAdm.Tables;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace HrAdm.Services
 {
@@ -11,18 +10,18 @@ namespace HrAdm.Services
     {
         //public const string SiteVer = "20201228f";     //for my.js/css
         public static string SiteVer = _Date.NowSecStr();
-        public const string LibVer = "20210605s";    //for lib.js/css
+        public const string LibVer = "20210712a";    //for lib.js/css
 
-        public static string NoImagePath = _Fun.DirRoot + "/wwwroot/images/noImage.jpg";
+        public static string NoImagePath = _Fun.DirRoot + "/wwwroot/image/noImage.jpg";
 
         //dir
         public static string DirTpl = _Fun.DirRoot + "_template/";
         public static string DirUpload = _Fun.DirRoot + "_upload/";
-        public static string DirLeave = DirUpload + "Leave";
-        public static string DirUserExt = DirUpload + "UserExt";
-        public static string DirUserLicense = DirUpload + "UserLicense";
-        public static string DirCustInput = DirUpload + "CustInput";
-        public static string DirUserImport = DirUpload + "UserImport";
+        public static string DirLeave = DirUpload + "Leave/";
+        public static string DirUserExt = DirUpload + "UserExt/";
+        public static string DirUserLicense = DirUpload + "UserLicense/";
+        public static string DirCustInput = DirUpload + "CustInput/";
+        public static string DirUserImport = DirUpload + "UserImport/";
         //dir cms
         public static string DirCms = DirUpload + "Cms";
 
@@ -38,48 +37,71 @@ namespace HrAdm.Services
         }
 
         #region get file path
-        public static string PathUserExt(string key)
+        public static string PathUserExt(string key, string ext)
         {
-            return _File.GetFirstPath(DirUserExt, "PhotoFile_" + key, NoImagePath);
+            //return _File.GetFirstPath(DirUserExt, "PhotoFile_" + key, NoImagePath);
+            return $"{DirUserExt}PhotoFile_{key}.{ext}";
         }
         #endregion
 
         public static string DirCmsType(string cmsType)
         {
-            return DirCms + cmsType;
+            return DirCms + cmsType + "/";
         }
 
         #region get file content
-        public static FileContentResult FileLeave(string key)
+        public static FileResult ViewLeave(string fid, string key, string ext)
         {
-            var path = _File.GetFirstPath(DirLeave, "FileName_" + key, NoImagePath);
-            return _WebFile.EchoImage(path);
+            return ViewFile("Leave", fid, key, ext);
+            //var path = _File.GetFirstPath(DirLeave, "FileName_" + key, NoImagePath);
+            //return _WebFile.EchoImage(path);
+        }
+        
+        public static FileResult ViewUserExt(string fid, string key, string ext)
+        {
+            //return _WebFile.EchoImage(PathUserExt(key));
+            return ViewFile(DirUserExt, fid, key, ext);
+        }
+        public static FileResult ViewUserLicense(string fid, string key, string ext)
+        {
+            //var path = _File.GetFirstPath(DirUserLicense, "FileName_" + key, NoImagePath);
+            //return _WebFile.EchoImage(path);
+            return ViewFile(DirUserLicense, fid, key, ext);
+        }
+        public static FileResult ViewCmsType(string fid, string key, string ext, string cmsType)
+        {
+            //var path = _File.GetFirstPath(DirCmsType(cmsType), "FileName_" + key, NoImagePath);
+            //return _WebFile.EchoImage(path);
+            return ViewFile(DirCmsType(cmsType), fid, key, ext);
+        }
+        public static FileResult ViewCustInput(string fid, string key, string ext)
+        {
+            return ViewFile(DirCustInput, fid, key, ext);
         }
 
-        public static FileContentResult FileUserExt(string key)
+        /*
+        public static FileResult ViewFile(string prog, string fid, string key, string ext)
         {
-            return _WebFile.EchoImage(PathUserExt(key));
+            var path = GetUploadFilePath(prog, fid, key, ext);
+            return _WebFile.ViewFile(path, $"{fid}.{ext}");
         }
-        public static FileContentResult FileUserLicense(string key)
+        */
+
+        private static FileResult ViewFile(string dir, string fid, string key, string ext)
         {
-            var path = _File.GetFirstPath(DirUserLicense, "FileName_" + key, NoImagePath);
-            return _WebFile.EchoImage(path);
+            var path = $"{dir}{fid}_{key}.{ext}";
+            return _WebFile.ViewFile(path, $"{fid}.{ext}");
         }
-        public static FileContentResult FileCustInput(string key)
-        {
-            var path = _File.GetFirstPath(DirCustInput, "FldFile_" + key, NoImagePath);
-            return _WebFile.EchoImage(path);
-        }
-        public static FileContentResult FileCmsType(string key, string cmsType)
-        {
-            var path = _File.GetFirstPath(DirCmsType(cmsType), "FileName_" + key, NoImagePath);
-            return _WebFile.EchoImage(path);
-        }
+
         #endregion
 
+        /// <summary>
+        /// get locale code without dash sign
+        /// </summary>
+        /// <returns></returns>
         public static string GetLocale0()
         {
-            return _Fun.GetLocaleByUser(false);
+            return _Locale.GetLocaleByUser(false);
         }
         
         /*

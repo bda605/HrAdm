@@ -40,7 +40,7 @@
             @await Component.InvokeAsync("XiText", new { title = R["RptName"].Value, fid = "Name", maxLen = 100, required = true, cols = "2,4" })
             @await Component.InvokeAsync("XiText", new { title = R["ExcelTpl"].Value, fid = "TplFile", maxLen = 30, required = true, cols = "2,4" })
             @await Component.InvokeAsync("XiText", new { title = R["ToEmail"].Value, fid = "ToEmails", labelTip = R["TipToEmail"].Value, cols = "2,9" })
-            @await Component.InvokeAsync("XiTextArea", new { title = "Sql", fid = "Sql", maxLen = 255, required = true, cols = "2,6" })
+            @await Component.InvokeAsync("XiTextarea", new { title = "Sql", fid = "Sql", maxLen = 255, required = true, cols = "2,6" })
             @await Component.InvokeAsync("XiCheck", new { title = R0["Status"].Value, fid = "Status", label = R0["Active"].Value })
         </form>
 

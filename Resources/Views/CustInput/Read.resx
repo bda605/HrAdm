@@ -100,10 +100,10 @@
   <data name="Text" xml:space="preserve">
     <value>Text</value>
   </data>
-  <data name="NumInt" xml:space="preserve">
+  <data name="Int" xml:space="preserve">
     <value>Integer</value>
   </data>
-  <data name="NumDec" xml:space="preserve">
+  <data name="Dec" xml:space="preserve">
     <value>Decimal</value>
   </data>
   <data name="Date" xml:space="preserve">

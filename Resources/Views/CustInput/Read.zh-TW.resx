@@ -120,10 +120,10 @@
   <data name="Text" xml:space="preserve">
     <value>文字</value>
   </data>
-  <data name="NumInt" xml:space="preserve">
+  <data name="Int" xml:space="preserve">
     <value>整數</value>
   </data>
-  <data name="NumDec" xml:space="preserve">
+  <data name="Dec" xml:space="preserve">
     <value>小數</value>
   </data>
   <data name="Date" xml:space="preserve">

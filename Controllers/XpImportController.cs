@@ -1,6 +1,5 @@
-﻿using Base.Enums;
-using Base.Models;
-using Base.Services;
+﻿using Base.Models;
+using BaseWeb.Controllers;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,16 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace HrAdm.Controllers
 {
     //Excel import base controller
-    abstract public class XpImportController : Controller 
+    abstract public class XpImportController : MyController 
     {
-        public string ProgName;     //program name
+        //public string ProgName;     //program display name
         public string ImportType;   //map to ImportLog.Type
-        public string PathTpl;      //template file path
+        public string TplPath;      //template file path
         public string DirUpload;    //upload dir, no right slash
 
         public ActionResult Read()
         {			
-            ViewBag.ProgName = ProgName;
+            //ViewBag.ProgName = ProgName;
             ViewBag.ImportType = ImportType;
             return View("/Views/XpImport/Read.cshtml"); //public view
         }
@@ -25,8 +24,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            //call public method
-            return Content(new XpImportRead(ImportType).GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new XpImportRead(ImportType).GetPage(Ctrl, dt));
         }
 
         //run import, drived class implement !!
@@ -39,8 +37,7 @@ namespace HrAdm.Controllers
         /// <returns>file</returns>
         public FileResult Template()
         {
-            //must PhysicalFile !!
-            return PhysicalFile(PathTpl, ContentTypeEstr.Excel, _File.GetFileName(PathTpl));
+            return _WebFile.ViewFile(TplPath);  //use this instead of PhysicalFile()
         }
 
         //download source import file
@@ -48,15 +45,17 @@ namespace HrAdm.Controllers
         {
             return GetFile(id, name);
         }
+
         //download failed import file
         public FileResult GetFail(string id, string name)
         {
             return GetFile(id + "_fail", name);
         }
+
         //download import file
         private FileResult GetFile(string realFileStem, string downFileName)
         {
-            return PhysicalFile($"{DirUpload}/{realFileStem}.xlsx", ContentTypeEstr.Excel, downFileName);
+            return _WebFile.ViewFile($"{DirUpload}/{realFileStem}.xlsx", downFileName);
         }
 
     }//class

@@ -58,7 +58,7 @@
     <Content Remove="wwwroot\js\base\_file.js" />
     <Content Remove="wwwroot\js\base\_formData.js" />
     <Content Remove="wwwroot\js\base\_idt.js" />
-    <Content Remove="wwwroot\js\base\_ilinkFile.js" />
+    <Content Remove="wwwroot\js\base\_ilink.js" />
     <Content Remove="wwwroot\js\base\_multi.js_old" />
     <Content Remove="wwwroot\js\base\_text.j_old" />
     <Content Remove="wwwroot\js\base\_valid.js" />
@@ -75,6 +75,9 @@
   <ItemGroup>
     <None Remove="Controllers\CustInputController.cs%281%29" />
     <None Remove="Controllers\CustInputController.cs%282%29" />
+    <None Remove="Controllers\MyController.cs_old" />
+    <None Remove="Controllers\UserController.cs%281%29" />
+    <None Remove="Controllers\UserController.cs%282%29" />
     <None Remove="Views\CustInput\Edit.cshtml_old" />
     <None Remove="Views\LeaveSign\Edit.cshtml_old" />
     <None Remove="Views\Leave\Edit.cshtml_old" />
@@ -150,7 +153,7 @@
     <None Include="wwwroot\js\base\_ihtml.js" />
     <None Include="wwwroot\js\base\_input.js" />
     <None Include="wwwroot\js\base\_iradio.js" />
-    <None Include="wwwroot\js\base\_ilinkFile.js" />
+    <None Include="wwwroot\js\base\_ilink.js" />
     <None Include="wwwroot\js\base\_iread.js" />
     <None Include="wwwroot\js\base\_iselect.js" />
     <None Include="wwwroot\js\base\_itext.js" />
@@ -200,7 +203,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\image\CustInput\" />
   </ItemGroup>
 
   <ItemGroup>

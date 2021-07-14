@@ -29,65 +29,78 @@ var _ihtml = $.extend({}, _ibase, {
      * param obj {objects} html input object array
      * param prog {string} program code
      * param height {int} input height(px)
-     * param fnFileName {function} 傳回filename後面部分字串
+     * //param fnFileName {function} js function to get filename, 
+     * //  if empty, fileName use prog + '_' + fid
      */
-    init: function (box, prog, height, fnFileName) {
-        height = height || 250;
-        box.find(_ihtml.Filter).summernote({
-            height: height,
-            //new version use callbacks
-            callbacks: {
-                onImageUpload: function (files) {
-                    var editor = $(this);   //summernote instance !!
-                    var data = new FormData();
-                    data.append('file', files[0]);
-                    //fileName for file name
-                    var fileName = (fnFileName === undefined)
-                        ? prog + '_' + _obj.getFid($(this).closest('textarea'))
-                        : fnFileName();
-                    data.append('fileName', fileName);
-                    $.ajax({
-                        data: data,
-                        type: "POST",
-                        url: "../Image/Upload",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        success: function (url) {
-                            //create image element & add into editor
-                            var image = document.createElement('img');
-                            image.src = url;
-                            //new version syntax !!
-                            editor.summernote('insertNode', image);
-                        }
-                    });
+    init: function (edit, prog, height) {
+        edit.eform.find(_ihtml.Filter).each(function () {
+            var upMe = $(this);
+            upMe.data('prog', prog);    //for onImageUpload()
+            //init summernote
+            upMe.summernote({
+                height: height || 200,
+                //new version use callbacks !!
+                callbacks: {
+                    //https://codepen.io/ondrejsvestka/pen/PROgzQ
+                    onChange: function (contents, $editable) {
+                        //sync value
+                        var me = $(this);
+                        me.val(me.summernote('isEmpty') ? "" : contents);
+
+                        //re-validate
+                        edit.validator.element(me);
+                    },
+
+                    onImageUpload: function (files) {
+                        var me = $(this);   //jquery object
+                        var data = new FormData();
+                        data.append('file', files[0]);
+                        data.append('prog', me.data('prog'));
+                        $.ajax({
+                            data: data,
+                            type: "POST",
+                            url: "SetHtmlImage",    //fixed action !!
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (url) {
+                                //create image element & add into editor
+                                var image = document.createElement('img');
+                                image.src = url;
+                                me.summernote('insertNode', image); //new version syntax !!
+                            }
+                        });
+                    },
                 },
-            },
 
-            //=== add image ext attr start ===
-            lang: _fun.locale,
-            popover: {
-                image: [
-                    ['custom', ['imageAttributes']],
-                    ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
-                    ['float', ['floatLeft', 'floatRight', 'floatNone']],
-                    ['remove', ['removeMedia']]
-                ],
-            },
-            imageAttributes: {
-                imageDialogLayout: 'default', // default|horizontal
-                icon: '<i class="note-icon-pencil"/>',
-                removeEmpty: false // true = remove attributes | false = leave empty if present
-            },
-            displayFields: {
-                imageBasic: true,  // show/hide Title, Source, Alt fields
-                imageExtra: false, // show/hide Alt, Class, Style, Role fields
-                linkBasic: false,   // show/hide URL and Target fields for link
-                linkExtra: false   // show/hide Class, Rel, Role fields for link
-            },
-            //=== add image ext attr start ===
+                //=== add image ext attr start ===
+                /*
+                lang: _fun.locale,
+                popover: {
+                    image: [
+                        ['custom', ['imageAttributes']],
+                        ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                        ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                        ['remove', ['removeMedia']]
+                    ],
+                },
+                imageAttributes: {
+                    imageDialogLayout: 'default', // default|horizontal
+                    icon: '<i class="note-icon-pencil"/>',
+                    removeEmpty: false // true = remove attributes | false = leave empty if present
+                },
+                displayFields: {
+                    imageBasic: true,  // show/hide Title, Source, Alt fields
+                    imageExtra: false, // show/hide Alt, Class, Style, Role fields
+                    linkBasic: false,   // show/hide URL and Target fields for link
+                    linkExtra: false   // show/hide Class, Rel, Role fields for link
+                },
+                */
+                //=== add image ext attr start ===
 
-        });
+            });//summernote()
+
+        });//each()
     },
 
     //set edit status for all html input

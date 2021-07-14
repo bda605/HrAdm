@@ -1,6 +1,8 @@
 ﻿using Base.Enums;
 using Base.Models;
 using Base.Services;
+using BaseWeb.Controllers;
+using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
-    public class CustInputController : Controller
+    public class CustInputController : MyController
     {
         public ActionResult Read()
         {
@@ -21,46 +23,60 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new CustInputRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new CustInputRead().GetPage(Ctrl, dt));
         }
 
-        [HttpPost]
-        public ContentResult GetJson(string key)
+        private CustInputEdit EditService()
         {
-            return Content(new CustInputEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return new CustInputEdit(Ctrl);
         }
 
         [HttpPost]
-        public JsonResult SetStatus(string key, bool status)
+        public ContentResult GetUpdateJson(string key)
         {
-            return Json(_Db.SetRowStatus("dbo.CustInput", "Id", key, status));
+            return JsonToCnt(EditService().GetUpdateJson(key));
         }
 
         [HttpPost]
-        //TODO: add your code, tSn_fid ex: t03_FileName
+        public ContentResult GetViewJson(string key)
+        {
+            return JsonToCnt(EditService().GetViewJson(key));
+        }
+
+        [HttpPost]
         public async Task<JsonResult> Create(string json, IFormFile t0_FldFile)
         {
-            return Json(await new CustInputEdit().CreateAsnyc(_Json.StrToJson(json), t0_FldFile));
+            return Json(await EditService().CreateAsnyc(_Json.StrToJson(json), t0_FldFile));
         }
 
         [HttpPost]
-        //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FldFile)
         {
-            return Json(await new CustInputEdit().UpdateAsnyc(key, _Json.StrToJson(json), t0_FldFile));
+            return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_FldFile));
         }
 
-        //TODO: add your code
         //get file/image
-        public FileContentResult GetFile(string table, string fid, string key)
+        public FileResult ViewFile(string table, string fid, string key, string ext)
         {
-            return _Xp.FileCustInput(key);
+            return _Xp.ViewCustInput(fid, key, ext);
         }
 
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(new CustInputEdit().Delete(key));
+            return Json(EditService().Delete(key));
+        }
+
+        /// <summary>
+        /// upload html image, image fileName: time string
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="prog"></param>
+        /// <returns>return url</returns>
+        public async Task<string> SetHtmlImage(IFormFile file, string prog)
+        {
+            var fileName = await _WebFile.SaveHtmlImage(file, prog);
+            return $"/image/{prog}/{fileName}";
         }
 
     }//class

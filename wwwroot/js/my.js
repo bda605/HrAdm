@@ -119,10 +119,16 @@ var _ajax = {
             //traditional: true,
             //async: false,
             success: function (data) {
-                //data maps to ResultDto
-                if (data && data.ErrorMsg) {
+                //data maps to ResultDto/JObject
+                if (!data)
+                    return;
+
+                if (data.ErrorMsg || data.ErrorBrFid) {
+                    var msg = data.ErrorMsg ? data.ErrorMsg :
+                        _BR[data.ErrorBrFid] ? _BR[data.ErrorBrFid] :
+                        _str.format('_ajax._call() failed, no ErrorBrFid={0}', data.ErrorBrFid);
                     if (fnError == null)
-                        _tool.msg(data.ErrorMsg);
+                        _tool.msg(msg);
                     else
                         fnError(data);
                 } else if (fnOk) {
@@ -514,7 +520,7 @@ var _crud = {
             return;
 
         _idate.init(edit.eform);  //init all date inputs
-        _valid.init(edit.eform);
+        edit.validator = _valid.init(edit.eform);   //set valid variables for _ihtml.js !!
         var childLen = _crud.getEditChildLen(edit);
         for (var i = 0; i < childLen; i++)
             _crud.initForm(_crud.getEditChild(edit, i));
@@ -587,8 +593,8 @@ var _crud = {
      * onclick export excel
      */
     onExport: function () {
-        var cond = _crud.getFindCond();
-        window.location = 'Export?cond=' + _json.toStr(cond);
+        var find = _crud.getFindCond();
+        window.location = 'Export?find=' + _json.toStr(find);
     },
 
     /**
@@ -615,7 +621,7 @@ var _crud = {
      * param key {string} row key
      */
     onUpdate: function (key) {
-        _crud.getJsonAndSetMode(key, _fun.FunU);
+        _crud._getJsonAndSetMode(key, _fun.FunU);
     },
 
     /**
@@ -623,17 +629,19 @@ var _crud = {
      * param key {string} row key
      */
     onView: function (key) {
-        _crud.getJsonAndSetMode(key, _fun.FunV);
+        _crud._getJsonAndSetMode(key, _fun.FunV);
     },
 
-    getJsonAndSetMode: function (key, fun) {
+    _getJsonAndSetMode: function (key, fun) {
         if (_str.isEmpty(key)) {
             _log.error('error: key is empty !');
             return;
         }
 
         //_crud.toUpdateMode(key);
-        _ajax.getJson('GetJson', { key: key }, function (data) {
+        var act = (fun == _fun.FunU) ? 'GetUpdateJson' : 
+            (fun == _fun.FunV) ? 'GetViewJson' : '';
+        _ajax.getJson(act, { key: key }, function (data) {
             _crud.toEditMode(fun, data);
         });
     },
@@ -958,13 +966,13 @@ var _crud = {
             }
         }
 
-        //debugger;
         //get saving row
         var formData = new FormData();  //for upload files if need
         var row = _crud.getUpdJson(formData);
-
-        //temp add
-        //return;
+        if (row == null) {
+            _tool.msg(_BR.SaveNone);
+            return;
+        }
 
         //save rows, call backend Save action
         var isNew = edit0.isNewRow();
@@ -1086,14 +1094,14 @@ var _crud = {
     },
 
     /**
-     * click Delete, 刪除一筆資料, 後端固定呼叫 Delete()
+     * onclick Delete, call backend Delete()
      * key {string} row key
-     * rowName {string} 資料列名稱
+     * rowName {string} for confirm
      */
     onDelete: function (key, rowName) {
         _crud.temp.data = { key: key };
         _tool.ans(_BR.SureDeleteRow + ' (' + rowName + ')', function () {
-            _ajax.getStr('Delete', { key: key }, function (msg) {
+            _ajax.getJson('Delete', { key: key }, function (msg) {
                 _tool.alert(_BR.DeleteOk);
                 _me.dt.reload();
             });
@@ -1194,12 +1202,6 @@ var _crud = {
 var _date = {
 
     /**
-     * Constant, moment.js datetime format, match to cs _Fun.CsDtFormat, _Fun.DbDtFormat
-     */ 
-    JsDateFormat: 'YYYY/MM/DD',
-    JsDtFormat: 'YYYY/MM/DD HH:mm:ss',
-
-    /**
       ?? 傳回起迄日期(json) for 日期欄位查詢
       param {string} start 開始日期欄位id
       param {string} end 結束日期欄位id
@@ -1211,13 +1213,13 @@ var _date = {
     },
 
     /**
-     * get today date string in UI format
-     */ 
+     * ??get today date string in UI format
     uiToday: function(){
         //var date = new Date();
         //return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-        return moment().format(_BR.UiDateFormat);
+        return moment().format(_BR.MmDateFmt);
     },
+     */
 
     /**
      * get current year
@@ -1231,21 +1233,10 @@ var _date = {
      * param ds {string} js date string
      * return {string} ui date string
      */ 
-    jsToUiDate: function (ds) {
+    mmToUiDate: function (ds) {
         return (_str.isEmpty(ds))
             ? ''
-            : moment(ds, _date.JsDateFormat).format(_BR.UiDateFormat);
-    },
-
-    /**
-     * ui date string to js date string
-     * param ds {string} ui date string
-     * return {string} js date string
-     */
-    uiToJsDate: function (ds) {
-        return (_str.isEmpty(ds))
-            ? ''
-            : moment(ds, _BR.UiDateFormat).format(_date.JsDateFormat);
+            : moment(ds, _fun.MmDateFmt).format(_BR.MmUiDateFmt);
     },
 
     /**
@@ -1253,22 +1244,46 @@ var _date = {
      * param dts {string} js datetime string
      * return {string} ui datetime2 string(no second)
      */ 
-    jsToUiDt2: function (dts) {
+    mmToUiDt2: function (dts) {
         return (_str.isEmpty(dts))
             ? ''
-            : moment(dts, _date.JsDtFormat).format(_BR.UiDt2Format);
+            : moment(dts, _fun.MmDtFmt).format(_BR.MmUiDt2Fmt);
     },
 
-    jsToUiDt: function (dts) {
+    mmToUiDt: function (dts) {
         return (_str.isEmpty(dts))
             ? ''
-            : moment(dts, _date.JsDtFormat).format(_BR.UiDtFormat);
+            : moment(dts, _fun.MmDtFmt).format(_BR.MmUiDtFmt);
     },
 
-    jsToFormat: function (dts, format) {
+    mmToFormat: function (dts, format) {
         return (_str.isEmpty(dts))
             ? ''
-            : moment(dts, _date.JsDtFormat).format(format);
+            : moment(dts, _fun.MmDtFmt).format(format);
+    },
+
+    //get value for compare
+    mmToValue: function (dts) {
+        return (_str.isEmpty(dts))
+            ? 0
+            : moment(dts, _fun.MmDtFmt).valueOf();
+    },
+
+    mmToMoment: function (dts) {
+        return (_str.isEmpty(dts))
+            ? null
+            : moment(dts, _fun.MmDtFmt);
+    },
+
+    /**
+     * ui date string to js date string
+     * param ds {string} ui date string
+     * return {string} js date string
+     */
+    uiToMmDate: function (ds) {
+        var date = _str.isEmpty(ds)
+            ? '' : moment(ds, _BR.MmUiDateFmt).format(_fun.MmDateFmt);
+        return date;
     },
 
     /**
@@ -1279,7 +1294,7 @@ var _date = {
     tsToUiDt: function (ts) {
         return (ts == '')
             ? ''
-            : moment(parseInt(ts) * 1000).format(_BR.UiDtFormat);
+            : moment(parseInt(ts) * 1000).format(_BR.MmUiDtFmt);
     },
 
     /**
@@ -1310,7 +1325,7 @@ var _date = {
      */
     isBig: function(ds1, ds2) {
         //return (Date.parse(date1) > Date.parse(date2));
-        return moment(ds1, _date.JsDtFormat).isAfter(moment(ds2, _date.JsDtFormat));
+        return moment(ds1, _fun.MmDtFmt).isAfter(moment(ds2, _fun.MmDtFmt));
     },
 
     /**
@@ -1322,7 +1337,7 @@ var _date = {
     getMonthDiff: function (ds1, ds2) {
         return (_str.isEmpty(start) || _str.isEmpty(end))
             ? 0
-            : _date.getMonthDiffByDate(moment(ds1, _date.JsDtFormat), moment(ds2, _date.JsDtFormat));
+            : _date.getMonthDiffByDate(moment(ds1, _fun.MmDtFmt), moment(ds2, _fun.MmDtFmt));
     },
 
     /**
@@ -1344,7 +1359,7 @@ var _date = {
      */ 
     jsDateAddYear: function (ds, year) {
         //return (parseInt(date.substring(0, 4)) + year) + date.substring(4);
-        return moment(ds, _date.JsDtFormat).add(year, 'y').format(_date.JsDtFormat);
+        return moment(ds, _fun.MmDtFmt).add(year, 'y').format(_fun.MmDtFmt);
     },
 
 }; //class
@@ -1392,29 +1407,33 @@ var _edit = {
     */
 
     //called by: EditOne.js, EditMany.js
-    //不設定 mapId
+    //not set mapId
     getUpdRow: function (kid, fidTypes, box) {
-        //如果key value為空白, 則傳回整列資料
+        //if key empty then return row
         var key = _input.get(kid, box);
         if (_str.isEmpty(key))
             return _form.toJson(box);
 
         var diff = false;
         var row = {};
-        var fid, ftype, value, obj;
+        var fid, ftype, value, obj, old;
         for (var j = 0; j < fidTypes.length; j = j + 2) {
             //skip read only type
             ftype = fidTypes[j + 1];
-            if (ftype === 'read')
+            if (ftype === 'link' || ftype === 'read')
                 continue;
 
             fid = fidTypes[j];
-            obj = (ftype === 'radio')
-                ? _iradio.getObj(fid, box)
-                : _obj.get(fid, box);
+            obj = (ftype === 'radio') ? _iradio.getObj(fid, box) : _obj.get(fid, box);
             value = _input.getO(obj, box, ftype);
-            //如果使用完全比對, 字串和數字會不相等!!
-            if (value != obj.data(_edit.DataOld)) {
+            old = obj.data(_edit.DataOld);
+            //if fully compare, string will not equal numeric !!
+            if (value != old) {
+                //date/dt old value has more length
+                if ((ftype === 'date' || ftype === 'dt') &&
+                    _date.mmToValue(value) === _date.mmToValue(old))
+                    continue;
+
                 row[fid] = value;
                 diff = true;
             }
@@ -1504,11 +1523,15 @@ var _edit = {
      * param elm {element} link element
      * param key {string} row key
      */
-    viewImage: function (table, fid, elm, key) {
-        if (_edit.isNewKey(key))
+    viewFile: function (table, fid, elm, key) {
+        if (_edit.isNewKey(key)) {
             _tool.msg(_BR.NewFileNotView);
-        else
-            _tool.showImage(elm.innerHTML, _str.format('GetFile?table={0}&fid={1}&key={2}', table, fid, key));
+            return;
+        } else {
+            var ext = _file.getFileExt(elm.innerText);
+            if (_file.isImageExt(ext))
+                _tool.showImage(elm.innerHTML, _str.format('ViewFile?table={0}&fid={1}&key={2}&ext={3}', table, fid, key, ext));
+        }
     },
 
     /**
@@ -1586,13 +1609,15 @@ var _file = {
     },
 
     /**
-     * get file ext without '.'
+     * get file ext without '.' in lowerCase, ex: txt
      */
     getFileExt: function (path) {
-        return _str.getTail(path, '.');
+        return _str.getTail(path, '.').toLowerCase();
     },
 
-
+    isImageExt: function (ext) {
+        return (",jpg,jpeg,png,gif,tif,tiff,").indexOf("," + ext + ",") >= 0;
+    }
 };//class
 
 //裡面function預設傳入object(not element or selector)
@@ -1604,8 +1629,9 @@ var _form = {
      * return {json}
      */ 
     toJson: function (form) {
+        //skip link & read fields
         var json = {};
-        form.find(_fun.fidFilter()).filter(':not([data-type=read])').each(function () {
+        form.find(_fun.fidFilter()).filter(':not([data-type=link],[data-type=read])').each(function () {
             var obj = $(this);
             json[_fun.getFid(obj)] = _input.getO(obj, form);            
         });
@@ -1925,24 +1951,15 @@ var _formData = {
 
 }; //class
 
-//var RB = null;  //resource base
 var _fun = {
 
-    //=== constant start(大camel) ===
-    //Fid: 'name',            //data-fid
-
-    //for moment.js
-    //JsDateFormat: 'YYYY/MM/DD',
-    //JsDtFormat: 'YYYY/MM/DD HH:mm:ss',
+    //=== constant start(big camel) ===
+    //constant, for moment.js, match to _Fun.cs CsDtFormat
+    MmDateFmt: 'YYYY/MM/DD',
+    MmDtFmt: 'YYYY/MM/DD HH:mm:ss',
 
     //input field error validation, need match server side _Web.cs
     //jsPath: '../Scripts/',      //js path for load
-    //errTail: '_err',            //error label 欄位id後面會加上這個字元
-    //XdRequired: 'xd-required',
-
-    //errCls: 'xg-error',           //欄位驗証錯誤時會加上這個 class name
-    //errLabCls: 'xg-error-label',     //error label 的 class name
-    //errBoxCls: 'xg-errorbox', //??_box欄位驗証錯誤時會加上這個 class name
 
     //constant for mapping to backend
     FunC: 'C',     //create
@@ -2397,18 +2414,18 @@ var _idate = $.extend({}, _ibase, {
     BoxFilter: '.date',
 
     //=== get/set start ===
+    //get ymd with format _fun.MmDateFmt
     getO: function (obj) {
-        return _date.uiToJsDate(obj.val());
+        return _date.uiToMmDate(obj.val());
     },
 
     /**
      * set input value
      * param obj {object} date object
-     * param value {string}
+     * param value {string} format: _fun.MmDateFmt
      */
     setO: function (obj, value) {
-        //obj.val(_date.jsToUiDate(value));
-        _idate._boxSetDate(_idate._elmToBox(obj), _date.jsToUiDate(value));
+        _idate._boxSetDate(_idate._objToBox(obj), _date.mmToUiDate(value));
     },
 
     setEditO: function (obj, status) {
@@ -2429,7 +2446,7 @@ var _idate = $.extend({}, _ibase, {
 
         //initial
         obj.datepicker({
-            //format: _BR.UiDateFormat,
+            //format in bootstrap-datepicker.js
             language: _fun.locale,
             autoclose: true,
             showOnFocus: false,
@@ -2475,7 +2492,10 @@ var _idate = $.extend({}, _ibase, {
      * return {object}
      */
     _elmToBox: function (elm) {
-        return $(elm).closest(_idate.BoxFilter);
+        return _idate._objToBox($(elm));
+    },
+    _objToBox: function (obj) {
+        return obj.closest(_idate.BoxFilter);
     },
 
     _boxSetDate: function (box, date) {
@@ -2495,7 +2515,8 @@ var _idt = $.extend({}, _idate, {
 
     //=== get/set start ===
     getO: function (obj) {        
-        var date = _date.uiToJsDate(_idate.getO(_idt._boxGetDate(obj)));
+        //var date = _date.uiToMmDate(_idate.getO(_idt._boxGetDate(obj)));
+        var date = _idate.getO(_idt._boxGetDate(obj));
         return _str.isEmpty(date)
             ? ''
             : date + ' ' +
@@ -2506,7 +2527,7 @@ var _idt = $.extend({}, _idate, {
     /**
      * set input value
      * param obj {object} datetime box object
-     * param value {string} _fun.JsDtFormat
+     * param value {string} _fun.MmDtFmt
      */
     setO: function (obj, value) {
         var date, hour, min;
@@ -2515,7 +2536,6 @@ var _idt = $.extend({}, _idate, {
             hour = 0;
             min = 0;
         } else {
-            //date = _date.jsToUiDate(value);
             date = value;   //_idate will set
             hour = parseInt(_str.getMid(value, ' ', ':'));
             min = parseInt(_str.getMid(value, ':', ':'));
@@ -2563,6 +2583,8 @@ var _idt = $.extend({}, _idate, {
 
 //input file
 var _ifile = $.extend({}, _ibase, {
+
+    //object: file input
 
     //=== overwrite start ===
     /**
@@ -2615,8 +2637,8 @@ var _ifile = $.extend({}, _ibase, {
 
         //check file ext
         var exts = fileObj.data('exts').toLowerCase();
-        if (!_str.isEmpty(exts)) {
-            var ext = _file.getFileExt(value).toLowerCase();
+        if (!_str.isEmpty(exts) && exts !== '*') {
+            var ext = _file.getFileExt(value);
             exts = ',' + exts + ',';
             if (exts.indexOf(',' + ext + ',') < 0) {
                 _tool.msg(_BR.UploadFileNotMatch);
@@ -2737,65 +2759,78 @@ var _ihtml = $.extend({}, _ibase, {
      * param obj {objects} html input object array
      * param prog {string} program code
      * param height {int} input height(px)
-     * param fnFileName {function} 傳回filename後面部分字串
+     * //param fnFileName {function} js function to get filename, 
+     * //  if empty, fileName use prog + '_' + fid
      */
-    init: function (box, prog, height, fnFileName) {
-        height = height || 250;
-        box.find(_ihtml.Filter).summernote({
-            height: height,
-            //new version use callbacks
-            callbacks: {
-                onImageUpload: function (files) {
-                    var editor = $(this);   //summernote instance !!
-                    var data = new FormData();
-                    data.append('file', files[0]);
-                    //fileName for file name
-                    var fileName = (fnFileName === undefined)
-                        ? prog + '_' + _obj.getFid($(this).closest('textarea'))
-                        : fnFileName();
-                    data.append('fileName', fileName);
-                    $.ajax({
-                        data: data,
-                        type: "POST",
-                        url: "../Image/Upload",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        success: function (url) {
-                            //create image element & add into editor
-                            var image = document.createElement('img');
-                            image.src = url;
-                            //new version syntax !!
-                            editor.summernote('insertNode', image);
-                        }
-                    });
+    init: function (edit, prog, height) {
+        edit.eform.find(_ihtml.Filter).each(function () {
+            var upMe = $(this);
+            upMe.data('prog', prog);    //for onImageUpload()
+            //init summernote
+            upMe.summernote({
+                height: height || 200,
+                //new version use callbacks !!
+                callbacks: {
+                    //https://codepen.io/ondrejsvestka/pen/PROgzQ
+                    onChange: function (contents, $editable) {
+                        //sync value
+                        var me = $(this);
+                        me.val(me.summernote('isEmpty') ? "" : contents);
+
+                        //re-validate
+                        edit.validator.element(me);
+                    },
+
+                    onImageUpload: function (files) {
+                        var me = $(this);   //jquery object
+                        var data = new FormData();
+                        data.append('file', files[0]);
+                        data.append('prog', me.data('prog'));
+                        $.ajax({
+                            data: data,
+                            type: "POST",
+                            url: "SetHtmlImage",    //fixed action !!
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (url) {
+                                //create image element & add into editor
+                                var image = document.createElement('img');
+                                image.src = url;
+                                me.summernote('insertNode', image); //new version syntax !!
+                            }
+                        });
+                    },
                 },
-            },
 
-            //=== add image ext attr start ===
-            lang: _fun.locale,
-            popover: {
-                image: [
-                    ['custom', ['imageAttributes']],
-                    ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
-                    ['float', ['floatLeft', 'floatRight', 'floatNone']],
-                    ['remove', ['removeMedia']]
-                ],
-            },
-            imageAttributes: {
-                imageDialogLayout: 'default', // default|horizontal
-                icon: '<i class="note-icon-pencil"/>',
-                removeEmpty: false // true = remove attributes | false = leave empty if present
-            },
-            displayFields: {
-                imageBasic: true,  // show/hide Title, Source, Alt fields
-                imageExtra: false, // show/hide Alt, Class, Style, Role fields
-                linkBasic: false,   // show/hide URL and Target fields for link
-                linkExtra: false   // show/hide Class, Rel, Role fields for link
-            },
-            //=== add image ext attr start ===
+                //=== add image ext attr start ===
+                /*
+                lang: _fun.locale,
+                popover: {
+                    image: [
+                        ['custom', ['imageAttributes']],
+                        ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                        ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                        ['remove', ['removeMedia']]
+                    ],
+                },
+                imageAttributes: {
+                    imageDialogLayout: 'default', // default|horizontal
+                    icon: '<i class="note-icon-pencil"/>',
+                    removeEmpty: false // true = remove attributes | false = leave empty if present
+                },
+                displayFields: {
+                    imageBasic: true,  // show/hide Title, Source, Alt fields
+                    imageExtra: false, // show/hide Alt, Class, Style, Role fields
+                    linkBasic: false,   // show/hide URL and Target fields for link
+                    linkExtra: false   // show/hide Class, Rel, Role fields for link
+                },
+                */
+                //=== add image ext attr start ===
 
-        });
+            });//summernote()
+
+        });//each()
     },
 
     //set edit status for all html input
@@ -2843,7 +2878,7 @@ var _ihtml = $.extend({}, _ibase, {
 }); //class
 
 //link file
-var _ilinkFile = {
+var _ilink = {
 
     //value by fid
     get: function (fid, form) {
@@ -2887,6 +2922,8 @@ var _input = {
         switch (type) {
             case 'text':
                 return _itext.getO(obj);
+            case 'textarea':
+                return _itextarea.getO(obj);
             case 'check':
                 return _icheck.getO(obj);
             case 'radio':
@@ -2899,14 +2936,12 @@ var _input = {
                 return _idt.getO(obj);
             case 'file':
                 return _ifile.getO(obj);
-            case 'textarea':
-                return _itextarea.getO(obj);
             case 'html':
                 return _ihtml.getO(obj);
             case 'read':
                 return _iread.getO(obj);
-            case 'linkFile':
-                return _ilinkFile.getO(obj);
+            case 'link':
+                return _ilink.getO(obj);
             default:
                 //text, textarea
                 return obj.val();
@@ -2956,11 +2991,11 @@ var _input = {
             case 'read':
                 var format = obj.data('format');
                 if (!_str.isEmpty(format) && !_str.isEmpty(_BR[format]))
-                    value = _date.jsToFormat(value, _BR[format]);
+                    value = _date.mmToFormat(value, _BR[format]);
                 _iread.setO(obj, value);
                 break;
-            case 'linkFile':
-                return _ilinkFile.setO(obj, value);
+            case 'link':
+                return _ilink.setO(obj, value);
             default:
                 //text
                 obj.val(value);
@@ -4300,29 +4335,29 @@ var _valid = {
     //validClass: 'valid',
 
     /**
-     * initial
-     * param form {object}
-     * param inputCfg {json} config
+     * initial jQuery Validation
+     * param form {object} form object
+     * return {object} validator object
      */
     init: function (form) {
-
         //remove data first
         form.removeData('validator');
-        //form.removeData('unobtrusiveValidation');
 
-        //default config
-        //this keyword not work inside !!
+        //config
         var config = {
+            ignore: ':hidden:not([data-type=html]),.note-editable.card-block',   //or summernote got error
+            errorElement: 'span',
+            errorPlacement: function (error, elm) {
+                error.insertAfter(_valid._getBox(elm));
+                return false;
+            }
             /*
+            ignore: '',     //xiFile has hidden input need validate
+            onclick: false, //checkbox, radio, and select
             unhighlight: function (elm, errorClass, validClass) {
                 var me = $(elm);
                 me.data('edit', 1);    //註記此欄位有異動
             }
-            */
-            ignore: '',     //xiFile has hidden input need validate
-            errorElement: 'span',
-            //onclick: false, //checkbox, radio, and select
-            /*
             highlight: function (elm) {
                 _valid._getError(elm).addClass(_valid.errorClass);
                 return false;
@@ -4333,15 +4368,7 @@ var _valid = {
             },
             */
             //errorClass: 'label label-danger',
-            errorPlacement: function (error, elm) {
-                error.insertAfter(_valid._getBox(elm));
-                return false;
-            }
         };
-
-        //加入外部傳入的自定義組態
-        //if (inputCfg)
-        //    config = _json.copy(inputCfg, config);
 
         return form.validate(config);
     },
@@ -4495,9 +4522,9 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
             //stateSave: true,
             //ordering: false,
 
-            //locale
+            //set locale file
             language: {
-                url: "../locale/" + _fun.locale + "/dataTables.txt",
+                url: "/locale/" + _fun.locale + "/dataTables.txt",
             },
 
             //default toolbar layout
@@ -4636,7 +4663,8 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
 function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 
     /**
-     * initial, call by this
+     * initial & and instance variables (this.validator by _valid.init())
+     * call by this
      */ 
     this.init = function () {
 
@@ -5071,9 +5099,9 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
      * param fid {string}
      * param elm {element} link element
      */
-    this.onViewImage = function (table, fid, elm) {
+    this.onViewFile = function (table, fid, elm) {
         var key = this.getKey(this.elmToRowBox(elm));
-        _edit.viewImage(table, fid, elm, key);
+        _edit.viewFile(table, fid, elm, key);
     };
 
     /**
@@ -5262,7 +5290,7 @@ function EditMany(kid, eformId, tplRowId, rowFilter, sortFid) {
 function EditOne(kid, eformId) {
 
     /**
-     * initial
+     * initial & and instance variables (this.validator by _valid.init())
      */
     this.init = function () {
         this.kid = kid || 'Id';
@@ -5362,9 +5390,9 @@ function EditOne(kid, eformId) {
      * param fid {string}
      * param elm {element} link element
      */
-    this.onViewImage = function (table, fid, elm) {
+    this.onViewFile = function (table, fid, elm) {
         var key = this.getKey();
-        _edit.viewImage(table, fid, elm, key);
+        _edit.viewFile(table, fid, elm, key);
     };
 
     //call last

@@ -7,7 +7,7 @@ namespace HrAdm.Services
 {
     public class LeaveRead
     {
-        private ReadDto GetDto()
+        private ReadDto GetReadDto()
         {
             var locale = _Xp.GetLocale0();
             return new ReadDto()
@@ -33,9 +33,9 @@ order by l.Id
             };
         }
 
-        public JObject GetPage(DtDto dt)
+        public JObject GetPage(string ctrl, DtDto dtDto)
         {
-            return new CrudRead().GetPage(GetDto(), dt);
+            return new CrudRead().GetPage(ctrl, GetReadDto(), dtDto);
         }
 
     } //class

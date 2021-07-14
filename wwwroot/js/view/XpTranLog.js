@@ -14,7 +14,7 @@
             ],
             columnDefs: [
 				{ targets: [6], render: function (data, type, full, meta) {
-                    return _date.jsToUiDt(data);
+                    return _date.mmToUiDt(data);
                 }},
             ],
         };

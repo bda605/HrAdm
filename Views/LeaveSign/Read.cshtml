@@ -23,13 +23,13 @@
                 ],
                 columnDefs: [
 				    { targets: [2], render: function (data, type, full, meta) {
-                        return _date.jsToUiDt2(data);
+                        return _date.mmToUiDt2(data);
                     }},
 				    { targets: [3], render: function (data, type, full, meta) {
-                        return _date.jsToUiDt2(data);
+                        return _date.mmToUiDt2(data);
                     }},
 				    { targets: [6], render: function (data, type, full, meta) {
-                        return _date.jsToUiDt(data);
+                        return _date.mmToUiDt(data);
                     }},
 				    { targets: [7], render: function (data, type, full, meta) {
                         return _str.format('<button type="button" class="btn btn-outline-secondary btn-sm" onclick="_crud.onUpdate(\'{0}\')">@R["Audit"]</button>', full.Id);
@@ -44,8 +44,8 @@
 
         //TODO: add your code
         //onclick viewFile, called by XiFile component
-        onViewFile: function (fid, elm) {
-            _edit.viewImage('', fid, elm, _itext.get('LeaveId', _me.eform));
+        onViewFile: function (table, fid, elm) {
+            _edit.viewFile(table, fid, elm, _itext.get('LeaveId', _me.eform));
         },
 
         onSubmit: function () {
@@ -93,7 +93,7 @@
             @await Component.InvokeAsync("XiRead", new { title = R["StartTime"].Value, fid = "StartTime", format = BrFormatEstr.Dt2 })
             @await Component.InvokeAsync("XiRead", new { title = R["EndTime"].Value, fid = "EndTime", format = BrFormatEstr.Dt2 })
             @await Component.InvokeAsync("XiRead", new { title = R["Hours"].Value, fid = "Hours" })
-            @await Component.InvokeAsync("XiLinkFile", new { title = R0["UpdFile"].Value, fid = "FileName" })
+            @await Component.InvokeAsync("XiLink", new { title = R0["UpdFile"].Value, fid = "FileName" })
             @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value, fid = "Created", format = BrFormatEstr.Dt })
             @await Component.InvokeAsync("XiSelect", new { title = R["SignStatus"].Value, fid = "SignStatus", required = true, rows = (List<IdStrDto>)ViewBag.SignStatuses2 })
             @await Component.InvokeAsync("XiText", new { title = R["Note"].Value, fid = "Note", maxLen = 100, cols = "2,8" })

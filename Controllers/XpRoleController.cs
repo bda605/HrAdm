@@ -1,38 +1,47 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
+using BaseWeb.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpRoleController : Controller
+    public class XpRoleController : MyController
     {
         public ActionResult Read()
         {
             //for edit view
-            ViewBag.Users = _XpCode.GetUsers();
-            ViewBag.Progs = _XpCode.GetProgs();
+            using (var db = new Db())
+            {
+                ViewBag.Users = _XpCode.GetUsers(db);
+                ViewBag.Progs = _XpCode.GetProgs(db);
+                ViewBag.AuthRanges = _XpCode.GetAuthRanges(_Xp.GetLocale0(), db);
+            }
             return View();
         }
 
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new XpRoleRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new XpRoleRead().GetPage(Ctrl, dt));
+        }
+
+        private XpRoleEdit EditService()
+        {
+            return new XpRoleEdit(Ctrl);
         }
 
         [HttpPost]
         public JsonResult Create(string json)
         {
-            return Json(new XpRoleEdit().Create(_Json.StrToJson(json)));
+            return Json(EditService().Create(_Json.StrToJson(json)));
         }
 
         [HttpPost]
         public JsonResult Update(string key, string json)
         {
-            return Json(new XpRoleEdit().Update(key, _Json.StrToJson(json)));
+            return Json(EditService().Update(key, _Json.StrToJson(json)));
         }
 
         [HttpPost]
@@ -44,13 +53,19 @@ namespace HrAdm.Controllers
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(new XpRoleEdit().Delete(key));
+            return Json(EditService().Delete(key));
         }
 
         [HttpPost]
-        public ContentResult GetJson(string key)
+        public ContentResult GetUpdateJson(string key)
         {
-            return Content(new XpRoleEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(EditService().GetUpdateJson(key));
+        }
+
+        [HttpPost]
+        public ContentResult GetViewJson(string key)
+        {
+            return JsonToCnt(EditService().GetViewJson(key));
         }
 
     }//class

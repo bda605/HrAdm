@@ -1,6 +1,5 @@
-﻿using Base.Enums;
-using Base.Models;
-using Base.Services;
+﻿using Base.Models;
+using BaseWeb.Controllers;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,30 +7,37 @@ using Microsoft.AspNetCore.Mvc;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class LeaveSignController : Controller
+    public class LeaveSignController : MyController
     {
         public ActionResult Read()
         {
             //for read view
             var locale0 = _Xp.GetLocale0();
-            //ViewBag.LeaveTypes = _XpCode.GetLeaveTypes(locale0);
-			//ViewBag.SignStatuses = _XpCode.GetSignStatuses(locale0);
             ViewBag.SignStatuses2 = _XpCode.GetSignStatuses2(locale0);
-            //for edit view
-            //ViewBag.Users = _XpCode.GetUsers();
             return View();
         }
 
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return Content(new LeaveSignRead().GetPage(dt).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(new LeaveSignRead().GetPage(Ctrl, dt));
+        }
+
+        private LeaveSignEdit EditService()
+        {
+            return new LeaveSignEdit(Ctrl);
         }
 
         [HttpPost]
-        public ContentResult GetJson(string key)
+        public ContentResult GetUpdateJson(string key)
         {
-            return Content(new LeaveSignEdit().GetJson(key).ToString(), ContentTypeEstr.Json);
+            return JsonToCnt(EditService().GetUpdateJson(key));
+        }
+
+        [HttpPost]
+        public ContentResult GetViewJson(string key)
+        {
+            return JsonToCnt(EditService().GetViewJson(key));
         }
 
         /// <summary>
@@ -49,9 +55,9 @@ namespace HrAdm.Controllers
 
         //TODO: add your code
         //get file/image
-        public FileContentResult GetFile(string table, string fid, string key)
+        public FileResult ViewFile(string table, string fid, string key, string ext)
         {
-            return _Xp.FileLeave(key);
+            return _Xp.ViewLeave(fid, key, ext);
         }
 
     }//class

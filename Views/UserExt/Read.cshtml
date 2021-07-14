@@ -42,11 +42,11 @@
         },
 
         //onclick viewFile, called by XiFile component
-        onViewFile: function (fid, elm) {
+        onViewFile: function (table, fid, elm) {
             if (fid == 'PhotoFile')
-                _me.edit0.onViewImage('', fid, elm);
+                _me.edit0.onViewFile(table, fid, elm);
             else if (fid == 'FileName')
-                _me.mUserLicense.onViewImage('', fid, elm);
+                _me.mUserLicense.onViewFile(table, fid, elm);
         },
 
         //generate docx file
@@ -64,11 +64,14 @@
     <div id="divRead">
         <form id='formRead' class='xg-form'>
             <div class="row">
-                @await Component.InvokeAsync("XiText", new { title = R["Account"].Value, fid = "Account", maxLen = 20, inRow = true })
+                <vc:xi-text dto="@(new XiTextDto { Title = R["Account"].Value, Fid = "Account", MaxLen = 20, InRow = true })"></vc:xi-text>
+                @*await Component.InvokeAsync("XiText", new { title = R["Account"].Value, fid = "Account", maxLen = 20, inRow = true })*@
                 @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
             </div>
-            @await Component.InvokeAsync("XiText", new { title = R["UserName"].Value, fid = "Name", maxLen = 20 })
-            @await Component.InvokeAsync("XiSelect", new { title = R["Dept"].Value, fid = "DeptId", rows = (List<IdStrDto>)ViewBag.Depts })
+            <vc:xi-text dto="@(new XiTextDto { Title = R["UserName"].Value, Fid = "Name", MaxLen = 20 })"></vc:xi-text>
+            @*await Component.InvokeAsync("XiText", new { title = R["UserName"].Value, fid = "Name", maxLen = 20 })*@
+            <vc:xi-select dto="@(new XiSelectDto { Title = R["Dept"].Value, Fid = "DeptId", Rows = (List<IdStrDto>)ViewBag.Depts })"></vc:xi-select>
+            @*await Component.InvokeAsync("XiSelect", new { title = R["Dept"].Value, fid = "DeptId", rows = (List<IdStrDto>)ViewBag.Depts })*@
         </form>
 
         <div class='xg-btns-box'>
@@ -90,12 +93,18 @@
 
     <div id="divEdit" class="xg-hide">
         <form id='eform' class='xg-form'>
-            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-            @await Component.InvokeAsync("XiText", new { title = R["Account"].Value, fid = "Account", maxLen = 20 })
-            @await Component.InvokeAsync("XiText", new { title = R["UserName"].Value, fid = "Name", maxLen = 20 })
-            @await Component.InvokeAsync("XiText", new { title = R["Dept"].Value, fid = "DeptId", maxLen = 10 })
-            @await Component.InvokeAsync("XiFile", new { title = R0["UpdImage"].Value, fid = "PhotoFile", labelTip = R["TipUpdImage"].Value })
-            @await Component.InvokeAsync("XiCheck", new { title = R0["Status"].Value, fid = "Status" })
+            <vc:xi-hide dto="@(new XiHideDto { Fid = "Id" })"></vc:xi-hide>
+            @*await Component.InvokeAsync("XiHide", new { fid = "Id" })*@
+            <vc:xi-text dto="@(new XiTextDto { Title = R["Account"].Value, Fid = "Account", MaxLen = 20 })"></vc:xi-text>
+            @*await Component.InvokeAsync("XiText", new { title = R["Account"].Value, fid = "Account", maxLen = 20 })*@
+            <vc:xi-text dto="@(new XiTextDto { Title = R["UserName"].Value, Fid = "Name", MaxLen = 20 })"></vc:xi-text>
+            @*await Component.InvokeAsync("XiText", new { title = R["UserName"].Value, fid = "Name", maxLen = 20 })*@
+            <vc:xi-text dto="@(new XiTextDto { Title = R["Dept"].Value, Fid = "DeptId", MaxLen = 10 })"></vc:xi-text>
+            @*await Component.InvokeAsync("XiText", new { title = R["Dept"].Value, fid = "DeptId", maxLen = 10 })*@
+            <vc:xi-file dto="@(new XiFileDto { Title = R0["UpdImage"].Value, Fid = "PhotoFile", LabelTip = R["TipUpdImage"].Value })"></vc:xi-file>
+            @*await Component.InvokeAsync("XiFile", new { title = R0["UpdImage"].Value, fid = "PhotoFile", labelTip = R["TipUpdImage"].Value })*@
+            <vc:xi-check dto="@(new XiCheckDto { Title = R0["Status"].Value, Fid = "Status" })"></vc:xi-check>
+            @*await Component.InvokeAsync("XiCheck", new { title = R0["Status"].Value, fid = "Status" })*@
         </form>
 
         <div class='xg-btns-box'>
@@ -201,66 +210,66 @@
 
 <script id="tplUserJob" type="text/template">
     <tr>
-        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-        @await Component.InvokeAsync("XiHide", new { fid = "UserId" })
-        @await Component.InvokeAsync("XiHide", new { fid = "JobDesc" })
-        <td>@await Component.InvokeAsync("XiText", new { fid = "JobName", maxLen = 30, required = true })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "JobType", maxLen = 30 })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "JobPlace", maxLen = 30 })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "StartEnd", maxLen = 30, required = true })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "CorpName", maxLen = 30, required = true })</td>
-        <td>@await Component.InvokeAsync("XiNum", new { fid = "CorpUsers" })</td>
-        <td class='text-center'>@await Component.InvokeAsync("XiCheck", new { fid = "IsManaged" })</td>
-        <td width='85px' class='text-center'>@await Component.InvokeAsync("XgOpenModal", new { title = R["JobNote"].Value, fid = "JobDesc", maxLen = -1 })</td>
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "UserId" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "JobDesc" })
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "JobName", MaxLen = 30, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "JobType", MaxLen = 30 })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "JobPlace", MaxLen = 30 })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "StartEnd", MaxLen = 30, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "CorpName", MaxLen = 30, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiInt", new XiIntDto { Fid = "CorpUsers" })</td>
+        <td class='text-center'>@await Component.InvokeAsync("XiCheck", new XiCheckDto { Fid = "IsManaged" })</td>
+        <td width='85px' class='text-center'>@await Component.InvokeAsync("XgOpenModal", new { title = R["JobNote"].Value, Fid = "JobDesc", MaxLen = -1 })</td>
         <td width='60px' class='text-center'>@await Component.InvokeAsync("XgDeleteRow", "_me.mUserJob.onDeleteRow(this)")</td>
     </tr>
 </script>
 
 <script id="tplUserSchool" type="text/template">
     <tr>
-        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-        @await Component.InvokeAsync("XiHide", new { fid = "UserId" })
-        <td>@await Component.InvokeAsync("XiText", new { fid = "SchoolName", maxLen = 30, required = true })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "SchoolDept", maxLen = 20, required = true })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "SchoolType", maxLen = 20 })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "StartEnd", maxLen = 30, required = true })</td>
-        <td class='text-center'>@await Component.InvokeAsync("XiCheck", new { fid = "Graduated" })</td>
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "UserId" })
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "SchoolName", MaxLen = 30, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "SchoolDept", MaxLen = 20, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "SchoolType", MaxLen = 20 })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "StartEnd", MaxLen = 30, Required = true })</td>
+        <td class='text-center'>@await Component.InvokeAsync("XiCheck", new XiCheckDto { Fid = "Graduated" })</td>
         <td width='60px' class='text-center'>@await Component.InvokeAsync("XgDeleteRow", "_me.mUserSchool.onDeleteRow(this)")</td>
     </tr>
 </script>
 
 <script id="tplUserLang" type="text/template">
     <tr>
-        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-        @await Component.InvokeAsync("XiHide", new { fid = "UserId" })
-        @await Component.InvokeAsync("XiHide", new { fid = "Sort" })
-        <td>@await Component.InvokeAsync("XiText", new { fid = "LangName", maxLen = 30, required = true })</td>
-        <td>@await Component.InvokeAsync("XiSelect", new { fid = "ListenLevel", rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
-        <td>@await Component.InvokeAsync("XiSelect", new { fid = "SpeakLevel", rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
-        <td>@await Component.InvokeAsync("XiSelect", new { fid = "ReadLevel", rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
-        <td>@await Component.InvokeAsync("XiSelect", new { fid = "WriteLevel", rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "UserId" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Sort" })
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "LangName", MaxLen = 30, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiSelect", new XiSelectDto { Fid = "ListenLevel", Rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
+        <td>@await Component.InvokeAsync("XiSelect", new XiSelectDto { Fid = "SpeakLevel", Rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
+        <td>@await Component.InvokeAsync("XiSelect", new XiSelectDto { Fid = "ReadLevel", Rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
+        <td>@await Component.InvokeAsync("XiSelect", new XiSelectDto { Fid = "WriteLevel", Rows = (List<IdStrDto>)ViewBag.LangLevels })</td>
         <td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", new { mName = "_me.mUserLang" })</td>
     </tr>
 </script>
 
 <script id="tplUserLicense" type="text/template">
     <tr>
-        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-        @await Component.InvokeAsync("XiHide", new { fid = "UserId" })
-        <td>@await Component.InvokeAsync("XiText", new { fid = "LicenseName", maxLen = 30, required = true })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "StartEnd", maxLen = 30, required = true })</td>
-        <td>@await Component.InvokeAsync("XiFile", new { fid = "FileName" })</td>
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "UserId" })
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "LicenseName", MaxLen = 30, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "StartEnd", MaxLen = 30, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiFile", new XiFileDto { Fid = "FileName" })</td>
         <td width='60px' class='text-center'>@await Component.InvokeAsync("XgDeleteRow", "_me.mUserLicense.onDeleteRow(this)")</td>
     </tr>
 </script>
 
 <script id="tplUserSkill" type="text/template">
     <tr>
-        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-        @await Component.InvokeAsync("XiHide", new { fid = "UserId" })
-        @await Component.InvokeAsync("XiHide", new { fid = "Sort" })
-        <td>@await Component.InvokeAsync("XiText", new { fid = "SkillName", maxLen = 30, required = true })</td>
-        <td>@await Component.InvokeAsync("XiTextArea", new { fid = "SkillDesc", maxLen = 500 })</td>
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "UserId" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Sort" })
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "SkillName", MaxLen = 30, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiTextarea", new XiTextareaDto { Fid = "SkillDesc", MaxLen = 500 })</td>
         <td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", new { mName = "_me.mUserSkill" })</td>
     </tr>
 </script>
