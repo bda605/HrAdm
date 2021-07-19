@@ -67,14 +67,14 @@
             <div class="row">
                 <div class="col-md-2 xg-label">@R["SignTime"]</div>
                 <div class="col-md-10 xg-input">
-                    @await Component.InvokeAsync("XiDate", new { fid = "SignTime", inRow = true, extClass = "xg-inline" })
+                    @await Component.InvokeAsync("XiDate", new XiDateDto { Fid = "SignTime", InRow = true, BoxClass = "xg-inline" })
                     <span>～</span>
-                    @await Component.InvokeAsync("XiDate", new { fid = "SignTime2", inRow = true, extClass = "xg-inline" })
+                    @await Component.InvokeAsync("XiDate", new XiDateDto { Fid = "SignTime2", InRow = true, BoxClass = "xg-inline" })
                     @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
                 </div>
             </div>
-            @await Component.InvokeAsync("XiSelect", new { title = R["Flow"].Value, fid = "FlowId", rows = (List<IdStrDto>)ViewBag.Flows, extClass = "xg-date-w" })
-            @*await Component.InvokeAsync("XiSelect", new { title = R["FlowStatus"].Value, fid = "FlowStatus", rows = (List<IdStrDto>)ViewBag.SignStatuses })*@
+            @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = R["Flow"].Value, Fid = "FlowId", Rows = (List<IdStrDto>)ViewBag.Flows, BoxClass = "xg-date-w" })
+            @*await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = R["FlowStatus"].Value, Fid = "FlowStatus", rows = (List<IdStrDto>)ViewBag.SignStatuses })*@
         </form>
 
         <table id="tableRead" class="table table-bordered xg-table" cellspacing="0">
@@ -92,15 +92,15 @@
 
     <div id="divEdit" class="xg-hide">
         <form id='eform' class='xg-form'>
-            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-            @await Component.InvokeAsync("XiRead", new { title = R["Asker"].Value + " :", fid = "UserName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["Agent"].Value + " :", fid = "AgentName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["LeaveType"].Value + " :", fid = "LeaveName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["StartTime"].Value + " :", fid = "StartTime", format = BrFormatEstr.Dt2 })
-            @await Component.InvokeAsync("XiRead", new { title = R["EndTime"].Value + " :", fid = "EndTime", format = BrFormatEstr.Dt2 })
-            @await Component.InvokeAsync("XiRead", new { title = R["Hours"].Value + " :", fid = "Hours" })
-            @await Component.InvokeAsync("XiLink", new { title = R0["UpdFile"].Value + " :", fid = "FileName" })
-            @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value + " :", fid = "Created", format = BrFormatEstr.Dt })
+            @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["Asker"].Value + " :", Fid = "UserName" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["Agent"].Value + " :", Fid = "AgentName" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["LeaveType"].Value + " :", Fid = "LeaveName" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["StartTime"].Value + " :", Fid = "StartTime", Format = BrFormatEstr.Dt2 })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["EndTime"].Value + " :", Fid = "EndTime", Format = BrFormatEstr.Dt2 })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["Hours"].Value + " :", Fid = "Hours" })
+            @await Component.InvokeAsync("XiLink", new XiLinkDto { Title = R0["UpdFile"].Value + " :", Fid = "FileName" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R0["Created"].Value + " :", Fid = "Created", Format = BrFormatEstr.Dt })
 
             <div class="row">
                 <div class="col-md-2 xg-label">@R["SignRows"] :</div>

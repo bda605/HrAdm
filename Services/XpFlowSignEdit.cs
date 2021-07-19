@@ -5,7 +5,7 @@ namespace HrAdm.Services
 {
     public class XpFlowSignEdit : MyEdit
     {
-        private string _flowCode;
+        private string _flowCode;   //XpFlow.Code
         public XpFlowSignEdit(string ctrl, string flowCode) : base(ctrl) 
         {
             _flowCode = flowCode;
@@ -33,7 +33,6 @@ where l.Id='{{0}}'
             }
 
             return new EditDto() { ReadSql = sql };
-            //return new CrudEdit(dto).GetJson(key);
         }
 
     } //class

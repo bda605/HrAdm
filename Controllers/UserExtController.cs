@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class UserExtController : MyController
+    public class UserExtController : MyCtrl
     {
         public ActionResult Read()
         {

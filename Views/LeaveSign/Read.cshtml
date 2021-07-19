@@ -85,18 +85,18 @@
 
     <div id="divEdit" class="xg-hide">
         <form id='eform' class='xg-form'>
-            @await Component.InvokeAsync("XiHide", new { fid = "SignId" })
-            @await Component.InvokeAsync("XiHide", new { fid = "LeaveId" })
-            @await Component.InvokeAsync("XiRead", new { title = R["Asker"].Value, fid = "UserName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["Agent"].Value, fid = "AgentName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["LeaveType"].Value, fid = "LeaveName" })
-            @await Component.InvokeAsync("XiRead", new { title = R["StartTime"].Value, fid = "StartTime", format = BrFormatEstr.Dt2 })
-            @await Component.InvokeAsync("XiRead", new { title = R["EndTime"].Value, fid = "EndTime", format = BrFormatEstr.Dt2 })
-            @await Component.InvokeAsync("XiRead", new { title = R["Hours"].Value, fid = "Hours" })
-            @await Component.InvokeAsync("XiLink", new { title = R0["UpdFile"].Value, fid = "FileName" })
-            @await Component.InvokeAsync("XiRead", new { title = R0["Created"].Value, fid = "Created", format = BrFormatEstr.Dt })
-            @await Component.InvokeAsync("XiSelect", new { title = R["SignStatus"].Value, fid = "SignStatus", required = true, rows = (List<IdStrDto>)ViewBag.SignStatuses2 })
-            @await Component.InvokeAsync("XiText", new { title = R["Note"].Value, fid = "Note", maxLen = 100, cols = "2,8" })
+            @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "SignId" })
+            @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "LeaveId" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["Asker"].Value, Fid = "UserName" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["Agent"].Value, Fid = "AgentName" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["LeaveType"].Value, Fid = "LeaveName" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["StartTime"].Value, Fid = "StartTime", Format = BrFormatEstr.Dt2 })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["EndTime"].Value, Fid = "EndTime", Format = BrFormatEstr.Dt2 })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["Hours"].Value, Fid = "Hours" })
+            @await Component.InvokeAsync("XiLink", new XiLinkDto { Title = R0["UpdFile"].Value, Fid = "FileName" })
+            @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R0["Created"].Value, Fid = "Created", Format = BrFormatEstr.Dt })
+            @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = R["SignStatus"].Value, Fid = "SignStatus", Required = true, Rows = (List<IdStrDto>)ViewBag.SignStatuses2 })
+            @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["Note"].Value, Fid = "Note", MaxLen = 100, Cols = "2,8" })
         </form>
 
         <div class='xg-center' style="margin-top:10px">

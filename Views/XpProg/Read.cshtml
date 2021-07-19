@@ -76,7 +76,7 @@
             <table class="table table-bordered xg-table xg-no-hline" cellspacing="0">
                 <thead>
                     <tr>
-                        @await Component.InvokeAsync("XgTh", new { title = R["Role"].Value, required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["Role"].Value, Required = true })
                         <th>@R0["Create"]</th>
                         <th>@R0["Read"]</th>
                         <th>@R0["Update"]</th>

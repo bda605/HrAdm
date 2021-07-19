@@ -2,7 +2,7 @@
 var _fun = {
 
     //=== constant start(big camel) ===
-    //constant, for moment.js, match to _Fun.cs CsDtFormat
+    //constant, for moment.js, match to _Fun.cs CsDtFmt
     MmDateFmt: 'YYYY/MM/DD',
     MmDtFmt: 'YYYY/MM/DD HH:mm:ss',
 

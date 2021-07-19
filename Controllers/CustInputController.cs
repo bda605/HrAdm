@@ -1,5 +1,4 @@
-﻿using Base.Enums;
-using Base.Models;
+﻿using Base.Models;
 using Base.Services;
 using BaseWeb.Controllers;
 using BaseWeb.Services;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
-    public class CustInputController : MyController
+    public class CustInputController : MyCtrl
     {
         public ActionResult Read()
         {

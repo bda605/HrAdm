@@ -1,13 +1,14 @@
 ﻿using Base.Models;
 using Base.Services;
 using BaseWeb.Controllers;
+using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpRoleController : MyController
+    public class XpRoleController : MyCtrl
     {
         public ActionResult Read()
         {
@@ -44,11 +45,13 @@ namespace HrAdm.Controllers
             return Json(EditService().Update(key, _Json.StrToJson(json)));
         }
 
+        /*
         [HttpPost]
         public JsonResult SetStatus(string key, bool status)
         {
             return Json(_Db.SetRowStatus("dbo.[Role]", "Id", key, status));
         }
+        */
 
         [HttpPost]
         public JsonResult Delete(string key)

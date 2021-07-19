@@ -1,13 +1,14 @@
 ﻿using Base.Models;
 using Base.Services;
 using BaseWeb.Controllers;
+using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpProgController : MyController
+    public class XpProgController : MyCtrl
     {
         public ActionResult Read()
         {
@@ -23,7 +24,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
-            return JsonToCnt(new ProgRead().GetPage(Ctrl, dt));
+            return JsonToCnt(new XpProgRead().GetPage(Ctrl, dt));
         }
 
         private XpProgEdit EditService()

@@ -13,7 +13,7 @@
     <div id="divRead">
         <form id='formRead' class='xg-form'>
             <div class="row">
-                @await Component.InvokeAsync("XiText", new { title = R["RptName"].Value, fid = "Name", inRow = true })
+                @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["RptName"].Value, Fid = "Name", InRow = true })
                 @await Component.InvokeAsync("XgFindTbar", new { })
             </div>
         </form>
@@ -36,12 +36,12 @@
 
     <div id="divEdit" class="xg-hide">
         <form id='eform' class='xg-form'>
-            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-            @await Component.InvokeAsync("XiText", new { title = R["RptName"].Value, fid = "Name", maxLen = 100, required = true, cols = "2,4" })
-            @await Component.InvokeAsync("XiText", new { title = R["ExcelTpl"].Value, fid = "TplFile", maxLen = 30, required = true, cols = "2,4" })
-            @await Component.InvokeAsync("XiText", new { title = R["ToEmail"].Value, fid = "ToEmails", labelTip = R["TipToEmail"].Value, cols = "2,9" })
-            @await Component.InvokeAsync("XiTextarea", new { title = "Sql", fid = "Sql", maxLen = 255, required = true, cols = "2,6" })
-            @await Component.InvokeAsync("XiCheck", new { title = R0["Status"].Value, fid = "Status", label = R0["Active"].Value })
+            @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+            @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["RptName"].Value, Fid = "Name", MaxLen = 100, Required = true, Cols = "2,4" })
+            @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["ExcelTpl"].Value, Fid = "TplFile", MaxLen = 30, Required = true, Cols = "2,4" })
+            @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["ToEmail"].Value, Fid = "ToEmails", LabelTip = R["TipToEmail"].Value, Cols = "2,9" })
+            @await Component.InvokeAsync("XiTextarea", new XiTextareaDto { Title = "Sql", Fid = "Sql", MaxLen = 255, Required = true, Cols = "2,6" })
+            @await Component.InvokeAsync("XiCheck", new XiCheckDto { Title = R0["Status"].Value, Fid = "Status", Label = R0["Active"].Value })
         </form>
 
         @await Component.InvokeAsync("XgSaveBack")

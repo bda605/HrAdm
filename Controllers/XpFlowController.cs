@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace HrAdm.Controllers
 {
-    public class XpFlowController : MyController
+    public class XpFlowController : MyCtrl
     {
         public ActionResult Read()
         {

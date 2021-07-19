@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HrAdm.Controllers
 {
     //Excel import base controller
-    abstract public class XpImportController : MyController 
+    abstract public class XpImportController : MyCtrl 
     {
         //public string ProgName;     //program display name
         public string ImportType;   //map to ImportLog.Type

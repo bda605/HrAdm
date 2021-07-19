@@ -104,7 +104,7 @@
     <div id="divRead">
         <form id='formRead' class='xg-form'>
             <div class="row">
-                @await Component.InvokeAsync("XiText", new { title = R["FlowName"].Value, fid = "Name", maxLen = 30, inRow = true })
+                @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["FlowName"].Value, Fid = "Name", MaxLen = 30, InRow = true })
                 @await Component.InvokeAsync("XgFindTbar")
             </div>
         </form>
@@ -128,17 +128,17 @@
     <!-- edit form -->
     <div id="divEdit" class="xg-hide jtk-surface jtk-surface-nopan">
         <form id='eform' class='xg-form'>
-            @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-            @await Component.InvokeAsync("XiText", new { fid = "Code", maxLen = 20, required = true, extClass = "xu-text", inputTip = R["FlowCode"].Value })
-            @await Component.InvokeAsync("XiText", new { fid = "Name", maxLen = 30, required = true, extClass = "xu-text", inputTip = R["FlowName"].Value })
+            @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+            @await Component.InvokeAsync("XiText", new XiTextDto { Fid = "Code", MaxLen = 20, Required = true, BoxClass = "xu-text", InputTip = R["FlowCode"].Value })
+            @await Component.InvokeAsync("XiText", new XiTextDto { Fid = "Name", MaxLen = 30, Required = true, BoxClass = "xu-text", InputTip = R["FlowName"].Value })
 
             <!-- add outer div for validate msg layout -->
             <div>
                 <div class="btn-group-vertical" role="group" style="margin-left: 5px;" aria-label="button group vertical">
-                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddStartNode()" title='@R["TipStartNode"]'>@R["StartNode"]</button>
-                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddNormalNode()" title='@R["TipNode"]'>@R["Node"]</button>
-                    @*<button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddAutoNode()" title="New Auto Node">Auto</button>*@
-                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddEndNode()" title='@R["TipEndNode"]'>@R["EndNode"]</button>
+                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddStartNode()" Title='@R["TipStartNode"]'>@R["StartNode"]</button>
+                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddNormalNode()" Title='@R["TipNode"]'>@R["Node"]</button>
+                    @*<button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddAutoNode()" Title="New Auto Node">Auto</button>*@
+                    <button type="button" class="btn btn-default xu-fun" onclick="_me.flow.onAddEndNode()" Title='@R["TipEndNode"]'>@R["EndNode"]</button>
                 </div>
             </div>
         </form>
@@ -156,14 +156,14 @@
     <div data-shape="Circle"
          class="xf-node {{_NodeClass}}" style="left:{{PosX}}px; top:{{PosY}}px;">
 
-        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-        @await Component.InvokeAsync("XiHide", new { fid = "FlowId" })
-        @await Component.InvokeAsync("XiHide", new { fid = "Name" })
-        @await Component.InvokeAsync("XiHide", new { fid = "NodeType" })
-        @await Component.InvokeAsync("XiHide", new { fid = "PosX" })
-        @await Component.InvokeAsync("XiHide", new { fid = "PosY" })
-        @await Component.InvokeAsync("XiHide", new { fid = "SignerType" })
-        @await Component.InvokeAsync("XiHide", new { fid = "SignerValue" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "FlowId" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Name" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "NodeType" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "PosX" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "PosY" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "SignerType" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "SignerValue" })
 
         <div class="xd-name">{{Name}}</div>
         <!-- flow end point -->
@@ -177,12 +177,12 @@
 <!-- flow line template -->
 <script id="tplLine" type="text/template">
     <div class="xd-line">
-        @await Component.InvokeAsync("XiHide", new { fid = "Id" })
-        @await Component.InvokeAsync("XiHide", new { fid = "FlowId" })
-        @await Component.InvokeAsync("XiHide", new { fid = "CondStr" })
-        @await Component.InvokeAsync("XiHide", new { fid = "StartNode" })
-        @await Component.InvokeAsync("XiHide", new { fid = "EndNode" })
-        @await Component.InvokeAsync("XiHide", new { fid = "Sort" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "FlowId" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "CondStr" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "StartNode" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "EndNode" })
+        @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Sort" })
     </div>
 </script>
 
@@ -196,12 +196,12 @@
             </div>
             <div class="modal-body">
                 <form id="eformNode" class="form-horizontal xg-form" style="padding:5px 20px;">
-                    @await Component.InvokeAsync("XiHide", new { fid = "NodeType" })
-                    @*await Component.InvokeAsync("XiSelect", new { title = "Node Type :", fid = "NodeType", rows = (List<IdStrDto>)ViewBag.NodeTypes, cols = cols })*@
-                    @*await Component.InvokeAsync("XiSelect", new { title = "SignTime :", fid = "LimitType", rows = (List<IdStrDto>)ViewBag.NodeLimitTypes, cols = cols })*@
-                    @await Component.InvokeAsync("XiText", new { title = R["NodeName"].Value, fid = "Name", maxLen = 20, required = true, cols = cols })
-                    @await Component.InvokeAsync("XiSelect", new { title = R["SignerType"].Value, fid = "SignerType", rows = (List<IdStrDto>)ViewBag.SignerTypes, required = true, cols = cols })
-                    @await Component.InvokeAsync("XiText", new { title = R["SignerValue"].Value, fid = "SignerValue", maxLen = 30, cols = cols })
+                    @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "NodeType" })
+                    @*await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = "Node Type :", Fid = "NodeType", rows = (List<IdStrDto>)ViewBag.NodeTypes, cols = cols })*@
+                    @*await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = "SignTime :", Fid = "LimitType", rows = (List<IdStrDto>)ViewBag.NodeLimitTypes, cols = cols })*@
+                    @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["NodeName"].Value, Fid = "Name", MaxLen = 20, Required = true, Cols = cols })
+                    @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = R["SignerType"].Value, Fid = "SignerType", Rows = (List<IdStrDto>)ViewBag.SignerTypes, Required = true, Cols = cols })
+                    @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["SignerValue"].Value, Fid = "SignerValue", MaxLen = 30, Cols = cols })
                 </form>
             </div>
             <div class="modal-footer">
@@ -222,9 +222,9 @@
             </div>
             <div class="modal-body">
                 <form id="eformLine" class="form-horizontal xg-form" style="padding:0 10px;">
-                    @await Component.InvokeAsync("XiRead", new { title = R["StartNode"].Value + " :", fid = "StartNode", cols = cols })
-                    @await Component.InvokeAsync("XiRead", new { title = R["EndNode"].Value + " :", fid = "EndNode", cols = cols })
-                    @await Component.InvokeAsync("XiNum", new { title = R["RunOrder"].Value + " :", fid = "Sort", required = true, cols = "4,2" })
+                    @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["StartNode"].Value + " :", Fid = "StartNode", Cols = cols })
+                    @await Component.InvokeAsync("XiRead", new XiReadDto { Title = R["EndNode"].Value + " :", Fid = "EndNode", Cols = cols })
+                    @await Component.InvokeAsync("XiInt", new XiIntDto { Title = R["RunOrder"].Value + " :", Fid = "Sort", Required = true, Cols = "4,2" })
                     @*Html.XiNum("Sort", "", "Run Order :", true, cols, new PropNumModel() { IsDigit = true, MaxValue = 10, Width = "80px" })*@
                     @*Html.XiRadios("LineType", "0", "Run Type :", (List<IdStrDto>)ViewBag.LineTypes, 9)*@
                     <div id="divLineCondBox" class="row xg-row">
@@ -257,10 +257,10 @@
 
 <script id="tplLineCond" type="text/template">
     <tr>
-        <td width="104px">@await Component.InvokeAsync("XiSelect", new { fid = "AndOr", value = "{{AndOr}}", rows = (List<IdStrDto>)ViewBag.AndOrs, inRow = true })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "Fid", value = "{{Fid}}", maxLen = 30, inRow = true })</td>
-        <td>@await Component.InvokeAsync("XiSelect", new { fid = "Op", value = "{{Op}}", rows = (List<IdStrDto>)ViewBag.LineOps, inRow = true })</td>
-        <td>@await Component.InvokeAsync("XiText", new { fid = "Value", value = "{{Value}}", maxLen = 30, inRow = true })</td>
+        <td width="104px">@await Component.InvokeAsync("XiSelect", new XiSelectDto { Fid = "AndOr", Value = "{{AndOr}}", Rows = (List<IdStrDto>)ViewBag.AndOrs, InRow = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "Fid", Value = "{{Fid}}", MaxLen = 30, InRow = true })</td>
+        <td>@await Component.InvokeAsync("XiSelect", new XiSelectDto { Fid = "Op", Value = "{{Op}}", Rows = (List<IdStrDto>)ViewBag.LineOps, InRow = true })</td>
+        <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "Value", Value = "{{Value}}", MaxLen = 30, InRow = true })</td>
         <td width='100px' class='text-center'>@await Component.InvokeAsync("XgDeleteUpDown", new { fnDeleteRow = "_me.flow.onDeleteLineCond(this)" })</td>
     </tr>
 </script>

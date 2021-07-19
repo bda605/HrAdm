@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class LeaveController : MyController
+    public class LeaveController : MyCtrl
     {
         public ActionResult Read()
         {

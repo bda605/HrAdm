@@ -1,4 +1,12 @@
 ﻿
+/* prog path, razor only support inline style */
+.xg-prog-path {
+    height: 38px;
+    padding: 8px 16px;
+    font-size: 16px;
+    color: gray;
+}
+
 /* form with line */
 .xg-lineform {
     font-size: 15px;
@@ -63,3 +71,27 @@
         border: none;
         margin: 0;
     }
+
+.xg-hide {
+    display: none;
+}
+
+.xg-inline {
+    display: inline-block;
+}
+
+/* title required sign */
+.xg-required {
+    color: red;
+    font-weight: bold;
+}
+
+/* match datepicker.css .date setting, for keep input width same to date at query form */
+.xg-date-w {
+    width: 180px !important;
+}
+
+/* animation */
+.xg-fade.hide {
+    display: none;
+}

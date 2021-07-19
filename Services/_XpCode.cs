@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace HrAdm.Services
 {
-    //與下拉欄位有關
+    //for dropdown input
     public static class _XpCode
     {
         #region master table to codes
@@ -41,8 +41,11 @@ order by Id";
         }
         #endregion
 
-
         #region get from XpCode table
+        public static List<IdStrDto> GetAuthRanges(string locale, Db db = null)
+        {
+            return TypeToList(locale, "AuthRange", db);
+        }
         public static List<IdStrDto> GetLangLevels(string locale, Db db = null)
         {
             return TypeToList(locale, "LangLevel", db);
@@ -55,11 +58,6 @@ order by Id";
         {
             return TypeToList(locale, "SignStatus", db);
         }
-        public static List<IdStrDto> GetAuthRanges(string locale, Db db = null)
-        {
-            return TypeToList(locale, "AuthRange", db);
-        }
-
         public static List<IdStrDto> GetSignStatuses2(string locale, Db db = null)
         {
             var sql = $@"
@@ -142,7 +140,7 @@ order by Id
             return rows;
         }
 
-        //get code table rows for 下拉式欄位
+        //get code table rows
         private static List<IdStrDto> TypeToList(string locale, string type, Db db = null)
         {
             var sql = $@"

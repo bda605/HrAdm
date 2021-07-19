@@ -1222,7 +1222,7 @@ var _date = {
      */
 
     /**
-     * get current year
+     * get current year, ex: 2021
      */ 
     nowYear: function() {
         return (new Date()).getFullYear();
@@ -1239,21 +1239,21 @@ var _date = {
             : moment(ds, _fun.MmDateFmt).format(_BR.MmUiDateFmt);
     },
 
-    /**
-     * js datetime string to ui datetime2 string(no second)
-     * param dts {string} js datetime string
-     * return {string} ui datetime2 string(no second)
-     */ 
-    mmToUiDt2: function (dts) {
-        return (_str.isEmpty(dts))
-            ? ''
-            : moment(dts, _fun.MmDtFmt).format(_BR.MmUiDt2Fmt);
-    },
-
     mmToUiDt: function (dts) {
         return (_str.isEmpty(dts))
             ? ''
             : moment(dts, _fun.MmDtFmt).format(_BR.MmUiDtFmt);
+    },
+
+    /**
+     * js datetime string to ui datetime2 string(no second)
+     * param dts {string} js datetime string
+     * return {string} ui datetime2 string(no second)
+     */
+    mmToUiDt2: function (dts) {
+        return (_str.isEmpty(dts))
+            ? ''
+            : moment(dts, _fun.MmDtFmt).format(_BR.MmUiDt2Fmt);
     },
 
     mmToFormat: function (dts, format) {
@@ -1262,7 +1262,7 @@ var _date = {
             : moment(dts, _fun.MmDtFmt).format(format);
     },
 
-    //get value for compare
+    //get datetime value for compare
     mmToValue: function (dts) {
         return (_str.isEmpty(dts))
             ? 0
@@ -1318,13 +1318,12 @@ var _date = {
     },
 
     /**
-     * compare two js date string
+     * compare two js date/datetime string
      * param ds1 {string} start js date string
      * param ds2 {string} end js date string
      * return {bool}
      */
     isBig: function(ds1, ds2) {
-        //return (Date.parse(date1) > Date.parse(date2));
         return moment(ds1, _fun.MmDtFmt).isAfter(moment(ds2, _fun.MmDtFmt));
     },
 
@@ -1954,7 +1953,7 @@ var _formData = {
 var _fun = {
 
     //=== constant start(big camel) ===
-    //constant, for moment.js, match to _Fun.cs CsDtFormat
+    //constant, for moment.js, match to _Fun.cs CsDtFmt
     MmDateFmt: 'YYYY/MM/DD',
     MmDtFmt: 'YYYY/MM/DD HH:mm:ss',
 

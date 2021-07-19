@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //CMS base controller
-    abstract public class XpCmsController : MyController 
+    abstract public class XpCmsController : MyCtrl 
     {
         //public string ProgName;     //program name
         public string CmsType;   //map to ImportLog.Type

@@ -11643,9 +11643,6 @@ $.extend( $.validator, {
 			return this
 				.errors()
 				.filter( selector );
-
-			//debugger;
-			//return $(element).closest('.xi-box').next().filter('span.error');
 		},
 
 		// See https://api.jquery.com/category/selectors/, for CSS

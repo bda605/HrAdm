@@ -1,6 +1,5 @@
 ﻿@charset "utf-8";
 
-/* === 修改預設 style === */
 body {
     /*padding-top: 50px;*/
     padding-bottom: 20px;
@@ -12,7 +11,7 @@ body, label {
     font-family: 微軟正黑體,Arial,Roboto,Helvetica Neue,Helvetica,sans-serif;
 }
 
-/* button 和後面的 icon 的間距*/
+/* space in button & icon */
 .btn > i {
     padding-left: 3px;
 }

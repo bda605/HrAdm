@@ -108,13 +108,6 @@
 }
 
 
-/*animation*/
-.xg-fade.hide {
-    display: none;
-}
-
-
-
 /* 用在 form裡面的 button */
 .xg-small-btn {
     padding: 2px 5px;
@@ -218,6 +211,17 @@ span.error {
     padding-top: 8px;
 }
 
+/* find form, use $.slideToggle() */
+.xg-find-form {
+    display: none;
+    padding: 10px 0 10px 0;
+}
+
+    /* init to open status, toggle will add open class */
+    .xg-find-form.open {
+        /*display: none;*/
+        padding: 10px 0 10px 0;
+    }
 
 /*
 .jtk-demo-main {
@@ -411,6 +415,14 @@ path, .jtk-endpoint { cursor:pointer; }
     background-color: #DEF;
 }
 
+/* prog path, razor only support inline style */
+.xg-prog-path {
+    height: 38px;
+    padding: 8px 16px;
+    font-size: 16px;
+    color: gray;
+}
+
 /* form with line */
 .xg-lineform {
     font-size: 15px;
@@ -476,6 +488,29 @@ path, .jtk-endpoint { cursor:pointer; }
         margin: 0;
     }
 
+.xg-hide {
+    display: none;
+}
+
+.xg-inline {
+    display: inline-block;
+}
+
+/* title required sign */
+.xg-required {
+    color: red;
+    font-weight: bold;
+}
+
+/* match datepicker.css .date setting, for keep input width same to date at query form */
+.xg-date-w {
+    width: 180px !important;
+}
+
+/* animation */
+.xg-fade.hide {
+    display: none;
+}
 
 /**
  * checkbox, radio, use pure css, no js
@@ -762,6 +797,34 @@ input[type=number] {
 }
 
 
+.xg-left {
+    text-align: left;
+}
+.xg-center {
+    text-align: center;
+}
+.xg-right {
+    text-align: right;
+}
+
+.xg-h10 {
+    height: 10px !important;
+}
+
+.xg-mt0 {
+    margin-top: 0 !important;
+}
+.xg-mt5 {
+    margin-top: 5px !important;
+}
+.xg-mt10 {
+    margin-top: 10px !important;
+}
+.xg-mb0 {
+    margin-bottom: 0 !important;
+}
+
+
 /* file url */
 .xg-edit-table td {
     border-top: none;
@@ -863,14 +926,6 @@ tr select {
     padding-right: 3px !important;
 }
 
-/* toolbar */
-
-/* row list toolbar */
-.xg-list-tbar {
-    padding: 3px 0 3px 0;
-}
-
-
 /* bootstrap alert */
 #xgAlert {
     position: fixed; 
@@ -940,86 +995,15 @@ body.xg-show-wait .xg-wait {
 }
 
 
-/* 切換畫面, ex: Read, Edit */
-/*
-.xg-swap {
-    display: none;
-}
+/* toolbar */
 
-.xg-swap.xg-active {
-    display: block;
-}
-*/
-
-.xg-hide {
-    display: none;
-}
-
-.xg-inline {
-    display: inline-block;
-}
-
-/* title required sign */
-.xg-required {
-    color: red;
-    font-weight: bold;
-}
-
-.xg-left {
-    text-align: left;
-}
-.xg-center {
-    text-align: center;
-}
-.xg-right {
-    text-align: right;
-}
-
-/* 查詢畫面, 使用 $.slideToggle() */
-.xg-find-form {
-    display: none;
-    padding: 10px 0 10px 0;
-}
-
-/* 初始狀態為開啟, toggle會加上 open class */
-.xg-find-form.open {
-    /*display: none;*/
-    padding: 10px 0 10px 0;
-}
-
-/* prog path, razor 只支援 inline style */
-.xg-prog-path {
-    height: 38px;
-    padding: 8px 16px;
-    font-size: 16px;
-    color: gray;
-}
-
-.xg-h10 {
-    height: 10px !important;
-}
-
-.xg-mt0 {
-    margin-top: 0 !important;
-}
-.xg-mt5 {
-    margin-top: 5px !important;
-}
-.xg-mt10 {
-    margin-top: 10px !important;
-}
-.xg-mb0 {
-    margin-bottom: 0 !important;
-}
-
-/* match datepicker.css .date setting, for keep input width same to date at query form */
-.xg-date-w {
-    width: 180px !important;
+/* row list toolbar */
+.xg-list-tbar {
+    padding: 3px 0 3px 0;
 }
 
 @charset "utf-8";
 
-/* === 修改預設 style === */
 body {
     /*padding-top: 50px;*/
     padding-bottom: 20px;
@@ -1031,7 +1015,7 @@ body, label {
     font-family: 微軟正黑體,Arial,Roboto,Helvetica Neue,Helvetica,sans-serif;
 }
 
-/* button 和後面的 icon 的間距*/
+/* space in button & icon */
 .btn > i {
     padding-left: 3px;
 }

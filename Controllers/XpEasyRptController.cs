@@ -1,12 +1,12 @@
 ﻿using Base.Models;
 using Base.Services;
 using BaseWeb.Controllers;
-using HrAdm.Services;
+using BaseWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
-    public class XpEasyRptController : MyController
+    public class XpEasyRptController : MyCtrl
     {
         public ActionResult Read()
         {

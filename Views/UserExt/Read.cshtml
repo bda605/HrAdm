@@ -65,13 +65,10 @@
         <form id='formRead' class='xg-form'>
             <div class="row">
                 <vc:xi-text dto="@(new XiTextDto { Title = R["Account"].Value, Fid = "Account", MaxLen = 20, InRow = true })"></vc:xi-text>
-                @*await Component.InvokeAsync("XiText", new { title = R["Account"].Value, fid = "Account", maxLen = 20, inRow = true })*@
                 @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
             </div>
             <vc:xi-text dto="@(new XiTextDto { Title = R["UserName"].Value, Fid = "Name", MaxLen = 20 })"></vc:xi-text>
-            @*await Component.InvokeAsync("XiText", new { title = R["UserName"].Value, fid = "Name", maxLen = 20 })*@
             <vc:xi-select dto="@(new XiSelectDto { Title = R["Dept"].Value, Fid = "DeptId", Rows = (List<IdStrDto>)ViewBag.Depts })"></vc:xi-select>
-            @*await Component.InvokeAsync("XiSelect", new { title = R["Dept"].Value, fid = "DeptId", rows = (List<IdStrDto>)ViewBag.Depts })*@
         </form>
 
         <div class='xg-btns-box'>
@@ -94,17 +91,11 @@
     <div id="divEdit" class="xg-hide">
         <form id='eform' class='xg-form'>
             <vc:xi-hide dto="@(new XiHideDto { Fid = "Id" })"></vc:xi-hide>
-            @*await Component.InvokeAsync("XiHide", new { fid = "Id" })*@
             <vc:xi-text dto="@(new XiTextDto { Title = R["Account"].Value, Fid = "Account", MaxLen = 20 })"></vc:xi-text>
-            @*await Component.InvokeAsync("XiText", new { title = R["Account"].Value, fid = "Account", maxLen = 20 })*@
             <vc:xi-text dto="@(new XiTextDto { Title = R["UserName"].Value, Fid = "Name", MaxLen = 20 })"></vc:xi-text>
-            @*await Component.InvokeAsync("XiText", new { title = R["UserName"].Value, fid = "Name", maxLen = 20 })*@
             <vc:xi-text dto="@(new XiTextDto { Title = R["Dept"].Value, Fid = "DeptId", MaxLen = 10 })"></vc:xi-text>
-            @*await Component.InvokeAsync("XiText", new { title = R["Dept"].Value, fid = "DeptId", maxLen = 10 })*@
             <vc:xi-file dto="@(new XiFileDto { Title = R0["UpdImage"].Value, Fid = "PhotoFile", LabelTip = R["TipUpdImage"].Value })"></vc:xi-file>
-            @*await Component.InvokeAsync("XiFile", new { title = R0["UpdImage"].Value, fid = "PhotoFile", labelTip = R["TipUpdImage"].Value })*@
             <vc:xi-check dto="@(new XiCheckDto { Title = R0["Status"].Value, Fid = "Status" })"></vc:xi-check>
-            @*await Component.InvokeAsync("XiCheck", new { title = R0["Status"].Value, fid = "Status" })*@
         </form>
 
         <div class='xg-btns-box'>
@@ -115,11 +106,11 @@
             <table class="table table-bordered xg-table xg-no-hline" cellspacing="0">
                 <thead>
                     <tr>
-                        @await Component.InvokeAsync("XgTh", new { title = R["JobName"].Value, required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["JobName"].Value, Required = true })
                         <th>@R["JobType"]</th>
                         <th>@R["JobPlace"]</th>
-                        @await Component.InvokeAsync("XgTh", new { title = R["StartEnd"].Value, required = true })
-                        @await Component.InvokeAsync("XgTh", new { title = R["CorpName"].Value, required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["StartEnd"].Value, Required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["CorpName"].Value, Required = true })
                         <th>@R["Corpation"]</th>
                         <th>@R["IsManaged"]</th>
                         <th>@R["JobNote"]</th>
@@ -138,10 +129,10 @@
             <table class="table table-bordered xg-table xg-no-hline" cellspacing="0">
                 <thead>
                     <tr>
-                        @await Component.InvokeAsync("XgTh", new { title = R["SchoolName"].Value, required = true })
-                        @await Component.InvokeAsync("XgTh", new { title = R["SchoolDept"].Value, required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["SchoolName"].Value, Required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["SchoolDept"].Value, Required = true })
                         <th>@R["EducType"]</th>
-                        @await Component.InvokeAsync("XgTh", new { title = R["StartEnd"].Value, required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["StartEnd"].Value, Required = true })
                         <th>@R["IsGrad"]</th>
                         <th></th>
                     </tr>
@@ -158,7 +149,7 @@
             <table class="table table-bordered xg-table xg-no-hline" cellspacing="0">
                 <thead>
                     <tr>
-                        @await Component.InvokeAsync("XgTh", new { title = R["LangName"].Value, required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["LangName"].Value, Required = true })
                         <th>@R["Listen"]</th>
                         <th>@R["Speak"]</th>
                         <th>@R["ReadAbility"]</th>
@@ -178,8 +169,8 @@
             <table class="table table-bordered xg-table xg-no-hline" cellspacing="0">
                 <thead>
                     <tr>
-                        @await Component.InvokeAsync("XgTh", new { title = R["LicName"].Value, required = true })
-                        @await Component.InvokeAsync("XgTh", new { title = R["StartEnd"].Value, required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["LicName"].Value, Required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["StartEnd"].Value, Required = true })
                         <th>@R0["UpdFileName"]</th>
                         <th></th>
                     </tr>
@@ -196,7 +187,7 @@
             <table class="table table-bordered xg-table xg-no-hline" cellspacing="0">
                 <thead>
                     <tr>
-                        @await Component.InvokeAsync("XgTh", new { title = R["SkillName"].Value, required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["SkillName"].Value, Required = true })
                         <th>@R["SkillNote"]</th>
                         <th></th>
                     </tr>

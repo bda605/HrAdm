@@ -24,7 +24,7 @@
     "inputFiles": [
       "wwwroot/js/lib/jquery-3.4.1.js",
       /* load validate first, or cause error(but min not), 1.19.3 not need unobtrusive */
-      "wwwroot/js/lib/jquery.validate-1.19.3-bruce.js",
+      "wwwroot/js/lib/jquery.validate-1.19.3.js",
       /*"wwwroot/js/lib/jquery.validate.unobtrusive-3.2.11.js",*/
       "wwwroot/js/lib/bootstrap.bundle-4.4.1.js",
       /* use jquery.dataTables, dataTables.bootstrap4 !! */
