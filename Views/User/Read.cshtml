@@ -14,7 +14,7 @@
         <form id='formRead' class='xg-form'>
             <div class="row">
                 @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["Account"].Value, Fid = "Account", MaxLen = 20, InRow = true })
-                @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
+                @await Component.InvokeAsync("XgFindTbar", new XgFindTbarDto { HasReset = true })
             </div>
             @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["UserName"].Value, Fid = "Name", MaxLen = 20 })
             @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = R["Dept"].Value, Fid = "DeptId", Rows = (List<IdStrDto>)ViewBag.Depts })

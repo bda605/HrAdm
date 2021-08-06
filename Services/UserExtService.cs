@@ -23,7 +23,7 @@ namespace HrAdm.Services
                 goto lab_error;
             }
 
-            var tplPath = _Xp.DirTpl + "UserExt.docx";
+            var tplPath = _Xp.GetTpl("UserExt.docx", true);
             if (!File.Exists(tplPath))
             {
                 error = "no file " + tplPath;

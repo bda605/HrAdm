@@ -18,7 +18,7 @@
                     @await Component.InvokeAsync("XiDate", new XiDateDto { Fid = "StartTime", InRow = true, BoxClass = "xg-inline" })
                     <span>～</span>
                     @await Component.InvokeAsync("XiDate", new XiDateDto { Fid = "StartTime2", InRow = true, BoxClass = "xg-inline" })
-                    @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
+                    @await Component.InvokeAsync("XgFindTbar", new XgFindTbarDto { HasReset = true })
                 </div>
             </div>
             @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = R["LeaveType"].Value, Fid = "LeaveType", Rows = (List<IdStrDto>)ViewBag.LeaveTypes, BoxClass = "xg-date-w" })

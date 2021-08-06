@@ -259,7 +259,7 @@ var _crud = {
     },
 
     /**
-     * onclick export excel
+     * onClick export excel button
      */
     onExport: function () {
         var find = _crud.getFindCond();

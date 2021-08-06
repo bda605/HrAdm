@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class LeaveSignController : MyCtrl
+    public class LeaveSignController : XpCtrl
     {
         public ActionResult Read()
         {

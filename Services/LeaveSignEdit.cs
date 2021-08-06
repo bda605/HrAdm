@@ -3,7 +3,7 @@ using Base.Services;
 
 namespace HrAdm.Services
 {
-    public class LeaveSignEdit : MyEdit
+    public class LeaveSignEdit : XpEdit
     {
         public LeaveSignEdit(string ctrl) : base(ctrl) { }
 

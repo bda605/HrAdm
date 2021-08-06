@@ -42,26 +42,6 @@
         _me.mLine.fnValid = _me.mLine_valid;
     },
 
-    /*
-    test1: function () {
-        _form.swap(_me.divEdit, function () {
-            _me.test2();
-        });
-    },
-
-    test2: function () {
-        var line = {
-            Id: '5YW3R5TH2A',
-            StartNode: '5YW3R5TEZA',
-            EndNode: '5YW3R5TG0A',
-        };
-        var flow = _me.flow;
-        flow.setNodeEvent($('#Start1'));
-        flow.setNodeEvent($('#Node1'));
-        flow.renderLine(line);
-    },
-    */
-
     edit0_afterSwap: function (toRead) {
         if (toRead)
             _me.divEditTbar.hide();

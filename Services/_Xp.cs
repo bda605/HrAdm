@@ -10,7 +10,7 @@ namespace HrAdm.Services
     {
         //public const string SiteVer = "20201228f";     //for my.js/css
         public static string SiteVer = _Date.NowSecStr();
-        public const string LibVer = "20210712a";    //for lib.js/css
+        public const string LibVer = "20210712d";    //for lib.js/css
 
         public static string NoImagePath = _Fun.DirRoot + "/wwwroot/image/noImage.jpg";
 
@@ -103,7 +103,20 @@ namespace HrAdm.Services
         {
             return _Locale.GetLocaleByUser(false);
         }
-        
+
+        /// <summary>
+        /// get template file
+        /// </summary>
+        /// <returns></returns>
+        public static string GetTpl(string fileName, bool hasLocale)
+        {
+            var dir = DirTpl;
+            if (hasLocale)
+                dir += _Locale.GetLocaleByUser() + "/";
+
+            return dir + fileName;
+        }
+
         /*
         //constructor
         static _Xp()

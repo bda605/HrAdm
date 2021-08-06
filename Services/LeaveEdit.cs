@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
-    public class LeaveEdit : MyEdit
+    public class LeaveEdit : XpEdit
     {
         public LeaveEdit(string ctrl) : base(ctrl) { }
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HrAdm.Controllers
 {
-    public class XpEasyRptController : MyCtrl
+    public class XpEasyRptController : XpCtrl
     {
         public ActionResult Read()
         {

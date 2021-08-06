@@ -36,7 +36,7 @@
       "wwwroot/js/lib/moment-2.24.js",
       "wwwroot/js/lib/bootstrap-datepicker-1.9.js",
       "wwwroot/js/lib/mustache-3.1.js",
-      "wwwroot/js/lib/summernote-bs4-0.8.18.min.js"
+      "wwwroot/js/lib/summernote-bs4-0.8.18.js"
     ],
     "minify": {
       "enabled": true,

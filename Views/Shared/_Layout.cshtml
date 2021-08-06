@@ -5,7 +5,7 @@
 @{
     _Fun.Config.SystemName = R["SystemName"].Value;
     var locale = _Locale.GetLocaleByUser();
-    var min = _Fun.IsDebug ? "" : ".min";   //min js
+    var min = _Fun.IsDev ? "" : ".min";   //min js
     //var menus = SetMenuName(_Web.GetMenu());  //by user right
     var menus = new List<MenuDto>()
     {
@@ -56,16 +56,16 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <!-- 1.load css -->
-    <link rel="stylesheet" href="~/css/lib@(min).css?Ver=@(_Xp.LibVer)" />
-    <link rel="stylesheet" href="~/css/my@(min).css?ver=@(_Xp.SiteVer)" />
+    <link rel="stylesheet" href="~/css/lib@(min).css?v=@(_Xp.LibVer)" />
+    <link rel="stylesheet" href="~/css/my@(min).css?v=@(_Xp.SiteVer)" />
     @RenderSection("styles", required: false)
 
     <!-- 2.load lib js -->
-    <script src="~/js/lib@(min).js?Ver=@(_Xp.LibVer)"></script>
+    <script src="~/js/lib@(min).js?v=@(_Xp.LibVer)"></script>
 
     <!-- 3.load my site js(debug/production mode) !! -->
     <environment include="Production">
-        <script src="~/js/my@(min).js?ver=@(_Xp.SiteVer)"></script>
+        <script src="~/js/my@(min).js?v=@(_Xp.SiteVer)"></script>
     </environment>
     <environment include="Development">
         <!-- tail ver will load failed !! -->
@@ -74,7 +74,7 @@
     </environment>
 
     <!-- 4.load local js -->
-    <script src="~/js/@(locale+min).js?ver=@(_Xp.SiteVer)"></script>
+    <script src="~/js/@(locale+min).js?v=@(_Xp.SiteVer)"></script>
 
     @RenderSection("scripts", required: false)
 

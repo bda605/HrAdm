@@ -126,11 +126,17 @@ var _ajax = {
                 if (data.ErrorMsg || data.ErrorBrFid) {
                     var msg = data.ErrorMsg ? data.ErrorMsg :
                         _BR[data.ErrorBrFid] ? _BR[data.ErrorBrFid] :
-                        _str.format('_ajax._call() failed, no ErrorBrFid={0}', data.ErrorBrFid);
+                            _str.format('_ajax._call() failed, no ErrorBrFid={0}', data.ErrorBrFid);
                     if (fnError == null)
                         _tool.msg(msg);
                     else
                         fnError(data);
+                } else if (typeof data === 'string' && data.substring(0, 2) === '0:') {
+                    var msg = data.substring(2);
+                    if (fnError == null)
+                        _tool.msg(msg);
+                    else
+                        fnError(msg);
                 } else if (fnOk) {
                     fnOk(data);
                 }

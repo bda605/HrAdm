@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HrAdm.Controllers
 {
     //Excel import base controller
-    abstract public class XpImportController : MyCtrl 
+    abstract public class XpImportController : XpCtrl 
     {
         //public string ProgName;     //program display name
         public string ImportType;   //map to ImportLog.Type
@@ -44,6 +44,11 @@ namespace HrAdm.Controllers
         public FileResult GetSource(string id, string name)
         {
             return GetFile(id, name);
+            /*
+            var file = GetFile(id, name);
+            return (file == null)
+                ? NotFound() : file;
+            */
         }
 
         //download failed import file

@@ -7,7 +7,14 @@ var _pjax = {
      */
     init: function (boxFt) {
         //if skip 'POST', it will trigger twice !!
-        $(document).pjax('[data-pjax]', boxFt, { type: 'POST' });
+        var docu = $(document);
+        docu.pjax('[data-pjax]', boxFt, { type: 'POST' });
+
+        //when backend exception
+        docu.on('pjax:error', function (event, xhr, textStatus, errorThrown, opts) {
+            opts.success(xhr.responseText, textStatus, xhr);
+            return false;
+        });
 
         /*
         $(document).on('ready pjax:success', box, function () {

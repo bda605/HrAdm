@@ -65,7 +65,7 @@
         <form id='formRead' class='xg-form'>
             <div class="row">
                 <vc:xi-text dto="@(new XiTextDto { Title = R["Account"].Value, Fid = "Account", MaxLen = 20, InRow = true })"></vc:xi-text>
-                @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
+                @await Component.InvokeAsync("XgFindTbar", new XgFindTbarDto { HasReset = true })
             </div>
             <vc:xi-text dto="@(new XiTextDto { Title = R["UserName"].Value, Fid = "Name", MaxLen = 20 })"></vc:xi-text>
             <vc:xi-select dto="@(new XiSelectDto { Title = R["Dept"].Value, Fid = "DeptId", Rows = (List<IdStrDto>)ViewBag.Depts })"></vc:xi-select>

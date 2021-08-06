@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class UserExtController : MyCtrl
+    public class UserExtController : XpCtrl
     {
         public ActionResult Read()
         {
@@ -81,8 +81,12 @@ namespace HrAdm.Controllers
             return JsonToCnt(EditService().GetViewJson(key));
         }
 
+        //generate word resume
         public void GenWord(string id)
         {
+            //for testing exception
+            //_Fun.Except();
+
             new UserExtService().GenWord(id);
         }
 

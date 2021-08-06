@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
-    public class XpCmsEdit : MyEdit
+    public class XpCmsEdit : XpEdit
     {
         public XpCmsEdit(string ctrl) : base(ctrl) { }
 

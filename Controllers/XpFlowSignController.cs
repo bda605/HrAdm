@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpFlowSignController : MyCtrl
+    public class XpFlowSignController : XpCtrl
     {
         public ActionResult Read()
         {

@@ -25,11 +25,11 @@ namespace HrAdmin.Controllers
         [HttpPost]
         public ActionResult Login(LoginVo vo)
         {
+            #region 1.check input account & password
             //reset UI msg
             vo.AccountMsg = "";
             vo.PwdMsg = "";
 
-            #region check account & password
             if (string.IsNullOrEmpty(vo.Account))
             {
                 vo.AccountMsg = "field is required.";
@@ -40,8 +40,9 @@ namespace HrAdmin.Controllers
                 vo.PwdMsg = "field is required.";
                 goto lab_exit;
             }
+            #endregion
 
-            //check password & get user info
+            #region 2.check DB password & get user info
             var sql = @"
 select u.Id as UserId, u.Name as UserName, u.Pwd,
     u.DeptId, d.Name as DeptName
@@ -59,10 +60,8 @@ where u.Account=@Account
             }
             #endregion
 
-            #region set base user info
+            #region 3.set base user info
             var userId = row["UserId"].ToString();
-            //var authType = AuthTypeEnum.Ctrl;
-            //var authList = _XpProg.GetAuthList(userId);
             var userInfo = new BaseUserDto()
             {
                 UserId = userId,
@@ -75,10 +74,10 @@ where u.Account=@Account
             };
             #endregion
 
-            //set session of base user info
+            //4.set session of base user info
             _Web.GetSession().Set(_Fun.BaseUser, userInfo);   //extension method
 
-            //redirect if need
+            //5.redirect if need
             var url = string.IsNullOrEmpty(vo.FromUrl) ? "/Home/Index" : vo.FromUrl;
             return Redirect(url);
 
@@ -90,6 +89,11 @@ where u.Account=@Account
         {
             _Web.GetSession().Clear();
             return Redirect("/Home/Index");
+        }
+
+        public ActionResult Error()
+        {
+            return View();
         }
 
         /*

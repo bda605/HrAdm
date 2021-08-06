@@ -14,7 +14,7 @@
         <form id='formRead' class='xg-form'>
             <div class="row">
                 @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["RptName"].Value, Fid = "Name", InRow = true })
-                @await Component.InvokeAsync("XgFindTbar", new { })
+                @await Component.InvokeAsync("XgFindTbar")
             </div>
         </form>
 

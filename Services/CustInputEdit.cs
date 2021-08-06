@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
-    public class CustInputEdit : MyEdit
+    public class CustInputEdit : XpEdit
     {
         public CustInputEdit(string ctrl) : base(ctrl) { }
 

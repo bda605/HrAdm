@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpRoleController : MyCtrl
+    public class XpRoleController : XpCtrl
     {
         public ActionResult Read()
         {

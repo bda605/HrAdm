@@ -3,7 +3,7 @@ using Base.Services;
 
 namespace HrAdm.Services
 {
-    public class UserEdit : MyEdit
+    public class UserEdit : XpEdit
     {
         public UserEdit(string ctrl) : base(ctrl) { }
 

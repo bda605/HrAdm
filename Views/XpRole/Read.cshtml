@@ -18,7 +18,7 @@
         <form id='formRead' class='xg-form'>
             <div class="row">
                 @await Component.InvokeAsync("XiText", new XiTextDto { Title = R["RoleName"].Value, Fid = "Name", MaxLen = 30, InRow = true })
-                @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
+                @await Component.InvokeAsync("XgFindTbar", new XgFindTbarDto { HasReset = true })
             </div>
         </form>
 

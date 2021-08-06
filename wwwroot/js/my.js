@@ -126,11 +126,17 @@ var _ajax = {
                 if (data.ErrorMsg || data.ErrorBrFid) {
                     var msg = data.ErrorMsg ? data.ErrorMsg :
                         _BR[data.ErrorBrFid] ? _BR[data.ErrorBrFid] :
-                        _str.format('_ajax._call() failed, no ErrorBrFid={0}', data.ErrorBrFid);
+                            _str.format('_ajax._call() failed, no ErrorBrFid={0}', data.ErrorBrFid);
                     if (fnError == null)
                         _tool.msg(msg);
                     else
                         fnError(data);
+                } else if (typeof data === 'string' && data.substring(0, 2) === '0:') {
+                    var msg = data.substring(2);
+                    if (fnError == null)
+                        _tool.msg(msg);
+                    else
+                        fnError(msg);
                 } else if (fnOk) {
                     fnOk(data);
                 }
@@ -590,7 +596,7 @@ var _crud = {
     },
 
     /**
-     * onclick export excel
+     * onClick export excel button
      */
     onExport: function () {
         var find = _crud.getFindCond();
@@ -3909,7 +3915,14 @@ var _pjax = {
      */
     init: function (boxFt) {
         //if skip 'POST', it will trigger twice !!
-        $(document).pjax('[data-pjax]', boxFt, { type: 'POST' });
+        var docu = $(document);
+        docu.pjax('[data-pjax]', boxFt, { type: 'POST' });
+
+        //when backend exception
+        docu.on('pjax:error', function (event, xhr, textStatus, errorThrown, opts) {
+            opts.success(xhr.responseText, textStatus, xhr);
+            return false;
+        });
 
         /*
         $(document).on('ready pjax:success', box, function () {
@@ -4124,6 +4137,7 @@ var _str = {
     trim: function (str) {
         return $.trim(str);
     },
+
 }; //class
 
 //switch radio, 使用 css3 toggle switch
@@ -5549,7 +5563,7 @@ function Flow(boxId, mNode, mLine) {
         this.plumb = plumb;
 
         //set event
-        this.setFlowEvent();
+        this._setFlowEvent();
 
         /*
         //set LineProp event
@@ -5567,7 +5581,7 @@ function Flow(boxId, mNode, mLine) {
      *   1.line right click to show context menu
      *   2.mouse down to hide context menu
      */
-    this.setFlowEvent = function () {
+    this._setFlowEvent = function () {
         var plumb = this.plumb;
         var me = this;
 
@@ -5577,7 +5591,7 @@ function Flow(boxId, mNode, mLine) {
         //(定義)Notification a Connection was clicked.
         /*
         plumb.bind('click', function (c) {
-            //this.showModalNode();
+            //this.showNodeProp();
             this.modalNodeProp.modal('show');
         });
         */
@@ -5602,24 +5616,24 @@ function Flow(boxId, mNode, mLine) {
                 return false;
 
             //get source node & type
-            //var sourceType = me.elmToNodeRow(conn.source).NodeType;
-            //var lineType = this.isSourceCondMode(sourceType) ? this.LineTypeCond : this.LineTypeYes;
+            //var sourceType = me._elmToNodeRow(conn.source).NodeType;
+            //var lineType = this._isSourceCondMode(sourceType) ? this.LineTypeCond : this.LineTypeYes;
             var prop = me.getLineProp('');
 
             //set conn style & label
             conn.setPaintStyle(prop.style);    //real connection
-            me.setLineLabel(conn, prop.label);
+            me._setLineLabel(conn, prop.label);
 
             //add parameters(line model) into connection
             //debugger;
             var row = {
-                StartNode: me.elmToNodeValue(conn.source, 'Id'),
-                EndNode: me.elmToNodeValue(conn.target, 'Id'),
+                StartNode: me._elmToNodeValue(conn.source, 'Id'),
+                EndNode: me._elmToNodeValue(conn.target, 'Id'),
                 //LineType: lineType,
                 CondStr: '',
                 Sort: 9,
             };
-            me.setLineKey(conn, me.addLine(row));
+            me._setLineKey(conn, me.addLine(row));
             //this.connSetParas(conn, line, true);
 
             //alert('connect');
@@ -5658,7 +5672,7 @@ function Flow(boxId, mNode, mLine) {
      * set node event & source/target property
      * param nodeObj {object} node object
      */ 
-    this.setNodeEvent = function (nodeObj) {
+    this._setNodeEvent = function (nodeObj) {
         //set source & target property
         var nodeType = _itext.get('NodeType', nodeObj);
         var plumb = this.plumb;
@@ -5687,7 +5701,7 @@ function Flow(boxId, mNode, mLine) {
             plumb.makeTarget(nodeElm, this.EndNodeCfg);
 
         //event: show node menu
-        //this.setNodeEvent(nodeObj);
+        //this._setNodeEvent(nodeObj);
         nodeObj.on('contextmenu', function (event) {
             //"this" is not work here !!
             me.showPopupMenu(event.target, event, true);
@@ -5698,27 +5712,6 @@ function Flow(boxId, mNode, mLine) {
         // version of this demo to find out about new nodes being added.
         //plumb.fire('jsPlumbDemoNodeAdded', nodeElm);
     };
-
-    /*
-    //load nodes & lines(at initial)
-    this.loadJson = function (json) {
-        //set flag
-        //this.loading = true;
-
-        //set instance
-
-        //stop drawing
-        jsPlumb.setSuspendDrawing(true);
- 
-        //load nodes & lines
-        this.loadNodes(_crud.getChildRows(json, 0));
-        this.loadLines(_crud.getChildRows(json, 1));
-
-        //start drawing
-        jsPlumb.setSuspendDrawing(false, true);
-        //this.loading = false;
-    };
-    */
 
     /**
      * load nodes into UI
@@ -5737,7 +5730,7 @@ function Flow(boxId, mNode, mLine) {
         //set nodes class
         var rows = _crud.getJsonRows(json);
         for (var i = 0; i < rows.length; i++)
-            this.setNodeClass(rows[i]);
+            this._setNodeClass(rows[i]);
 
         //3rd param reset=false, coz box has other objects, cannot reset
         this.mNode.loadRows(box, rows, false);
@@ -5745,7 +5738,7 @@ function Flow(boxId, mNode, mLine) {
         //set nodes event
         var me = this;
         box.find(this.NodeFilter).each(function () {
-            me.setNodeEvent($(this));
+            me._setNodeEvent($(this));
         });
 
         //start drawing
@@ -5785,7 +5778,7 @@ function Flow(boxId, mNode, mLine) {
      * param row {json} node row
      * return {json} new row
      */ 
-    this.setNodeClass = function (row) {
+    this._setNodeClass = function (row) {
         switch (row.NodeType) {
             case this.StartNode:
                 row._NodeClass = this.StartNodeCls;
@@ -5814,43 +5807,26 @@ function Flow(boxId, mNode, mLine) {
             PosY: 100,
         };
 
-        var node = this.mNode.addRow(this.divFlowBox, this.setNodeClass(row));
-        this.setNodeEvent(node);   //set node event
+        var node = this.mNode.addRow(this.divFlowBox, this._setNodeClass(row));
+        this._setNodeEvent(node);   //set node event
     };
 
     /**
      * node id to node object
      */ 
-    this.idToNode = function (id) {
+    this._idToNode = function (id) {
         return this.divFlowBox.find('.xf-node [value=' + id + ']').closest('.xf-node');
     };
     /**
      * inside element to node object
      */ 
-    this.elmToNode = function (elm) {
+    this._elmToNode = function (elm) {
         return $(elm).closest(this.NodeFilter);
     };
-    /*
-    //get node row (by node object)
-    this.getNodeRow = function (obj) {
-        return this.mNode.getRow(obj);
+    this._elmToNodeValue = function (elm, fid) {
+        var node = this._elmToNode(elm);
+        return this._boxGetValue(node, fid);
     };
-    //get node row by inside element
-    this.elmToNodeRow = function (elm) {
-        var node = this.elmToNode(elm);
-        return this.mNode.getRow(node);
-    };
-    */
-    this.elmToNodeValue = function (elm, fid) {
-        var node = this.elmToNode(elm);
-        return this.boxGetValue(node, fid);
-    };
-    /*
-    this.getNodeIdByElm = function (elm) {
-        var node = this.elmToNode(elm);
-        return _obj.get('Id', node);
-    };
-    */
 
     /**
      * node get field value
@@ -5858,7 +5834,7 @@ function Flow(boxId, mNode, mLine) {
      * param fid {string} field id
      * return {string}
      */ 
-    this.boxGetValue = function (node, fid) {
+    this._boxGetValue = function (node, fid) {
         return _itext.get(fid, node);
     };
 
@@ -5868,7 +5844,7 @@ function Flow(boxId, mNode, mLine) {
      * param fids {strings} field id array
      * return {json}
      */ 
-    this.boxGetValues = function (node, fids) {
+    this._boxGetValues = function (node, fids) {
         var json = {};
         for (var i = 0; i < fids.length; i++) {
             var fid = fids[i];
@@ -5885,7 +5861,7 @@ function Flow(boxId, mNode, mLine) {
 
         //add deleted row of node
         var node = $(nodeElm);
-        this.mNode.deleteRow(this.getObjKey(node));
+        this.mNode.deleteRow(this._getObjKey(node));
 
         //delete node 
         $(nodeElm).remove();
@@ -5904,20 +5880,19 @@ function Flow(boxId, mNode, mLine) {
         var prop = this.getLineProp(row.CondStr);    //get line style & label
         var conn = this.plumb.connect({
             //type: 'basic',
-            source: this.idToNode(row.StartNode),
-            target: this.idToNode(row.EndNode),
+            source: this._idToNode(row.StartNode),
+            target: this._idToNode(row.EndNode),
             paintStyle: prop.style,
             //anchors: ["Right", "Left"],
         });
 
         //add custom attributes: whole line model(big camel), only this way workable !!
         //this.connSetParas(conn, row, isNew); 
-        this.setLineKey(conn, row.Id);
+        this._setLineKey(conn, row.Id);
 
         //set label
-        this.setLineLabel(conn, prop.label);
+        this._setLineLabel(conn, prop.label);
     };
-
 
     /**
      * add flow line into hide UI for crud
@@ -5935,33 +5910,14 @@ function Flow(boxId, mNode, mLine) {
     /**
      * set connection key
      */ 
-    this.setLineKey = function (conn, key) {
+    this._setLineKey = function (conn, key) {
         var row = {};
         row['Id'] = key;
         conn.setParameters(row);
     };
 
-    /*
-    //save line model into connection object
-    this.connSetParas = function (conn, line, isNew) {
-        var lineId = isNew ? this.getNewLineId() : line.Id;
-        this.mLine.keyValuesToModel(isNew, lineId, line);
-        //keep old value
-        //line._LineType = line.LineType;
-        line._CondStr = line.CondStr; //_CondStr for log changed
-        line._Sort = line.Sort;
-        conn.setParameters(line);
-    };
-
-    //return string
-    this.getNewLineId = function () {
-        this.maxLineNo++;
-        return this.maxLineNo + '';
-    };
-    */
-
     //is line source node a condition mode(true) or yes/no type(false)
-    this.isSourceCondMode = function (sourceType) {
+    this._isSourceCondMode = function (sourceType) {
         return (sourceType == this.StartNode || sourceType == this.AutoNode);
     };
 
@@ -5973,11 +5929,11 @@ function Flow(boxId, mNode, mLine) {
         return {
             //type: type,
             style: this.InitLineCfg,
-            label: this.condStrToLabel(condStr),
+            label: this._condStrToLabel(condStr),
         }
     };
 
-    this.getLineElmKey = function (conn) {
+    this._getLineElmKey = function (conn) {
         return conn.getParameters()['Id'];
     };
 
@@ -5986,12 +5942,12 @@ function Flow(boxId, mNode, mLine) {
      * param obj {object}
      * return {string} key value
      */
-    this.getObjKey = function (obj) {
+    this._getObjKey = function (obj) {
         return _itext.get('Id', obj);
     };
 
     //set connection label
-    this.setLineLabel = function (conn, label) {
+    this._setLineLabel = function (conn, label) {
         var obj = conn.getOverlay('label');
         obj.setVisible(!_str.isEmpty(label));
         obj.setLabel(label);
@@ -6056,10 +6012,10 @@ function Flow(boxId, mNode, mLine) {
         var canEdit = true;
         var nodeType;
         if (isNode) {
-            nodeType = this.elmToNodeValue(elm, 'NodeType');
+            nodeType = this._elmToNodeValue(elm, 'NodeType');
             canEdit = (nodeType == this.NormalNode || nodeType == this.AutoNode);
         } else {
-            nodeType = this.elmToNodeValue(elm.source, 'NodeType');
+            nodeType = this._elmToNodeValue(elm.source, 'NodeType');
             canEdit = (nodeType == this.StartNode || nodeType == this.AutoNode);
         }
         /*
@@ -6082,7 +6038,7 @@ function Flow(boxId, mNode, mLine) {
     };
 
     //convert condiction string to label string
-    this.condStrToLabel = function (str) {
+    this._condStrToLabel = function (str) {
         if (_str.isEmpty(str))
             return '';
 
@@ -6095,7 +6051,7 @@ function Flow(boxId, mNode, mLine) {
     };
 
     //convert condStr to List<Cond>
-    this.condStrToList = function (str) {
+    this._condStrToList = function (str) {
         if (_str.isEmpty(str))
             return null;
 
@@ -6136,9 +6092,9 @@ function Flow(boxId, mNode, mLine) {
         return condStr;
     };
 
-    this.showModalNode = function (nodeType) {
-        var node = this.elmToNode(this.nowElm);
-        var row = this.boxGetValues(node, ['NodeType', 'Name', 'SignerType', 'SignerValue']);
+    this.showNodeProp = function (nodeType) {
+        var node = this._elmToNode(this.nowElm);
+        var row = this._boxGetValues(node, ['NodeType', 'Name', 'SignerType', 'SignerValue']);
         _form.loadJson(this.modalNodeProp, row);
 
         //show modal
@@ -6146,19 +6102,19 @@ function Flow(boxId, mNode, mLine) {
     };
 
     //conn: line connection
-    this.showModalLine = function (conn) {
+    this.showLineProp = function (conn) {
         //debugger;
         var form = this.eformLine;  //line prop modal edit form
         //var line = conn.getParameters();   //line model
-        var line = this.connToLine(conn);
+        var line = this._connToLine(conn);
         //var lineType = line.LineType;
 
         //show fields
         //_iradio.set('LineType', lineType, form);
         //this.onChangeLineType(lineType); //switch input
-        _iread.set('StartNode', this.elmToNodeValue(conn.source, 'Name'), form);
-        _iread.set('EndNode', this.elmToNodeValue(conn.target, 'Name'), form);
-        _itext.set('Sort', this.boxGetValue(line, 'Sort'), form);
+        _iread.set('StartNode', this._elmToNodeValue(conn.source, 'Name'), form);
+        _iread.set('EndNode', this._elmToNodeValue(conn.target, 'Name'), form);
+        _itext.set('Sort', this._boxGetValue(line, 'Sort'), form);
 
         //show modal
         _modal.showO(this.modalLineProp);
@@ -6168,7 +6124,7 @@ function Flow(boxId, mNode, mLine) {
 
         //load line conditions rows
         this.divLineConds.empty();
-        var condList = this.condStrToList(this.boxGetValue(line, 'CondStr'));
+        var condList = this._condStrToList(this._boxGetValue(line, 'CondStr'));
         if (condList != null) {
             for (var i = 0; i < condList.length; i++) {
                 var newCond = $(this.tplLineCond);
@@ -6179,12 +6135,12 @@ function Flow(boxId, mNode, mLine) {
     };
 
     //jsplumb connection to line object
-    this.connToLine = function (conn) {
-        return this.idToLine(this.getLineElmKey(conn));
+    this._connToLine = function (conn) {
+        return this._idToLine(this._getLineElmKey(conn));
     };
 
     //id to line object
-    this.idToLine = function (id) {
+    this._idToLine = function (id) {
         return this.divLinesBox.find('.xd-line [value=' + id + ']').closest('.xd-line');
     };
 
@@ -6247,9 +6203,9 @@ function Flow(boxId, mNode, mLine) {
     //context menu event
     this.onMenuEdit = function () {
         if (this.nowIsNode)
-            this.showModalNode(this.elmToNodeValue(this.nowElm, 'NodeType'));
+            this.showNodeProp(this._elmToNodeValue(this.nowElm, 'NodeType'));
         else
-            this.showModalLine(this.nowElm);
+            this.showLineProp(this.nowElm);
     };
 
     this.onMenuDelete = function () {
@@ -6337,12 +6293,12 @@ function Flow(boxId, mNode, mLine) {
         //conn.setParameter('CondStr', condStr);
         //conn.setParameter('Sort', _itext.get('Sort', form));
         //var line = conn.getParameters();    //model
-        var line = this.connToLine(conn);
+        var line = this._connToLine(conn);
         _form.loadJson(line, row);
 
         //change line label
         var prop = this.getLineProp(condStr)
-        this.setLineLabel(conn, prop.label);
+        this._setLineLabel(conn, prop.label);
         conn.setPaintStyle(prop.style);
     };
 

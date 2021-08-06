@@ -65,12 +65,6 @@ namespace HrAdm
             });
 
 
-            //8.initial _Fun by mssql
-            //IServiceProvider di = services.BuildServiceProvider();
-            //_Fun.Init(di, DbTypeEnum.MSSql, AuthTypeEnum.Ctrl);
-
-            //9.set locale
-            //_Locale.SetCulture(_Fun.Config.Locale);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,7 +76,8 @@ namespace HrAdm
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Home/Error");
             }
             else
             {

@@ -70,7 +70,7 @@
                     @await Component.InvokeAsync("XiDate", new XiDateDto { Fid = "SignTime", InRow = true, BoxClass = "xg-inline" })
                     <span>～</span>
                     @await Component.InvokeAsync("XiDate", new XiDateDto { Fid = "SignTime2", InRow = true, BoxClass = "xg-inline" })
-                    @await Component.InvokeAsync("XgFindTbar", new { hasReset = true })
+                    @await Component.InvokeAsync("XgFindTbar", new XgFindTbarDto { HasReset = true })
                 </div>
             </div>
             @await Component.InvokeAsync("XiSelect", new XiSelectDto { Title = R["Flow"].Value, Fid = "FlowId", Rows = (List<IdStrDto>)ViewBag.Flows, BoxClass = "xg-date-w" })

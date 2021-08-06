@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
-    //CMS base controller
-    abstract public class XpCmsController : MyCtrl 
+    //CMS base controller, abstract class
+    abstract public class XpCmsController : XpCtrl 
     {
         //public string ProgName;     //program name
-        public string CmsType;   //map to ImportLog.Type
+        public string CmsType;      //map to CmsTypeEstr
         public string DirUpload;    //upload dir, no right slash
         public CmsEditDto EditDto;
 
+        //use shared view
         public ActionResult Read()
         {			
             //ViewBag.ProgName = ProgName;
@@ -24,6 +25,7 @@ namespace HrAdm.Controllers
             return View("/Views/XpCms/Read.cshtml", EditDto); //public view
         }
 
+        //read rows with cmsType
         [HttpPost]
         public ContentResult GetPage(DtDto dt)
         {
@@ -35,26 +37,21 @@ namespace HrAdm.Controllers
             return new XpCmsEdit(Ctrl);
         }
 
+        //by dirUpload & cmsType
         [HttpPost]
         public async Task<JsonResult> Create(string json, IFormFile t0_FileName)
         {
             return Json(await EditService().CreateAsnyc(_Json.StrToJson(json), t0_FileName, DirUpload, CmsType));
         }
 
+        //by dirUpload
         [HttpPost]
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FileName)
         {
             return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_FileName, DirUpload));
         }
 
-        /*
-        [HttpPost]
-        public JsonResult SetStatus(string key, bool status)
-        {
-            return Json(_Db.SetRowStatus("dbo.[User]", "Id", key, status));
-        }
-        */
-
+        //by cmsType
         public FileResult ViewFile(string table, string fid, string key, string ext)
         {
             return _Xp.ViewCmsType(fid, key, ext, CmsType);

@@ -60,4 +60,5 @@ var _str = {
     trim: function (str) {
         return $.trim(str);
     },
+
 }; //class
