@@ -57,7 +57,7 @@
 
     <!-- 1.load css -->
     <link rel="stylesheet" href="~/css/lib@(min).css?v=@(_Xp.LibVer)" />
-    <link rel="stylesheet" href="~/css/my@(min).css?v=@(_Xp.SiteVer)" />
+    <link rel="stylesheet" href="~/css/my@(min).css?v=@(_Xp.MyVer)" />
     @RenderSection("styles", required: false)
 
     <!-- 2.load lib js -->
@@ -65,7 +65,7 @@
 
     <!-- 3.load my site js(debug/production mode) !! -->
     <environment include="Production">
-        <script src="~/js/my@(min).js?v=@(_Xp.SiteVer)"></script>
+        <script src="~/js/my@(min).js?v=@(_Xp.MyVer)"></script>
     </environment>
     <environment include="Development">
         <!-- tail ver will load failed !! -->
@@ -74,7 +74,7 @@
     </environment>
 
     <!-- 4.load local js -->
-    <script src="~/js/@(locale+min).js?v=@(_Xp.SiteVer)"></script>
+    <script src="~/js/@(locale+min).js?v=@(_Xp.MyVer)"></script>
 
     @RenderSection("scripts", required: false)
 

@@ -4,6 +4,7 @@ using BaseWeb.Attributes;
 using BaseWeb.Extensions;
 using BaseWeb.Services;
 using HrAdm.Models;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -93,7 +94,8 @@ where u.Account=@Account
 
         public ActionResult Error()
         {
-            return View();
+            var error = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            return View("Error", (error == null) ? _Fun.SystemError : error.Error.Message);
         }
 
         /*

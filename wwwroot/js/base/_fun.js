@@ -83,6 +83,27 @@ var _fun = {
         });
     },
 
+    block: function (){
+        $.blockUI({
+            message: '' +
+                '<table><tr><td style="height:50px">' +
+                '   <i class="spinner ico-spin"></i>' +
+                '   <span style="margin-left:3px; vertical-align:middle;">' + _BR.Working + '</span>' +
+                '</td></tr></table>',
+            css: {
+                padding: '0 30px',
+                borderWidth: '2px', //no dash here, use camel or add '
+                width: 'auto',
+                left: '42%',
+            },
+            overlayCSS: { opacity: 0.3 },
+        });
+    },
+
+    unBlock: function () {
+        $.unblockUI();
+    },
+
     //#region remark code
     /*
       ??

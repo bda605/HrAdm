@@ -9,12 +9,14 @@
     border-radius: 5px
 }
 
+/*
 #xgWait {
     display: none;  
     position: fixed;
     top: 33%;
     left: 50%;
 }
+*/
 
 /* xg-msg for both xgMsg & xgAns */
 .xg-msg .modal-dialog {

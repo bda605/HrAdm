@@ -33,6 +33,7 @@
         //custom function
         _me.edit0.fnAfterSwap = _me.edit0_afterSwap;
         _me.edit0.fnAfterOpenEdit = _me.edit0_afterOpenEdit;
+        //
         _me.mNode.fnLoadJson = _me.mNode_loadJson;
         _me.mNode.fnGetUpdJson = _me.mNode_getUpdJson;
         _me.mNode.fnValid = _me.mNode_valid;

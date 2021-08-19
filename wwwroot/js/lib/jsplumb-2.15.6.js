@@ -4395,7 +4395,7 @@
 
     var jsPlumbInstance = root.jsPlumbInstance = function (_defaults) {
 
-        this.version = "2.15.4";
+        this.version = "2.15.6";
 
         this.Defaults = {
             Anchor: "Bottom",
@@ -13721,7 +13721,7 @@
         params.stub = params.stub == null ? 30 : params.stub;
         var segments,
             _super = _jp.Connectors.AbstractConnector.apply(this, arguments),
-            midpoint = params.midpoint == null ? 0.5 : params.midpoint,
+            midpoint = params.midpoint == null || isNaN(params.midpoint) ? 0.5 : params.midpoint,
             alwaysRespectStubs = params.alwaysRespectStubs === true,
             lastx = null, lasty = null, lastOrientation,
             cornerRadius = params.cornerRadius != null ? params.cornerRadius : 0,
@@ -13824,6 +13824,8 @@
                     });
                 }
             };
+
+        this.midpoint = midpoint;
 
         this._compute = function (paintInfo, params) {
 
@@ -14718,6 +14720,7 @@
                 this.canvas = null;
                 this.path = null;
                 this.group = null;
+                this._jsPlumb = null;
             }
             else {
                 // if not a forced cleanup, just detach from DOM for now.
@@ -15840,7 +15843,8 @@
         },
         destroyDraggable: function (el, category) {
             _getDragManager(this, category).destroyDraggable(el);
-            delete el._jsPlumbDragOptions;
+            el._jsPlumbDragOptions = null;
+            el._jsPlumbRelatedElement = null;
         },
         unbindDraggable: function (el, evt, fn, category) {
             _getDragManager(this, category).destroyDraggable(el, evt, fn);

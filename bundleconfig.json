@@ -5,7 +5,7 @@
       "wwwroot/css/lib/bootstrap-4.4.1.css",
       "wwwroot/css/lib/dataTables.bootstrap4-1.10.19.css",
       "wwwroot/css/lib/bootstrap-datepicker-1.9.css",
-      "wwwroot/css/lib/summernote-bs4-0.8.18.min.css"
+      "wwwroot/css/lib/summernote-bs4-0.8.18.css"
     ]
   },
 
@@ -32,6 +32,7 @@
       "wwwroot/js/lib/dataTables.bootstrap4-1.10.19.js",
       /* pjax must remark 716,716 lines */
       "wwwroot/js/lib/jquery.pjax-2.0.1.js",
+      "wwwroot/js/lib/jquery.blockUI-2.7.js",
       "wwwroot/js/lib/modernizr-2.8.3.js",
       "wwwroot/js/lib/moment-2.24.js",
       "wwwroot/js/lib/bootstrap-datepicker-1.9.js",

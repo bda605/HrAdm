@@ -9,16 +9,20 @@ var _ajax = {
      * param fnError {function} failed callback function
      * return {json}
      */
-    getJson: function (url, data, fnOk, fnError) {
+    getJson: function (url, data, fnOk, fnError, block) {
         var json = {
             url: url,
             type: 'POST',
             data: data,
             //dataType: backend return type: xml, html, script, json, jsonp, text
-            dataType: 'json',   //JsonResult
+            dataType: 'json',   //return type: ContentType,JsonResult
             //processData: false
         };
         _ajax._call(json, fnOk, fnError);
+    },
+    //no block UI
+    getJson0: function (url, data, fnOk, fnError) {
+        _ajax.getJson(url, data, fnOk, fnError, false);
     },
 
     /**
@@ -29,7 +33,7 @@ var _ajax = {
      * param fnError {function}
      * return {json}
      */
-    getJsonByFormData: function (url, data, fnOk, fnError) {
+    getJsonByFormData: function (url, data, fnOk, fnError, block) {
         var json = {
             url: url,
             type: 'POST',
@@ -41,11 +45,15 @@ var _ajax = {
         };
         _ajax._call(json, fnOk, fnError);
     },
+    //no block UI
+    getJsonByFormData0: function (url, data, fnOk, fnError) {
+        _ajax.getJsonByFormData(url, data, fnOk, fnError, false);
+    },
 
     /**
      * ajax return string
      */ 
-    getStr: function (url, data, fnOk, fnError) {
+    getStr: function (url, data, fnOk, fnError, block) {
         var json = {
             url: url,
             type: 'POST',
@@ -54,12 +62,16 @@ var _ajax = {
         };
         _ajax._call(json, fnOk, fnError);
     },
+    //no block UI
+    getStr0: function (url, data, fnOk, fnError, block) {
+        _ajax.getStr(url, data, fnOk, fnError, false);
+    },
 
     /**
      * ajax return html string
      * return html string
      */
-    getView: function (url, data, fnOk, fnError) {
+    getView: function (url, data, fnOk, fnError, block) {
         var json = {
             url: url,
             type: 'POST',
@@ -68,19 +80,27 @@ var _ajax = {
         };
         _ajax._call(json, fnOk, fnError);
     },
+    //no block UI
+    getView0: function (url, data, fnOk, fnError, block) {
+        _ajax.getView(url, data, fnOk, fnError, false);
+    },
 
     /**
      * ajax return image file
      * return html string
      */
-    getImageFile: function (url, data) {
+    getImageFile: function (url, data, block) {
         var json = {
             url: url,
             type: 'POST',
             data: data,
             dataType: 'html',
         };
-        _ajax._call(json);
+        _ajax._call(json, null, null, block);
+    },
+    //no block UI
+    getImageFile0: function (url, data) {
+        _ajax.getImageFile(url, data, false);
     },
 
     /**
@@ -111,9 +131,14 @@ var _ajax = {
      * ajax call(private), only return success info(include custom message)
      * param json {json} ajax json
      * param fnOk {function} callback function
+     * param fnError {function} callback function
+     * param block {bool} block ui or not, default true
      * return {json} ResultDto
      */
-    _call: function (json, fnOk, fnError) {
+    _call: function (json, fnOk, fnError, block) {
+        if (_var.isEmpty(block))
+            block = true;
+
         var config = {
             //contentType: 'application/json; charset=utf-8',
             //traditional: true,
@@ -131,12 +156,15 @@ var _ajax = {
                         _tool.msg(msg);
                     else
                         fnError(data);
+
+                //case of getStr()
                 } else if (typeof data === 'string' && data.substring(0, 2) === '0:') {
                     var msg = data.substring(2);
                     if (fnError == null)
                         _tool.msg(msg);
                     else
                         fnError(msg);
+
                 } else if (fnOk) {
                     fnOk(data);
                 }
@@ -149,10 +177,14 @@ var _ajax = {
                 }
             },
             beforeSend: function () {
-                _tool.showWait();
+                //_tool.showWait();
+                if (block)
+                    _fun.block();
             },
             complete: function () {
-                _tool.hideWait();
+                //_tool.hideWait();
+                if (block)
+                    _fun.unBlock();
             },
         };
 

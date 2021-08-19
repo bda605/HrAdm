@@ -16,7 +16,7 @@ function Flow(boxId, mNode, mLine) {
         this.StartNode = 'S';
         this.EndNode = 'E';
         this.NormalNode = 'N';
-        this.AutoNode = 'A';
+        //this.AutoNode = 'A';
 
         //and/or seperator for line condition
         //js only replace first found, so use regular, value is same to code.type=AndOr
@@ -30,7 +30,7 @@ function Flow(boxId, mNode, mLine) {
         this.EpFilter = '.xf-ep';       //node end point
         this.StartNodeCls = 'xf-start-node';    //start node class
         this.EndNodeCls = 'xf-end-node';        //end node class
-        this.AutoNodeCls = 'xf-auto-node';      //auto node class
+        //this.AutoNodeCls = 'xf-auto-node';      //auto node class
 
         //connection(line) style: start, agree, disagree
         this.InitLineCfg = { stroke: 'blue', strokeWidth: 2 };  //initial
@@ -283,7 +283,7 @@ function Flow(boxId, mNode, mLine) {
             me.showPopupMenu(event.target, event, true);
         });
 
-        //產生節點, remark it: 似乎無作用 !!
+        //create node, remark it: seems no work !!
         // this is not part of the core demo functionality; it is a means for the Toolkit edition's wrapped
         // version of this demo to find out about new nodes being added.
         //plumb.fire('jsPlumbDemoNodeAdded', nodeElm);
@@ -362,9 +362,11 @@ function Flow(boxId, mNode, mLine) {
             case this.EndNode:
                 row._NodeClass = this.EndNodeCls;
                 break;
+            /*
             case this.AutoNode:
                 row._NodeClass = this.AutoNodeCls;
                 break;
+            */
             default:
                 //normal node
                 break;
@@ -494,7 +496,8 @@ function Flow(boxId, mNode, mLine) {
 
     //is line source node a condition mode(true) or yes/no type(false)
     this._isSourceCondMode = function (sourceType) {
-        return (sourceType == this.StartNode || sourceType == this.AutoNode);
+        //return (sourceType == this.StartNode || sourceType == this.AutoNode);
+        return (sourceType == this.StartNode);
     };
 
     /**
@@ -589,10 +592,12 @@ function Flow(boxId, mNode, mLine) {
         var nodeType;
         if (isNode) {
             nodeType = this._elmToNodeValue(elm, 'NodeType');
-            canEdit = (nodeType == this.NormalNode || nodeType == this.AutoNode);
+            //canEdit = (nodeType == this.NormalNode || nodeType == this.AutoNode);
+            canEdit = (nodeType == this.NormalNode);
         } else {
             nodeType = this._elmToNodeValue(elm.source, 'NodeType');
-            canEdit = (nodeType == this.StartNode || nodeType == this.AutoNode);
+            //canEdit = (nodeType == this.StartNode || nodeType == this.AutoNode);
+            canEdit = (nodeType == this.StartNode);
         }
         /*
         //debugger;
@@ -654,7 +659,7 @@ function Flow(boxId, mNode, mLine) {
     };
 
     //get line condition string
-    this.getCondStr = function () {
+    this._getLineLabel = function () {
         var me = this;
         var condStr = '';
         this.divLineConds.find('tr').each(function (idx) {
@@ -735,11 +740,13 @@ function Flow(boxId, mNode, mLine) {
     };
     //on add end node
     this.onAddEndNode = function () {
-        this.addNode('E', this.EndNode);
+        this.addNode('End', this.EndNode);
     };
+    /*
     this.onAddAutoNode = function () {
         this.addNode('Auto', this.AutoNode);
     };
+    */
     //on add normal node
     this.onAddNormalNode = function () {
         this.addNode('Node', this.NormalNode);
@@ -824,7 +831,7 @@ function Flow(boxId, mNode, mLine) {
         //_assert.inArray(lineType, ['0','1','2']);
 
         //conds to string
-        var condStr = this.getCondStr();
+        var condStr = this._getLineLabel();
 
         //set new value
         //write into line, this.nowElm is line connection

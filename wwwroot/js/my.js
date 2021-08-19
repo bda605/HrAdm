@@ -9,16 +9,20 @@ var _ajax = {
      * param fnError {function} failed callback function
      * return {json}
      */
-    getJson: function (url, data, fnOk, fnError) {
+    getJson: function (url, data, fnOk, fnError, block) {
         var json = {
             url: url,
             type: 'POST',
             data: data,
             //dataType: backend return type: xml, html, script, json, jsonp, text
-            dataType: 'json',   //JsonResult
+            dataType: 'json',   //return type: ContentType,JsonResult
             //processData: false
         };
         _ajax._call(json, fnOk, fnError);
+    },
+    //no block UI
+    getJson0: function (url, data, fnOk, fnError) {
+        _ajax.getJson(url, data, fnOk, fnError, false);
     },
 
     /**
@@ -29,7 +33,7 @@ var _ajax = {
      * param fnError {function}
      * return {json}
      */
-    getJsonByFormData: function (url, data, fnOk, fnError) {
+    getJsonByFormData: function (url, data, fnOk, fnError, block) {
         var json = {
             url: url,
             type: 'POST',
@@ -41,11 +45,15 @@ var _ajax = {
         };
         _ajax._call(json, fnOk, fnError);
     },
+    //no block UI
+    getJsonByFormData0: function (url, data, fnOk, fnError) {
+        _ajax.getJsonByFormData(url, data, fnOk, fnError, false);
+    },
 
     /**
      * ajax return string
      */ 
-    getStr: function (url, data, fnOk, fnError) {
+    getStr: function (url, data, fnOk, fnError, block) {
         var json = {
             url: url,
             type: 'POST',
@@ -54,12 +62,16 @@ var _ajax = {
         };
         _ajax._call(json, fnOk, fnError);
     },
+    //no block UI
+    getStr0: function (url, data, fnOk, fnError, block) {
+        _ajax.getStr(url, data, fnOk, fnError, false);
+    },
 
     /**
      * ajax return html string
      * return html string
      */
-    getView: function (url, data, fnOk, fnError) {
+    getView: function (url, data, fnOk, fnError, block) {
         var json = {
             url: url,
             type: 'POST',
@@ -68,19 +80,27 @@ var _ajax = {
         };
         _ajax._call(json, fnOk, fnError);
     },
+    //no block UI
+    getView0: function (url, data, fnOk, fnError, block) {
+        _ajax.getView(url, data, fnOk, fnError, false);
+    },
 
     /**
      * ajax return image file
      * return html string
      */
-    getImageFile: function (url, data) {
+    getImageFile: function (url, data, block) {
         var json = {
             url: url,
             type: 'POST',
             data: data,
             dataType: 'html',
         };
-        _ajax._call(json);
+        _ajax._call(json, null, null, block);
+    },
+    //no block UI
+    getImageFile0: function (url, data) {
+        _ajax.getImageFile(url, data, false);
     },
 
     /**
@@ -111,9 +131,14 @@ var _ajax = {
      * ajax call(private), only return success info(include custom message)
      * param json {json} ajax json
      * param fnOk {function} callback function
+     * param fnError {function} callback function
+     * param block {bool} block ui or not, default true
      * return {json} ResultDto
      */
-    _call: function (json, fnOk, fnError) {
+    _call: function (json, fnOk, fnError, block) {
+        if (_var.isEmpty(block))
+            block = true;
+
         var config = {
             //contentType: 'application/json; charset=utf-8',
             //traditional: true,
@@ -131,12 +156,15 @@ var _ajax = {
                         _tool.msg(msg);
                     else
                         fnError(data);
+
+                //case of getStr()
                 } else if (typeof data === 'string' && data.substring(0, 2) === '0:') {
                     var msg = data.substring(2);
                     if (fnError == null)
                         _tool.msg(msg);
                     else
                         fnError(msg);
+
                 } else if (fnOk) {
                     fnOk(data);
                 }
@@ -149,10 +177,14 @@ var _ajax = {
                 }
             },
             beforeSend: function () {
-                _tool.showWait();
+                //_tool.showWait();
+                if (block)
+                    _fun.block();
             },
             complete: function () {
-                _tool.hideWait();
+                //_tool.hideWait();
+                if (block)
+                    _fun.unBlock();
             },
         };
 
@@ -2040,6 +2072,27 @@ var _fun = {
         });
     },
 
+    block: function (){
+        $.blockUI({
+            message: '' +
+                '<table><tr><td style="height:50px">' +
+                '   <i class="spinner ico-spin"></i>' +
+                '   <span style="margin-left:3px; vertical-align:middle;">' + _BR.Working + '</span>' +
+                '</td></tr></table>',
+            css: {
+                padding: '0 30px',
+                borderWidth: '2px', //no dash here, use camel or add '
+                width: 'auto',
+                left: '42%',
+            },
+            overlayCSS: { opacity: 0.3 },
+        });
+    },
+
+    unBlock: function () {
+        $.unblockUI();
+    },
+
     //#region remark code
     /*
       ??
@@ -3335,16 +3388,14 @@ var _iread = {
 
 }; //class
 
-//一般的 select option 
+//select option 
 var _iselect = $.extend({}, _ibase, {
 
-    //=== default get/set ===
+    //#region override
     getO: function (obj) {
         return (obj.length === 0) ? '' : obj.find('option:selected').val();
     },
 
-    //設定目前選取的item
-    //不傳回選取的 option object(自行呼叫 getIndex())
     setO: function (obj, value) {
         filter = 'option[value="' + value + '"]';
         var item = obj.find(filter);
@@ -3361,8 +3412,7 @@ var _iselect = $.extend({}, _ibase, {
     setEditO: function (obj, status) {
         obj.prop('disabled', !status);
     },
-    //=== end ===
-
+    //#endregion
 
     //get selected index(base 0)
     getIndex: function (fid, box) {
@@ -3484,12 +3534,12 @@ var _iselect = $.extend({}, _ibase, {
 
 }); //class
 
-//擴充_ibase屬性, 使用jQuery
+//extend _ibase.js, use jQuery
 //https://stackoverflow.com/questions/10744552/extending-existing-singleton
 var _itext = $.extend({}, _ibase, {
 
-    //add input mask
-    //use jquery maskedinput
+    //new method
+    //add input mask, use jquery maskedinput
     mask: function (box) {
         var filter = "[data-mask!='']";
         _obj.getF(filter, box).each(function () {
@@ -4250,6 +4300,7 @@ var _tool = {
         });
     },
 
+    /*
     //show waiting
     showWait: function () {
         //$('body').addClass('xg-show-loading');
@@ -4259,6 +4310,7 @@ var _tool = {
         //$('body').removeClass('xg-show-loading');
         $('#xgWait').hide();
     },
+    */
 
     /**
      * show textarea editor
@@ -4642,8 +4694,8 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
         
         //before/after ajax call, show/hide waiting msg
         var dt = $(selector);
-        dt.on('preXhr.dt', function (e, settings, data) { _tool.showWait(); });
-        dt.on('xhr.dt', function (e, settings, data) { _tool.hideWait(); });
+        dt.on('preXhr.dt', function (e, settings, data) { _fun.block(); });
+        dt.on('xhr.dt', function (e, settings, data) { _fun.unBlock(); });
         this.dt = dt.DataTable(config);
 
         //.DataTables() will return DataTable API instance, but .dataTable() only return jQuery object !!
@@ -5430,7 +5482,7 @@ function Flow(boxId, mNode, mLine) {
         this.StartNode = 'S';
         this.EndNode = 'E';
         this.NormalNode = 'N';
-        this.AutoNode = 'A';
+        //this.AutoNode = 'A';
 
         //and/or seperator for line condition
         //js only replace first found, so use regular, value is same to code.type=AndOr
@@ -5444,7 +5496,7 @@ function Flow(boxId, mNode, mLine) {
         this.EpFilter = '.xf-ep';       //node end point
         this.StartNodeCls = 'xf-start-node';    //start node class
         this.EndNodeCls = 'xf-end-node';        //end node class
-        this.AutoNodeCls = 'xf-auto-node';      //auto node class
+        //this.AutoNodeCls = 'xf-auto-node';      //auto node class
 
         //connection(line) style: start, agree, disagree
         this.InitLineCfg = { stroke: 'blue', strokeWidth: 2 };  //initial
@@ -5564,16 +5616,6 @@ function Flow(boxId, mNode, mLine) {
 
         //set event
         this._setFlowEvent();
-
-        /*
-        //set LineProp event
-        //LineType radio
-        this.modalLineProp.find('[name=LineType]').change(function () {
-            this.onChangeLineType(this.value);
-        });
-        */
-
-        //return plumb;
     };
 
     /**
@@ -5707,7 +5749,7 @@ function Flow(boxId, mNode, mLine) {
             me.showPopupMenu(event.target, event, true);
         });
 
-        //產生節點, remark it: 似乎無作用 !!
+        //create node, remark it: seems no work !!
         // this is not part of the core demo functionality; it is a means for the Toolkit edition's wrapped
         // version of this demo to find out about new nodes being added.
         //plumb.fire('jsPlumbDemoNodeAdded', nodeElm);
@@ -5763,7 +5805,7 @@ function Flow(boxId, mNode, mLine) {
         //render jsplumb line
         var rows = _crud.getJsonRows(json);
         for (var i = 0; i < rows.length; i++)
-            this.renderLine(rows[i]);
+            this._renderLine(rows[i]);
 
         //load editMany lines
         this.mLine.loadRows(this.divLinesBox, rows);
@@ -5786,9 +5828,11 @@ function Flow(boxId, mNode, mLine) {
             case this.EndNode:
                 row._NodeClass = this.EndNodeCls;
                 break;
+            /*
             case this.AutoNode:
                 row._NodeClass = this.AutoNodeCls;
                 break;
+            */
             default:
                 //normal node
                 break;
@@ -5874,7 +5918,7 @@ function Flow(boxId, mNode, mLine) {
      * param row {json} line row
      * return void
      */ 
-    this.renderLine = function (row) {
+    this._renderLine = function (row) {
 
         //param 2(reference object) not work here !!
         var prop = this.getLineProp(row.CondStr);    //get line style & label
@@ -5918,7 +5962,8 @@ function Flow(boxId, mNode, mLine) {
 
     //is line source node a condition mode(true) or yes/no type(false)
     this._isSourceCondMode = function (sourceType) {
-        return (sourceType == this.StartNode || sourceType == this.AutoNode);
+        //return (sourceType == this.StartNode || sourceType == this.AutoNode);
+        return (sourceType == this.StartNode);
     };
 
     /**
@@ -6013,10 +6058,12 @@ function Flow(boxId, mNode, mLine) {
         var nodeType;
         if (isNode) {
             nodeType = this._elmToNodeValue(elm, 'NodeType');
-            canEdit = (nodeType == this.NormalNode || nodeType == this.AutoNode);
+            //canEdit = (nodeType == this.NormalNode || nodeType == this.AutoNode);
+            canEdit = (nodeType == this.NormalNode);
         } else {
             nodeType = this._elmToNodeValue(elm.source, 'NodeType');
-            canEdit = (nodeType == this.StartNode || nodeType == this.AutoNode);
+            //canEdit = (nodeType == this.StartNode || nodeType == this.AutoNode);
+            canEdit = (nodeType == this.StartNode);
         }
         /*
         //debugger;
@@ -6078,7 +6125,7 @@ function Flow(boxId, mNode, mLine) {
     };
 
     //get line condition string
-    this.getCondStr = function () {
+    this._getLineLabel = function () {
         var me = this;
         var condStr = '';
         this.divLineConds.find('tr').each(function (idx) {
@@ -6144,30 +6191,11 @@ function Flow(boxId, mNode, mLine) {
         return this.divLinesBox.find('.xd-line [value=' + id + ']').closest('.xd-line');
     };
 
-    /*
-    //line prop show cond(true) or agree(false)
-    this.linePropShowCond = function (show) {
-        var win = this.modalLineProp;
-        if (show) {
-            win.find('.xu-cond').show();    //show condition input
-            win.find('.xu-agree').hide();   //show agree radio
-        } else {
-            win.find('.xu-cond').hide();
-            win.find('.xu-agree').show();
-        }
-    };
-    */
-
     //#region events
     //on add start node
     this.onAddStartNode = function () {
-        //this.renderLine(this.row0);
-        //return;
-
         //check, only one start node allow
-        //debugger;
         if (this.divFlowBox.find('.' + this.StartNodeCls).length > 0) {
-        //if (_json.findIndex(this.mNode.getRows(), 'NodeType', 'S') >= 0) {
             //_tool.msg(this.R.StartNodeExist);
             _tool.msg('Start Node Already Existed !');
             return;
@@ -6178,27 +6206,17 @@ function Flow(boxId, mNode, mLine) {
     };
     //on add end node
     this.onAddEndNode = function () {
-        this.addNode('E', this.EndNode);
+        this.addNode('End', this.EndNode);
     };
+    /*
     this.onAddAutoNode = function () {
         this.addNode('Auto', this.AutoNode);
     };
+    */
     //on add normal node
     this.onAddNormalNode = function () {
         this.addNode('Node', this.NormalNode);
     };
-
-    /*
-    this.deleteNode = function (elm) {
-        //delete lines first
-
-        //delete node
-    };
-
-    this.deleteLine = function (elm) {
-        var tr = $(btn).closest('tr');
-    };
-    */
 
     //context menu event
     this.onMenuEdit = function () {
@@ -6279,7 +6297,7 @@ function Flow(boxId, mNode, mLine) {
         //_assert.inArray(lineType, ['0','1','2']);
 
         //conds to string
-        var condStr = this.getCondStr();
+        var condStr = this._getLineLabel();
 
         //set new value
         //write into line, this.nowElm is line connection
@@ -6301,15 +6319,6 @@ function Flow(boxId, mNode, mLine) {
         this._setLineLabel(conn, prop.label);
         conn.setPaintStyle(prop.style);
     };
-
-    /*
-    this.onChangeLineType = function (lineType) {
-        if (lineType === '2')
-            _form.hideShow(null, [this.divLineCondBox]);
-        else
-            _form.hideShow([this.divLineCondBox]);
-    };
-    */
     //#endregion (events)
 
     //call last

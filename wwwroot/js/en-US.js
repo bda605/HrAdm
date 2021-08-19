@@ -44,7 +44,13 @@ var _BR = {
     SureDeleteRow: 'Sure to Delete Row ?',
     SureDeleteSelected: 'Sure to Delete Selected ?',
 
-    NoAuthRow: 'No right for this row, Please connect Admin.',
+    //authority
+    NoAuthUser: 'No right for this user, Please connect Admin.',
+    NoAuthDept: 'No right for this department, Please connect Admin.',
+
+    //others
+    Working: 'Working...',
+
 };
 /**
  * American English translation for bootstrap-datepicker

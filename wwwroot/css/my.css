@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?cd830l');
-  src:  url('fonts/icomoon.eot?cd830l#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?cd830l') format('truetype'),
-    url('fonts/icomoon.woff?cd830l') format('woff'),
-    url('fonts/icomoon.svg?cd830l#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?9ftoua');
+  src:  url('fonts/icomoon.eot?9ftoua#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?9ftoua') format('truetype'),
+    url('fonts/icomoon.woff?9ftoua') format('woff'),
+    url('fonts/icomoon.svg?9ftoua#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -105,6 +105,9 @@
 }
 .ico-exit:before {
   content: "\ea14";
+}
+.ico-spin:before {
+  content: "\e97c";
 }
 
 
@@ -301,10 +304,19 @@ span.error {
     width: 45px;
     height: 45px;
 }
+    .xf-node.xf-end-node .xd-name {
+        margin-left: -2px !important;
+    }
+    .xf-node.xf-end-node .xf-ep {
+        display: none !important;
+    }
+
+/*
 .xf-node.xf-auto-node {
     border: 3px solid gray;
     border-radius: 0;
 }
+*/
 
 /*
 .aLabel {
@@ -329,7 +341,7 @@ span.error {
 }
 */
 
-/* end point, class name 固定為 xf-ep !! */
+/* end point, class name fix to xf-ep !! */
 .xf-ep {
     position: absolute;
     bottom: 37%;
@@ -936,12 +948,14 @@ tr select {
     border-radius: 5px
 }
 
+/*
 #xgWait {
     display: none;  
     position: fixed;
     top: 33%;
     left: 50%;
 }
+*/
 
 /* xg-msg for both xgMsg & xgAns */
 .xg-msg .modal-dialog {
@@ -1018,6 +1032,18 @@ body, label {
 /* space in button & icon */
 .btn > i {
     padding-left: 3px;
+}
+
+/* icomoon spinner */
+@keyframes anim-rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+.spinner {
+    vertical-align: middle;
+    display: inline-block;
+    font-size: 2em;
+    animation: anim-rotate 2s infinite steps(12);
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -1205,12 +1231,6 @@ table.dataTable thead th {
         top: 8px;
         right: 5px;
     }
-
-.fa {
-    font-size: larger;
-    /*color: white;*/
-}
-
 
 .note-toolbar {
     background: #eee !important;

@@ -185,8 +185,8 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
         
         //before/after ajax call, show/hide waiting msg
         var dt = $(selector);
-        dt.on('preXhr.dt', function (e, settings, data) { _tool.showWait(); });
-        dt.on('xhr.dt', function (e, settings, data) { _tool.hideWait(); });
+        dt.on('preXhr.dt', function (e, settings, data) { _fun.block(); });
+        dt.on('xhr.dt', function (e, settings, data) { _fun.unBlock(); });
         this.dt = dt.DataTable(config);
 
         //.DataTables() will return DataTable API instance, but .dataTable() only return jQuery object !!

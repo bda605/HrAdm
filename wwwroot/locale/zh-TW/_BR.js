@@ -44,7 +44,11 @@ var _BR = {
     SureDeleteRow: '是否確定刪除這筆資料?',
     SureDeleteSelected: '是否確定刪除選取的資料?',
 
+    //authority
     NoAuthUser: '您只能存取個人資料，請聯絡管理者。',
     NoAuthDept: '您只能存取同部門資料，請聯絡管理者。',
+
+    //others
+    Working: '作業處理中...',
 
 };

@@ -77,10 +77,19 @@
     width: 45px;
     height: 45px;
 }
+    .xf-node.xf-end-node .xd-name {
+        margin-left: -2px !important;
+    }
+    .xf-node.xf-end-node .xf-ep {
+        display: none !important;
+    }
+
+/*
 .xf-node.xf-auto-node {
     border: 3px solid gray;
     border-radius: 0;
 }
+*/
 
 /*
 .aLabel {
@@ -105,7 +114,7 @@
 }
 */
 
-/* end point, class name 固定為 xf-ep !! */
+/* end point, class name fix to xf-ep !! */
 .xf-ep {
     position: absolute;
     bottom: 37%;

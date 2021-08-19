@@ -6,29 +6,45 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\css\lib\jsPlumb\**" />
+    <Compile Remove="wwwroot\css\lib\jsPlumb_old\**" />
+    <Compile Remove="wwwroot\css\lib\old\**" />
     <Compile Remove="wwwroot_old2\**" />
     <Compile Remove="wwwroot_old\**" />
+    <Compile Remove="_data\**" />
     <Compile Remove="_log\**" />
     <Compile Remove="_source_old\**" />
     <Compile Remove="_sql\**" />
     <Compile Remove="_temp\**" />
     <Compile Remove="_upload\**" />
+    <Content Remove="wwwroot\css\lib\jsPlumb\**" />
+    <Content Remove="wwwroot\css\lib\jsPlumb_old\**" />
+    <Content Remove="wwwroot\css\lib\old\**" />
     <Content Remove="wwwroot_old2\**" />
     <Content Remove="wwwroot_old\**" />
+    <Content Remove="_data\**" />
     <Content Remove="_log\**" />
     <Content Remove="_source_old\**" />
     <Content Remove="_sql\**" />
     <Content Remove="_temp\**" />
     <Content Remove="_upload\**" />
+    <EmbeddedResource Remove="wwwroot\css\lib\jsPlumb\**" />
+    <EmbeddedResource Remove="wwwroot\css\lib\jsPlumb_old\**" />
+    <EmbeddedResource Remove="wwwroot\css\lib\old\**" />
     <EmbeddedResource Remove="wwwroot_old2\**" />
     <EmbeddedResource Remove="wwwroot_old\**" />
+    <EmbeddedResource Remove="_data\**" />
     <EmbeddedResource Remove="_log\**" />
     <EmbeddedResource Remove="_source_old\**" />
     <EmbeddedResource Remove="_sql\**" />
     <EmbeddedResource Remove="_temp\**" />
     <EmbeddedResource Remove="_upload\**" />
+    <None Remove="wwwroot\css\lib\jsPlumb\**" />
+    <None Remove="wwwroot\css\lib\jsPlumb_old\**" />
+    <None Remove="wwwroot\css\lib\old\**" />
     <None Remove="wwwroot_old2\**" />
     <None Remove="wwwroot_old\**" />
+    <None Remove="_data\**" />
     <None Remove="_log\**" />
     <None Remove="_source_old\**" />
     <None Remove="_sql\**" />
@@ -50,6 +66,7 @@
     <Content Remove="Views\XpFlow\zz__LineCond.cshtml" />
     <Content Remove="Views\User\Edit - 複製.cshtml" />
     <Content Remove="Views\User\Read - 複製.cshtml" />
+    <Content Remove="wwwroot\css\base\fontAwesome.c_old" />
   </ItemGroup>
 
   <ItemGroup>
@@ -115,11 +132,16 @@
     <None Include="wwwroot\css\bootstrap-datepicker.css.map" />
     <None Include="wwwroot\css\fonts\icomoon.svg" />
     <None Include="wwwroot\css\lib\font\summernote.woff2" />
-    <None Include="wwwroot\css\lib\jsPlumb\ico-jsplumb.svg" />
     <None Include="wwwroot\css\summernote-bs4.js.map" />
     <None Include="wwwroot\css\summernote-bs4.min.js.map" />
     <None Include="wwwroot\css\view\_xg_block.css_old" />
-    <None Include="wwwroot\js\lib.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Home\Error.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties bundleconfig_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

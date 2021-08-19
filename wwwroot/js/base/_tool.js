@@ -54,6 +54,7 @@ var _tool = {
         });
     },
 
+    /*
     //show waiting
     showWait: function () {
         //$('body').addClass('xg-show-loading');
@@ -63,6 +64,7 @@ var _tool = {
         //$('body').removeClass('xg-show-loading');
         $('#xgWait').hide();
     },
+    */
 
     /**
      * show textarea editor

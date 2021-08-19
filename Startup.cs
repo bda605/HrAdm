@@ -63,15 +63,13 @@ namespace HrAdm
                 opts.Cookie.IsEssential = true;
                 opts.IdleTimeout = TimeSpan.FromMinutes(60);
             });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //initial & set locale
-            _Fun.Init(env.IsDevelopment(), app.ApplicationServices, DbTypeEnum.MSSql, AuthTypeEnum.Row);
+            _Fun.Init(env.IsDevelopment(), app.ApplicationServices, DbTypeEnum.MSSql, AuthTypeEnum.Data);
             _Locale.SetCulture(_Fun.Config.Locale);
 
             if (env.IsDevelopment())

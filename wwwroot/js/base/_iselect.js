@@ -1,14 +1,12 @@
 ﻿
-//一般的 select option 
+//select option 
 var _iselect = $.extend({}, _ibase, {
 
-    //=== default get/set ===
+    //#region override
     getO: function (obj) {
         return (obj.length === 0) ? '' : obj.find('option:selected').val();
     },
 
-    //設定目前選取的item
-    //不傳回選取的 option object(自行呼叫 getIndex())
     setO: function (obj, value) {
         filter = 'option[value="' + value + '"]';
         var item = obj.find(filter);
@@ -25,8 +23,7 @@ var _iselect = $.extend({}, _ibase, {
     setEditO: function (obj, status) {
         obj.prop('disabled', !status);
     },
-    //=== end ===
-
+    //#endregion
 
     //get selected index(base 0)
     getIndex: function (fid, box) {

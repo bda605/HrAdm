@@ -44,7 +44,13 @@ var _BR = {
     SureDeleteRow: '是否确定删除这笔资料?',
     SureDeleteSelected: '是否确定删除选取的资料?',
 
-    NoAuthRow: '您没有权限存取这笔资料，请联络管理者。',
+    //authority
+    NoAuthUser: '您只能存取個人資料，請聯絡管理者。',
+    NoAuthDept: '您只能存取同部門資料，請聯絡管理者。',
+
+    //others
+    Working: '作業處理中...',
+
 };
 /**
  * Simplified Chinese translation for bootstrap-datepicker
