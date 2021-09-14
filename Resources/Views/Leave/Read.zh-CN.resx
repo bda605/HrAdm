@@ -118,27 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StartTime" xml:space="preserve">
-    <value>開始時間</value>
+    <value>开始时间</value>
   </data>
   <data name="LeaveType" xml:space="preserve">
-    <value>假別</value>
+    <value>假别</value>
   </data>
   <data name="FlowStatus" xml:space="preserve">
-    <value>流程狀態</value>
+    <value>流程状态</value>
   </data>
   <data name="Asker" xml:space="preserve">
-    <value>請假人</value>
+    <value>请假人</value>
   </data>
   <data name="Agent" xml:space="preserve">
     <value>代理人</value>
   </data>
   <data name="EndTime" xml:space="preserve">
-    <value>結束時間</value>
+    <value>结束时间</value>
   </data>
   <data name="Hours" xml:space="preserve">
-    <value>請假時數</value>
+    <value>请假时数</value>
   </data>
   <data name="SignRows" xml:space="preserve">
-    <value>簽核流程</value>
+    <value>签核流程</value>
   </data>
 </root>

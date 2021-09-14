@@ -137,9 +137,9 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
                     this._start = this.dt.page.info().start;
                     this._keepStart = false; //reset
 
-                    //data is mapping to backend ErrorModel
-                    if (result.ErrorMsg != null && result.ErrorMsg != "") {
-                        _tool.msg(result.ErrorMsg);
+                    var msg = _ajax.getErrorMsg(result);
+                    if (msg) {
+                        _tool.msg(msg);
                         result.recordsFiltered = 0;
                         this.recordsFiltered = 0;
                         return [];  //no null, or jquery will get wrong !!

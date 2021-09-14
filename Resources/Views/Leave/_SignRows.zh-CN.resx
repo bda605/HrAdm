@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NodeName" xml:space="preserve">
-    <value>節點名稱</value>
+    <value>节点名称</value>
   </data>
   <data name="Signer" xml:space="preserve">
-    <value>簽核人</value>
+    <value>签核人</value>
   </data>
   <data name="SignStatus" xml:space="preserve">
-    <value>簽核狀態</value>
+    <value>签核状态</value>
   </data>
   <data name="SignTime" xml:space="preserve">
-    <value>簽核時間</value>
+    <value>签核时间</value>
   </data>
   <data name="Note" xml:space="preserve">
-    <value>備註</value>
+    <value>备注</value>
   </data>
 </root>

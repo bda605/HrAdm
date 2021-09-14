@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ProgName" xml:space="preserve">
-    <value>功能名稱</value>
+    <value>功能名称</value>
   </data>
   <data name="ProgCode" xml:space="preserve">
-    <value>功能代碼</value>
+    <value>功能代码</value>
   </data>
   <data name="CrudFun" xml:space="preserve">
     <value>CRUD功能</value>
@@ -133,6 +133,6 @@
     <value>角色</value>
   </data>
   <data name="AuthRow" xml:space="preserve">
-    <value>資料等級權限</value>
+    <value>资料等级权限</value>
   </data>
 </root>

@@ -51,6 +51,7 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
+        //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Create(string json, IFormFile t0_FldFile)
         {
             //_Fun.Except();
@@ -58,12 +59,14 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
+        //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FldFile)
         {
             //_Fun.Except();
             return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_FldFile));
         }
 
+        //TODO: add your code
         //get file/image
         public FileResult ViewFile(string table, string fid, string key, string ext)
         {

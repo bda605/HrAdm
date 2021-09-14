@@ -94,17 +94,17 @@ function Flow(boxId, mNode, mLine) {
         this.nowElm = null;         //node element or connection(line)
         //#endregion
 
-        //this.condOpExprs/this.condOpShows
+        //this.condOpExprs/this.condOpShows, match XpCode.Type=LineOp
         //for show line label
         var condOpMaps = [
             this.OrSep, ') || (',  //or
             this.AndSep, ' && ',    //and
-            ',eq,', '=',
-            ',neq,', '!=',
-            ',gt,', '>',
-            ',ge,', '>=',
-            ',st,', '<',
-            ',se,', '<=',
+            ',EQ,', '=',
+            ',NEQ,', '!=',
+            ',GT,', '>',
+            ',GE,', '>=',
+            ',ST,', '<',
+            ',SE,', '<=',
         ];
         this.condOpExprs = [];   //condition op regular expression
         this.condOpShows = [];   //condition op show text

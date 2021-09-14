@@ -121,16 +121,16 @@
     <value>文字</value>
   </data>
   <data name="Int" xml:space="preserve">
-    <value>整數</value>
+    <value>整数</value>
   </data>
   <data name="Dec" xml:space="preserve">
-    <value>小數</value>
+    <value>小数</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>日期</value>
   </data>
   <data name="Dt" xml:space="preserve">
-    <value>日期時間</value>
+    <value>日期时间</value>
   </data>
   <data name="Textarea" xml:space="preserve">
     <value>多行文字</value>

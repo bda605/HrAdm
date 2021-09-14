@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RoleName" xml:space="preserve">
-    <value>角色名稱</value>
+    <value>角色名称</value>
   </data>
   <data name="UserList" xml:space="preserve">
-    <value>用戶清單</value>
+    <value>用户清单</value>
   </data>
   <data name="RoleProg" xml:space="preserve">
     <value>角色功能</value>

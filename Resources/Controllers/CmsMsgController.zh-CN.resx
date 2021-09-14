@@ -121,18 +121,18 @@
     <value>主旨</value>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>內容</value>
+    <value>内容</value>
   </data>
   <data name="Note" xml:space="preserve">
-    <value>備註</value>
+    <value>备注</value>
   </data>
   <data name="FileName" xml:space="preserve">
-    <value>上傳檔案</value>
+    <value>上传档案</value>
   </data>
   <data name="StartTime" xml:space="preserve">
-    <value>開始時間</value>
+    <value>开始时间</value>
   </data>
   <data name="EndTime" xml:space="preserve">
-    <value>結束時間</value>
+    <value>结束时间</value>
   </data>
 </root>

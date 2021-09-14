@@ -121,28 +121,28 @@
     <value>代理人</value>
   </data>
   <data name="Asker" xml:space="preserve">
-    <value>申請人</value>
+    <value>申请人</value>
   </data>
   <data name="EndTime" xml:space="preserve">
-    <value>結束時間</value>
+    <value>结束时间</value>
   </data>
   <data name="FlowStatus" xml:space="preserve">
-    <value>流程狀態</value>
+    <value>流程状态</value>
   </data>
   <data name="Hours" xml:space="preserve">
-    <value>請假時數</value>
+    <value>请假时数</value>
   </data>
   <data name="LeaveType" xml:space="preserve">
-    <value>假別</value>
+    <value>假别</value>
   </data>
   <data name="SignRows" xml:space="preserve">
-    <value>簽核流程</value>
+    <value>签核流程</value>
   </data>
   <data name="StartTime" xml:space="preserve">
-    <value>開始時間</value>
+    <value>开始时间</value>
   </data>
   <data name="SignTime" xml:space="preserve">
-    <value>簽核時間</value>
+    <value>签核时间</value>
   </data>
   <data name="Flow" xml:space="preserve">
     <value>流程</value>

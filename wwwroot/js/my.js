@@ -143,30 +143,28 @@ var _ajax = {
             //contentType: 'application/json; charset=utf-8',
             //traditional: true,
             //async: false,
-            success: function (data) {
-                //data maps to ResultDto/JObject
-                if (!data)
+            success: function (result) {
+                //result maps to ResultDto/JObject
+                if (!result)
                     return;
 
-                if (data.ErrorMsg || data.ErrorBrFid) {
-                    var msg = data.ErrorMsg ? data.ErrorMsg :
-                        _BR[data.ErrorBrFid] ? _BR[data.ErrorBrFid] :
-                            _str.format('_ajax._call() failed, no ErrorBrFid={0}', data.ErrorBrFid);
+                var msg = _ajax.getErrorMsg(result);
+                if (msg) {
                     if (fnError == null)
                         _tool.msg(msg);
                     else
-                        fnError(data);
+                        fnError(result);
 
                 //case of getStr()
-                } else if (typeof data === 'string' && data.substring(0, 2) === '0:') {
-                    var msg = data.substring(2);
+                } else if (typeof result === 'string' && result.substring(0, 2) === '0:') {
+                    var msg = result.substring(2);
                     if (fnError == null)
                         _tool.msg(msg);
                     else
                         fnError(msg);
 
                 } else if (fnOk) {
-                    fnOk(data);
+                    fnOk(result);
                 }
             },
 
@@ -189,6 +187,14 @@ var _ajax = {
         };
 
         $.ajax(_json.copy(json, config));
+    },
+
+    getErrorMsg: function (result) {
+        return (!result.ErrorMsg && !result.ErrorBrFid) ? "" : 
+            result.ErrorMsg ? result.ErrorMsg :
+            _BR[result.ErrorBrFid] ? _BR[result.ErrorBrFid] :
+            _str.format('_ajax._call() failed, no ErrorBrFid={0}', result.ErrorBrFid);
+
     },
 
 };//class
@@ -4646,9 +4652,9 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
                     this._start = this.dt.page.info().start;
                     this._keepStart = false; //reset
 
-                    //data is mapping to backend ErrorModel
-                    if (result.ErrorMsg != null && result.ErrorMsg != "") {
-                        _tool.msg(result.ErrorMsg);
+                    var msg = _ajax.getErrorMsg(result);
+                    if (msg) {
+                        _tool.msg(msg);
                         result.recordsFiltered = 0;
                         this.recordsFiltered = 0;
                         return [];  //no null, or jquery will get wrong !!
@@ -5560,17 +5566,17 @@ function Flow(boxId, mNode, mLine) {
         this.nowElm = null;         //node element or connection(line)
         //#endregion
 
-        //this.condOpExprs/this.condOpShows
+        //this.condOpExprs/this.condOpShows, match XpCode.Type=LineOp
         //for show line label
         var condOpMaps = [
             this.OrSep, ') || (',  //or
             this.AndSep, ' && ',    //and
-            ',eq,', '=',
-            ',neq,', '!=',
-            ',gt,', '>',
-            ',ge,', '>=',
-            ',st,', '<',
-            ',se,', '<=',
+            ',EQ,', '=',
+            ',NEQ,', '!=',
+            ',GT,', '>',
+            ',GE,', '>=',
+            ',ST,', '<',
+            ',SE,', '<=',
         ];
         this.condOpExprs = [];   //condition op regular expression
         this.condOpShows = [];   //condition op show text

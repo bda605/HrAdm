@@ -1,15 +1,16 @@
 ﻿using Base.Models;
+using Base.Services;
 using BaseWeb.Extensions;
 using BaseWeb.Services;
 
-namespace Base.Services
+namespace HrAdm.Services
 {
     public class MyBaseUserService : IBaseUserService
     {
         //get base user info
         public BaseUserDto GetData()
         {
-            return _Web.GetSession().Get<BaseUserDto>(_Fun.BaseUser);   //extension method
+            return _Http.GetSession().Get<BaseUserDto>(_Fun.BaseUser);   //extension method
         }
     }
 }

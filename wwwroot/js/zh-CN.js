@@ -45,11 +45,12 @@ var _BR = {
     SureDeleteSelected: '是否确定删除选取的资料?',
 
     //authority
-    NoAuthUser: '您只能存取個人資料，請聯絡管理者。',
-    NoAuthDept: '您只能存取同部門資料，請聯絡管理者。',
+    NoAuthUser: '您只能存取个人资料，请联络管理者。 ',
+    NoAuthDept: '您只能存取同部门资料，请联络管理者。 ',
 
     //others
-    Working: '作業處理中...',
+    Working: '作业处理中...',
+    TimeOut: '待機時間過久，請重新登入。',
 
 };
 /**
@@ -66,7 +67,7 @@ var _BR = {
 		today: "今天",
 		monthsTitle: "选择月份",
 		clear: "清除",
-		format: "yyyy-mm-dd",
+		format: "yyyy/mm/dd",
 		titleFormat: "yyyy年mm月",
 		weekStart: 1
 	};

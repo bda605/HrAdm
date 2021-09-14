@@ -38,7 +38,7 @@
 
         //on view row
         onView: function (flowCode, key) {
-            _ajax.getJson('GetJson', { flowCode: flowCode, key: key }, function (data) {
+            _ajax.getJson('GetViewJson', { flowCode: flowCode, key: key }, function (data) {
                 //consider other flow types
                 _crud.toEditMode(_fun.FunV, data);
             });

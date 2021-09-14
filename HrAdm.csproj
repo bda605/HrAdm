@@ -125,7 +125,6 @@
     <Folder Include="wwwroot\locale\zh-CN\" />
     <Folder Include="wwwroot\locale\zh-TW\" />
     <Folder Include="_template\en-US\" />
-    <Folder Include="_template\zh-CN\" />
   </ItemGroup>
 
   <ItemGroup>

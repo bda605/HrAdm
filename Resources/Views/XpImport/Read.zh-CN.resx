@@ -118,30 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PlsSelectExcel" xml:space="preserve">
-    <value>請選取 Excel 檔案</value>
+    <value>请选取 Excel 档案</value>
   </data>
   <data name="ImportDone" xml:space="preserve">
-    <value>匯入完成, 成功{0}筆, 失敗{1}筆</value>
+    <value>汇入完成, 成功{0}笔, 失败{1}笔</value>
   </data>
   <data name="FileName" xml:space="preserve">
-    <value>匯入檔案名稱</value>
+    <value>汇入档案名称</value>
   </data>
   <data name="ImportExcel" xml:space="preserve">
-    <value>匯入Excel</value>
+    <value>汇入Excel</value>
   </data>
   <data name="DownloadTpl" xml:space="preserve">
-    <value>下載範本</value>
+    <value>下载范本</value>
   </data>
   <data name="OkRows" xml:space="preserve">
-    <value>成功筆數</value>
+    <value>成功笔数</value>
   </data>
   <data name="FailRows" xml:space="preserve">
-    <value>失敗筆數</value>
+    <value>失败笔数</value>
   </data>
   <data name="TotalRows" xml:space="preserve">
-    <value>合計筆數</value>
+    <value>合计笔数</value>
   </data>
   <data name="ImportFile" xml:space="preserve">
-    <value>匯入檔案</value>
+    <value>汇入档案</value>
   </data>
 </root>

@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RptName" xml:space="preserve">
-    <value>報表名稱</value>
+    <value>报表名称</value>
   </data>
   <data name="ExcelTpl" xml:space="preserve">
-    <value>Excel範本</value>
+    <value>Excel范本</value>
   </data>
   <data name="ToEmail" xml:space="preserve">
     <value>收件者Email</value>
   </data>
   <data name="TipToEmail" xml:space="preserve">
-    <value>逗號分隔</value>
+    <value>逗号分隔</value>
   </data>
 </root>

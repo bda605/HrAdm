@@ -76,7 +76,7 @@ where u.Account=@Account
             #endregion
 
             //4.set session of base user info
-            _Web.GetSession().Set(_Fun.BaseUser, userInfo);   //extension method
+            _Http.GetSession().Set(_Fun.BaseUser, userInfo);   //extension method
 
             //5.redirect if need
             var url = string.IsNullOrEmpty(vo.FromUrl) ? "/Home/Index" : vo.FromUrl;
@@ -88,7 +88,7 @@ where u.Account=@Account
 
         public ActionResult Logout()
         {
-            _Web.GetSession().Clear();
+            _Http.GetSession().Clear();
             return Redirect("/Home/Index");
         }
 

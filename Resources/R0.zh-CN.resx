@@ -118,79 +118,79 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Crud" xml:space="preserve">
-    <value>維護</value>
+    <value>维护</value>
   </data>
   <data name="MenuCustInput" xml:space="preserve">
-    <value>9.自訂輸入欄位</value>
+    <value>9.自订输入栏位</value>
   </data>
   <data name="MenuUserImport" xml:space="preserve">
-    <value>10.匯入用戶資料</value>
+    <value>10.汇入用户资料</value>
   </data>
   <data name="MenuCmsMsg" xml:space="preserve">
-    <value>11.最新消息維護</value>
+    <value>11.最新消息维护</value>
   </data>
   <data name="MenuXpEasyRpt" xml:space="preserve">
-    <value>12.簡單報表維護</value>
+    <value>12.简单报表维护</value>
   </data>
   <data name="MenuLeave" xml:space="preserve">
-    <value>1.請假作業</value>
+    <value>1.请假作业</value>
   </data>
   <data name="MenuLeaveSign" xml:space="preserve">
-    <value>2.待簽核假單</value>
+    <value>2.待签核假单</value>
   </data>
   <data name="MenuXpFlow" xml:space="preserve">
-    <value>3.流程維護</value>
+    <value>3.流程维护</value>
   </data>
   <data name="MenuXpFlowSign" xml:space="preserve">
-    <value>4.簽核資料查詢</value>
+    <value>4.签核资料查询</value>
   </data>
   <data name="MenuUser" xml:space="preserve">
-    <value>5.用戶管理</value>
+    <value>5.用户管理</value>
   </data>
   <data name="MenuXpRole" xml:space="preserve">
-    <value>6.角色維護</value>
+    <value>6.角色维护</value>
   </data>
   <data name="MenuXpProg" xml:space="preserve">
-    <value>7.功能維護</value>
+    <value>7.功能维护</value>
   </data>
   <data name="MenuUserExt" xml:space="preserve">
-    <value>8.用戶經歷維護</value>
+    <value>8.用户经历维护</value>
   </data>
   <data name="MenuTranLog" xml:space="preserve">
-    <value>13.異動記錄查詢</value>
+    <value>13.异动记录查询</value>
   </data>
   <data name="SystemName" xml:space="preserve">
-    <value>人事管理系統</value>
+    <value>人事管理系统</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>建檔時間</value>
+    <value>建档时间</value>
   </data>
   <data name="Creator" xml:space="preserve">
-    <value>建檔人員</value>
+    <value>建档人员</value>
   </data>
   <data name="Reviser" xml:space="preserve">
-    <value>修改人員</value>
+    <value>修改人员</value>
   </data>
   <data name="Revised" xml:space="preserve">
     <value>修改日期</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>資料狀態</value>
+    <value>资料状态</value>
   </data>
   <data name="UpdFile" xml:space="preserve">
-    <value>上傳檔案</value>
+    <value>上传档案</value>
   </data>
   <data name="Active" xml:space="preserve">
-    <value>啟用</value>
+    <value>启用</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>送出</value>
   </data>
   <data name="ToRead" xml:space="preserve">
-    <value>回上一頁</value>
+    <value>回上一页</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>檢視</value>
+    <value>检视</value>
   </data>
   <data name="Fun" xml:space="preserve">
     <value>功能</value>
@@ -199,34 +199,34 @@
     <value>新增</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>刪除</value>
+    <value>删除</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>修改</value>
   </data>
   <data name="Read" xml:space="preserve">
-    <value>查詢</value>
+    <value>查询</value>
   </data>
   <data name="Print" xml:space="preserve">
     <value>列印</value>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>匯出</value>
+    <value>汇出</value>
   </data>
   <data name="Sort" xml:space="preserve">
     <value>排序</value>
   </data>
   <data name="UpdImage" xml:space="preserve">
-    <value>上傳圖片</value>
+    <value>上传图片</value>
   </data>
   <data name="UpdFileName" xml:space="preserve">
-    <value>上傳檔名</value>
+    <value>上传档名</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>取消</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>匯入</value>
+    <value>汇入</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>是</value>

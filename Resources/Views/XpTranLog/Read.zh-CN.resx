@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="TableName" xml:space="preserve">
-    <value>資料表名稱</value>
+    <value>资料表名称</value>
   </data>
   <data name="ColName" xml:space="preserve">
-    <value>欄位名稱</value>
+    <value>栏位名称</value>
   </data>
   <data name="RowId" xml:space="preserve">
-    <value>資料Id</value>
+    <value>资料Id</value>
   </data>
   <data name="CrudOp" xml:space="preserve">
-    <value>異動操作</value>
+    <value>异动操作</value>
   </data>
   <data name="OldValue" xml:space="preserve">
-    <value>欄位舊值</value>
+    <value>栏位旧值</value>
   </data>
   <data name="NewValue" xml:space="preserve">
-    <value>欄位新值</value>
+    <value>栏位新值</value>
   </data>
 </root>
