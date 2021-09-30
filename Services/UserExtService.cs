@@ -13,11 +13,12 @@ namespace HrAdm.Services
         /// generate word docu
         /// </summary>
         /// <param name="userId">User.Id</param>
-        public void GenWord(string userId)
+        /// <return>error msg if any</return>
+        public string GenWord(string userId)
         {
             #region 1.check data && template file
             var error = "";
-            if (string.IsNullOrEmpty(userId))
+            if (_Str.IsEmpty(userId))
             {
                 error = "UserId is need.";
                 goto lab_error;
@@ -97,12 +98,15 @@ namespace HrAdm.Services
             };
 
             //5.call public method
-            _WebWord.ExportByTplRow(tplPath, "UserExt.docx", user, childs, images);
-            return;
+            error = _WebWord.ExportByTplRowAsync(tplPath, "UserExt.docx", user, childs, images);
+            if (!_Str.IsEmpty(error))
+                goto lab_error;
+
+            //case of ok
+            return "";
 
         lab_error:
-            _Log.Error("UserExtService.cs GenWord() failed: " + error);
-            return;
+            return "UserExtService.cs GenWord() failed: " + error;
         }
 
     }//class

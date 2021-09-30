@@ -1,22 +1,24 @@
 ﻿
 var _fun = {
 
-    //=== constant start(big camel) ===
-    //constant, for moment.js, match to _Fun.cs CsDtFmt
+    //#region constant (big camel) ===
+    //for moment.js, match to _Fun.cs CsDtFmt
     MmDateFmt: 'YYYY/MM/DD',
     MmDtFmt: 'YYYY/MM/DD HH:mm:ss',
 
     //input field error validation, need match server side _Web.cs
     //jsPath: '../Scripts/',      //js path for load
 
-    //constant for mapping to backend
+    //for mapping to backend
     FunC: 'C',     //create
     FunR: 'R',     //read
     FunU: 'U',     //update
     FunD: 'D',     //delete, for input file
     FunV: 'V',     //view row
-    //=== constant end ===
 
+    //error BR code, same to _Fun.PreBrError
+    PreBrError: 'B:',
+    //#endregion
 
     //variables
     locale: 'zh-TW',    //now locale, _Layout.cshmlt will set
@@ -28,10 +30,10 @@ var _fun = {
     //variables ??
     //isCheck: true,
 
-    //後端必須實作 Fun/Test()
+    //server need Fun/Hello()
     onHello: function () {
         _ajax.getStr('../Fun/Hello', null, function (msg) {
-            alert('OK');
+            alert(msg);
         });
     },
 

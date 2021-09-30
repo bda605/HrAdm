@@ -5,28 +5,29 @@ using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
     public class XpFlowController : XpCtrl
     {
-        public ActionResult Read()
+        public async Task<ActionResult> Read()
         {
-            using(var db = new Db())
+            await using(var db = new Db())
             {
                 var locale0 = _Xp.GetLocale0();
-                ViewBag.NodeTypes = _XpCode.GetNodeTypes(locale0, db);
-                ViewBag.SignerTypes = _XpCode.GetSignerTypes(locale0, db);
-                ViewBag.AndOrs = _XpCode.GetAndOrs(locale0, db);
-                ViewBag.LineOps = _XpCode.GetLineOps(locale0, db);
+                ViewBag.NodeTypes = _XpCode.GetNodeTypesAsync(locale0, db);
+                ViewBag.SignerTypes = _XpCode.GetSignerTypesAsync(locale0, db);
+                ViewBag.AndOrs = _XpCode.GetAndOrsAsync(locale0, db);
+                ViewBag.LineOps = _XpCode.GetLineOpsAsync(locale0, db);
             }
             return View();
         }
 
         [HttpPost]
-        public ContentResult GetPage(DtDto dt)
+        public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(new XpFlowRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new XpFlowRead().GetPageAsync(Ctrl, dt));
         }
 
         private XpFlowEdit EditService()
@@ -35,15 +36,15 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public ContentResult GetUpdateJson(string key)
+        public async Task<ContentResult> GetUpdJson(string key)
         {
-            return JsonToCnt(EditService().GetUpdateJson(key));
+            return JsonToCnt(await EditService().GetUpdJsonAsync(key));
         }
 
         [HttpPost]
-        public ContentResult GetViewJson(string key)
+        public async Task<ContentResult> GetViewJson(string key)
         {
-            return JsonToCnt(EditService().GetViewJson(key));
+            return JsonToCnt(await EditService().GetViewJsonAsync(key));
         }
 
         /*
@@ -55,21 +56,21 @@ namespace HrAdm.Controllers
         */
 
         [HttpPost]
-        public JsonResult Create(string json)
+        public async Task<JsonResult> Create(string json)
         {
-            return Json(EditService().Create(_Json.StrToJson(json), FnSetNewKey));
+            return Json(await EditService().CreateAsync(_Str.ToJson(json), FnSetNewKey));
         }
 
         [HttpPost]
-        public JsonResult Update(string key, string json)
+        public async Task<JsonResult> Update(string key, string json)
         {
-            return Json(EditService().Update(key, _Json.StrToJson(json), FnSetNewKey));
+            return Json(await EditService().UpdateAsync(key, _Str.ToJson(json), FnSetNewKey));
         }
 
         [HttpPost]
-        public JsonResult Delete(string key)
+        public async Task<JsonResult> Delete(string key)
         {
-            return Json(EditService().Delete(key));
+            return Json(await EditService().DeleteAsync(key));
         }
 
         /// <summary>
@@ -78,12 +79,17 @@ namespace HrAdm.Controllers
         /// <param name="inputJson"></param>
         /// <param name="edit"></param>
         /// <returns></returns>
-        private bool FnSetNewKey(CrudEdit editService, JObject inputJson, EditDto edit)
+        private string FnSetNewKey(CrudEdit editService, JObject inputJson, EditDto edit)
         {
-            return (
-                editService.SetNewKeyJson(inputJson, edit) &&
-                editService.SetChildFkey(inputJson, 1, "StartNode", "00") &&
-                editService.SetChildFkey(inputJson, 1, "EndNode", "00"));
+            var error = editService.SetNewKeyJson(inputJson, edit);
+            if (_Str.NotEmpty(error))
+                return error;
+
+            error = editService.SetChildFkey(inputJson, 1, "StartNode", "00");
+            if (_Str.NotEmpty(error))
+                return error;
+
+            return editService.SetChildFkey(inputJson, 1, "EndNode", "00");
         }
 
     } //class

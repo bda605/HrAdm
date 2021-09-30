@@ -22,7 +22,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         override public JsonResult Import(IFormFile file)
         {
-            return Json(new UserImportService().Import(file, this.DirUpload));
+            return Json(new UserImportService().ImportAsync(file, this.DirUpload));
         }
 
     }//class

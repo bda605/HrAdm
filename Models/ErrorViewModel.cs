@@ -1,3 +1,4 @@
+using Base.Services;
 using System;
 
 namespace HrAdm.Models
@@ -6,6 +7,6 @@ namespace HrAdm.Models
     {
         public string RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        public bool ShowRequestId => !_Str.IsEmpty(RequestId);
     }
 }

@@ -156,8 +156,8 @@ var _ajax = {
                         fnError(result);
 
                 //case of getStr()
-                } else if (typeof result === 'string' && result.substring(0, 2) === '0:') {
-                    var msg = result.substring(2);
+                } else if (typeof result === 'string' && result.substring(0, _fun.PreBrError.length) === _fun.PreBrError) {
+                    var msg = result.substring(_fun.PreBrError.length);
                     if (fnError == null)
                         _tool.msg(msg);
                     else

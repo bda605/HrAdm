@@ -48,7 +48,7 @@ where c.Id='{0}'
         {
             _cmsType = cmsType;
             var service = Service();
-            var result = service.Create(json);
+            var result = await service.CreateAsync(json);
             if (_Valid.ResultStatus(result))
                 await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), dirUpload, t0_FileName, nameof(t0_FileName));
             return result;
@@ -57,7 +57,7 @@ where c.Id='{0}'
         public async Task<ResultDto> UpdateAsnyc(string key, JObject json, IFormFile t0_FileName, string dirUpload)
         {
             var service = Service();
-            var result = service.Update(key, json);
+            var result = await service.UpdateAsync(key, json);
             if (_Valid.ResultStatus(result))
                 await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), dirUpload, t0_FileName, nameof(t0_FileName));
             return result;

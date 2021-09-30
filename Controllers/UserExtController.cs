@@ -15,16 +15,16 @@ namespace HrAdm.Controllers
         public ActionResult Read()
         {
 			//for read view
-			ViewBag.Depts = _XpCode.GetDepts();
+			ViewBag.Depts = _XpCode.GetDeptsAsync();
 			//for edit view
-			ViewBag.LangLevels = _XpCode.GetLangLevels(_Xp.GetLocale0());
+			ViewBag.LangLevels = _XpCode.GetLangLevelsAsync(_Xp.GetLocale0());
             return View();
         }
 
         [HttpPost]
-        public ContentResult GetPage(DtDto dt)
+        public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(new UserExtRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new UserExtRead().GetPage(Ctrl, dt));
         }
 
         private UserExtEdit EditService()
@@ -36,14 +36,14 @@ namespace HrAdm.Controllers
         //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Create(string json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
-            return Json(await EditService().CreateAsnyc(_Json.StrToJson(json), t0_PhotoFile, t03_FileName));
+            return Json(await EditService().CreateAsnyc(_Str.ToJson(json), t0_PhotoFile, t03_FileName));
         }
 
         [HttpPost]
         //TODO: add your code, tSn_fid ex: t03_FileName
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
-            return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_PhotoFile, t03_FileName));
+            return Json(await EditService().UpdateAsnyc(key, _Str.ToJson(json), t0_PhotoFile, t03_FileName));
         }
 
         //TODO: add your code
@@ -66,19 +66,19 @@ namespace HrAdm.Controllers
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(EditService().Delete(key));
+            return Json(EditService().DeleteAsync(key));
         }
 
         [HttpPost]
-        public ContentResult GetUpdateJson(string key)
+        public async Task<ContentResult> GetUpdJson(string key)
         {
-            return JsonToCnt(EditService().GetUpdateJson(key));
+            return JsonToCnt(await EditService().GetUpdJsonAsync(key));
         }
 
         [HttpPost]
-        public ContentResult GetViewJson(string key)
+        public async Task<ContentResult> GetViewJson(string key)
         {
-            return JsonToCnt(EditService().GetViewJson(key));
+            return JsonToCnt(await EditService().GetViewJsonAsync(key));
         }
 
         //generate word resume

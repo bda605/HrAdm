@@ -23,12 +23,12 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public ContentResult GetPage(DtDto dt)
+        public async Task<ContentResult> GetPage(DtDto dt)
         {
             //testing error case
             //return JsonToCnt(_Json.GetError());
 
-            return JsonToCnt(new CustInputRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new CustInputRead().GetPage(Ctrl, dt));
         }
 
         private CustInputEdit EditService()
@@ -37,17 +37,17 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public ContentResult GetUpdateJson(string key)
+        public async Task<ContentResult> GetUpdJson(string key)
         {
             //_Fun.Except();
-            return JsonToCnt(EditService().GetUpdateJson(key));
+            return JsonToCnt(await EditService().GetUpdJsonAsync(key));
         }
 
         [HttpPost]
-        public ContentResult GetViewJson(string key)
+        public async Task<ContentResult> GetViewJson(string key)
         {
             //_Fun.Except();
-            return JsonToCnt(EditService().GetViewJson(key));
+            return JsonToCnt(await EditService().GetViewJsonAsync(key));
         }
 
         [HttpPost]
@@ -55,7 +55,7 @@ namespace HrAdm.Controllers
         public async Task<JsonResult> Create(string json, IFormFile t0_FldFile)
         {
             //_Fun.Except();
-            return Json(await EditService().CreateAsnyc(_Json.StrToJson(json), t0_FldFile));
+            return Json(await EditService().CreateAsnyc(_Str.ToJson(json), t0_FldFile));
         }
 
         [HttpPost]
@@ -63,7 +63,7 @@ namespace HrAdm.Controllers
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FldFile)
         {
             //_Fun.Except();
-            return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_FldFile));
+            return Json(await EditService().UpdateAsnyc(key, _Str.ToJson(json), t0_FldFile));
         }
 
         //TODO: add your code
@@ -82,7 +82,7 @@ namespace HrAdm.Controllers
             //testing error case
             //return Json(_Model.GetError());
 
-            return Json(EditService().Delete(key));
+            return Json(EditService().DeleteAsync(key));
         }
 
         /// <summary>

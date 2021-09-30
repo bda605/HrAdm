@@ -2,6 +2,7 @@
 using Base.Models;
 using Base.Services;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
@@ -23,9 +24,9 @@ order by u.Name
             },
         };
 
-        public JObject GetPage(string ctrl, DtDto dt)
+        public async Task<JObject> GetPage(string ctrl, DtDto dt)
         {
-            return new CrudRead().GetPage(ctrl, dto, dt);
+            return await new CrudRead().GetPageAsync(ctrl, dto, dt);
         }
 
     } //class

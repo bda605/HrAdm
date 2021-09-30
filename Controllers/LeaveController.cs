@@ -17,18 +17,18 @@ namespace HrAdm.Controllers
         {
             //for read view
             var locale0 = _Xp.GetLocale0();
-            ViewBag.LeaveTypes = _XpCode.GetLeaveTypes(locale0);
-			ViewBag.SignStatuses = _XpCode.GetSignStatuses(locale0);
+            ViewBag.LeaveTypes = _XpCode.GetLeaveTypesAsync(locale0);
+			ViewBag.SignStatuses = _XpCode.GetSignStatusesAsync(locale0);
 			//for edit view
-			ViewBag.Users = _XpCode.GetUsers();
+			ViewBag.Users = _XpCode.GetUsersAsync();
             return View();
         }
 
         [HttpPost]
         [XgProgAuth(CrudEnum.Read)]
-        public ContentResult GetPage(DtDto dt)
+        public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(new LeaveRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new LeaveRead().GetPage(Ctrl, dt));
         }
 
         private LeaveEdit EditService()
@@ -40,35 +40,35 @@ namespace HrAdm.Controllers
         [XgProgAuth(CrudEnum.Create)]
         public async Task<JsonResult> Create(string json, IFormFile t0_FileName)
         {
-            return Json(await EditService().CreateAsnyc(_Json.StrToJson(json), t0_FileName));
+            return Json(await EditService().CreateAsnyc(_Str.ToJson(json), t0_FileName));
         }
 
         [HttpPost]
         [XgProgAuth(CrudEnum.Update)]
-        public ContentResult GetUpdateJson(string key)
+        public async Task<ContentResult> GetUpdJson(string key)
         {
-            return JsonToCnt(EditService().GetUpdateJson(key));
+            return JsonToCnt(await EditService().GetUpdJsonAsync(key));
         }
 
         [HttpPost]
         [XgProgAuth(CrudEnum.Update)]
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FileName)
         {
-            return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_FileName));
+            return Json(await EditService().UpdateAsnyc(key, _Str.ToJson(json), t0_FileName));
         }
 
         [HttpPost]
         [XgProgAuth(CrudEnum.Delete)]
         public JsonResult Delete(string key)
         {
-            return Json(EditService().Delete(key));
+            return Json(EditService().DeleteAsync(key));
         }
 
         [HttpPost]
         [XgProgAuth(CrudEnum.View)]
-        public ContentResult GetViewJson(string key)
+        public async Task<ContentResult> GetViewJson(string key)
         {
-            return JsonToCnt(EditService().GetViewJson(key));
+            return JsonToCnt(await EditService().GetViewJsonAsync(key));
         }
 
         //get file/image

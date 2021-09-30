@@ -2,6 +2,7 @@
 using Base.Models;
 using Base.Services;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
@@ -31,9 +32,9 @@ order by Id desc
             };
         }
 
-        public JObject GetPage(string ctrl, DtDto dt)
+        public async Task<JObject> GetPage(string ctrl, DtDto dt)
         {
-            return new CrudRead().GetPage(ctrl, GetDto(), dt);
+            return await new CrudRead().GetPageAsync(ctrl, GetDto(), dt);
         }
 
     } //class

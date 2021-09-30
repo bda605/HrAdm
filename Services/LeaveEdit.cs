@@ -52,17 +52,17 @@ where l.Id='{{0}}'
         private JObject _inputRow;
 
         //delegate function of FnAfterSave
-        private string FnCreateSignRows(Db db, JObject newKeyJson)
+        private async Task<string> FnCreateSignRowsAsync(Db db, JObject newKeyJson)
         {
             var newKey = _Str.ReadNewKeyJson(newKeyJson);
-            return _XpFlow.CreateSignRows(_inputRow, "UserId", "Leave", newKey, db);
+            return await _XpFlow.CreateSignRowsAsync(_inputRow, "UserId", "Leave", newKey, db);
         }
 
         public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_FileName)
         {
             _inputRow = _Json.ReadInputJson0(json);
             var service = Service();
-            var result = service.Create(json, null, FnCreateSignRows);
+            var result = await service.CreateAsync(json, null, FnCreateSignRowsAsync);
             if (_Valid.ResultStatus(result))
             {
                 await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), _Xp.DirLeave, t0_FileName, nameof(t0_FileName));
@@ -73,7 +73,7 @@ where l.Id='{{0}}'
         public async Task<ResultDto> UpdateAsnyc(string key, JObject json, IFormFile t0_FileName)
         {
             var service = Service();
-            var result = service.Update(key, json);
+            var result = await service.UpdateAsync(key, json);
             if (_Valid.ResultStatus(result))
             {
                 await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), _Xp.DirLeave, t0_FileName, nameof(t0_FileName));

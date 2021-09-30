@@ -2,6 +2,7 @@
 using Base.Services;
 using HrAdm.Tables;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
@@ -9,23 +10,23 @@ namespace HrAdm.Services
     public static class _XpCode
     {
         #region master table to codes
-        public static List<IdStrDto> GetProjects(Db db = null)
+        public static async Task<List<IdStrDto>> GetProjectsAsync(Db db = null)
         {
-            return TableToList("Project", db);
+            return await TableToListAsync("Project", db);
         }
-        public static List<IdStrDto> GetUsers(Db db = null)
+        public static async Task<List<IdStrDto>> GetUsersAsync(Db db = null)
         {
-            return TableToList("User", db);
+            return await TableToListAsync("User", db);
         }
-        public static List<IdStrDto> GetDepts(Db db = null)
+        public static async Task<List<IdStrDto>> GetDeptsAsync(Db db = null)
         {
-            return TableToList("Dept", db);
+            return await TableToListAsync("Dept", db);
         }
-        public static List<IdStrDto> GetRoles(Db db = null)
+        public static async Task<List<IdStrDto>> GetRolesAsync(Db db = null)
         {
-            return TableToList("XpRole", db);
+            return await TableToListAsync("XpRole", db);
         }
-        public static List<IdStrDto> GetProgs(Db db = null)
+        public static async Task<List<IdStrDto>> GetProgsAsync(Db db = null)
         {
             //return TableToList("XpProg", db);
             var sql = @"
@@ -33,32 +34,32 @@ select
     Id, (case when AuthRow=1 then '*' else '' end)+Name as Str
 from dbo.XpProg
 order by Id";
-            return SqlToList(sql, db);
+            return await SqlToListAsync(sql, db);
         }
-        public static List<IdStrDto> GetFlows(Db db = null)
+        public static async Task<List<IdStrDto>> GetFlowsAsync(Db db = null)
         {
-            return TableToList("XpFlow", db);
+            return await TableToListAsync("XpFlow", db);
         }
         #endregion
 
         #region get from XpCode table
-        public static List<IdStrDto> GetAuthRanges(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetAuthRangesAsync(string locale, Db db = null)
         {
-            return TypeToList(locale, "AuthRange", db);
+            return await TypeToListAsync(locale, "AuthRange", db);
         }
-        public static List<IdStrDto> GetLangLevels(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetLangLevelsAsync(string locale, Db db = null)
         {
-            return TypeToList(locale, "LangLevel", db);
+            return await TypeToListAsync(locale, "LangLevel", db);
         }
-        public static List<IdStrDto> GetLeaveTypes(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetLeaveTypesAsync(string locale, Db db = null)
         {
-            return TypeToList(locale, "LeaveType", db);
+            return await TypeToListAsync(locale, "LeaveType", db);
         }
-        public static List<IdStrDto> GetSignStatuses(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetSignStatusesAsync(string locale, Db db = null)
         {
-            return TypeToList(locale, "SignStatus", db);
+            return await TypeToListAsync(locale, "SignStatus", db);
         }
-        public static List<IdStrDto> GetSignStatuses2(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetSignStatuses2Async(string locale, Db db = null)
         {
             var sql = $@"
 select 
@@ -67,26 +68,26 @@ from dbo.XpCode
 where Type='SignStatus'
 and Ext='1'
 order by Sort";
-            return SqlToList(sql, db);
+            return await SqlToListAsync(sql, db);
         }
         #endregion
 
         #region for flow
-        public static List<IdStrDto> GetNodeTypes(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetNodeTypesAsync(string locale, Db db = null)
         {
-            return TypeToList(locale, "NodeType", db);
+            return await TypeToListAsync(locale, "NodeType", db);
         }
-        public static List<IdStrDto> GetSignerTypes(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetSignerTypesAsync(string locale, Db db = null)
         {
-            return TypeToList(locale, "SignerType", db);
+            return await TypeToListAsync(locale, "SignerType", db);
         }
-        public static List<IdStrDto> GetAndOrs(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetAndOrsAsync(string locale, Db db = null)
         {
-            return TypeToList(locale, "AndOr", db);
+            return await TypeToListAsync(locale, "AndOr", db);
         }
-        public static List<IdStrDto> GetLineOps(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetLineOpsAsync(string locale, Db db = null)
         {
-            return TypeToList(locale, "LineOp", db);
+            return await TypeToListAsync(locale, "LineOp", db);
         }
 
         /*
@@ -118,7 +119,7 @@ order by Sort";
         }
         #endregion
 
-        private static List<IdStrDto> TableToList(string table, Db db = null)
+        private static async Task<List<IdStrDto>> TableToListAsync(string table, Db db = null)
         {
             var sql = string.Format(@"
 select 
@@ -126,22 +127,22 @@ select
 from dbo.[{0}]
 order by Id
 ", table);
-            return SqlToList(sql, db);
+            return await SqlToListAsync(sql, db);
         }
 
         //get codes from sql 
-        private static List<IdStrDto> SqlToList(string sql, Db db = null)
+        private static async Task<List<IdStrDto>> SqlToListAsync(string sql, Db db = null)
         {
             var emptyDb = false;
             _Fun.CheckOpenDb(ref db, ref emptyDb);
 
-            var rows = db.GetModels<IdStrDto>(sql);
-            _Fun.CheckCloseDb(db, emptyDb);
+            var rows = await db.GetModelsAsync<IdStrDto>(sql);
+            await _Fun.CheckCloseDb(db, emptyDb);
             return rows;
         }
 
         //get code table rows
-        private static List<IdStrDto> TypeToList(string locale, string type, Db db = null)
+        private static async Task<List<IdStrDto>> TypeToListAsync(string locale, string type, Db db = null)
         {
             var sql = $@"
 select 
@@ -149,7 +150,7 @@ select
 from dbo.XpCode
 where Type='{type}'
 order by Sort";
-            return SqlToList(sql, db);           
+            return await SqlToListAsync(sql, db);           
         }
         public static string GetValue(XpCode row, string locale)
         {

@@ -27,9 +27,9 @@ namespace HrAdm.Controllers
 
         //read rows with cmsType
         [HttpPost]
-        public ContentResult GetPage(DtDto dt)
+        public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(new XpCmsRead(CmsType).GetPage(Ctrl, dt));
+            return JsonToCnt(await new XpCmsRead(CmsType).GetPage(Ctrl, dt));
         }
 
         private XpCmsEdit EditService()
@@ -41,14 +41,14 @@ namespace HrAdm.Controllers
         [HttpPost]
         public async Task<JsonResult> Create(string json, IFormFile t0_FileName)
         {
-            return Json(await EditService().CreateAsnyc(_Json.StrToJson(json), t0_FileName, DirUpload, CmsType));
+            return Json(await EditService().CreateAsnyc(_Str.ToJson(json), t0_FileName, DirUpload, CmsType));
         }
 
         //by dirUpload
         [HttpPost]
         public async Task<JsonResult> Update(string key, string json, IFormFile t0_FileName)
         {
-            return Json(await EditService().UpdateAsnyc(key, _Json.StrToJson(json), t0_FileName, DirUpload));
+            return Json(await EditService().UpdateAsnyc(key, _Str.ToJson(json), t0_FileName, DirUpload));
         }
 
         //by cmsType
@@ -60,19 +60,19 @@ namespace HrAdm.Controllers
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(EditService().Delete(key));
+            return Json(EditService().DeleteAsync(key));
         }
 
         [HttpPost]
-        public ContentResult GetUpdateJson(string key)
+        public async Task<ContentResult> GetUpdJson(string key)
         {
-            return JsonToCnt(EditService().GetUpdateJson(key));
+            return JsonToCnt(await EditService().GetUpdJsonAsync(key));
         }
 
         [HttpPost]
-        public ContentResult GetViewJson(string key)
+        public async Task<ContentResult> GetViewJson(string key)
         {
-            return JsonToCnt(EditService().GetViewJson(key));
+            return JsonToCnt(await EditService().GetViewJsonAsync(key));
         }
 
     }//class

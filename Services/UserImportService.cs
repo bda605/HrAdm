@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
@@ -18,7 +19,7 @@ namespace HrAdm.Services
         /// </summary>
         /// <param name="file"></param>
         /// <returns>ResultImportDto</returns>
-        public ResultImportDto Import(IFormFile file, string dirUpload)
+        public async Task<ResultImportDto> ImportAsync(IFormFile file, string dirUpload)
         {
             var importDto = new ExcelImportDto<UserImportVo>()
             {
@@ -27,7 +28,7 @@ namespace HrAdm.Services
                 FnSaveImportRows = SaveImportRows,
                 CreatorName = _Fun.GetBaseUser().UserName,
             };
-            return _WebExcel.ImportByFile(file, dirUpload, importDto);
+            return await _WebExcel.ImportByFileAsync(file, dirUpload, importDto);
         }
 
         /// <summary>

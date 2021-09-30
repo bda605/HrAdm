@@ -3,6 +3,7 @@ using BaseWeb.Controllers;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
@@ -22,9 +23,9 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public ContentResult GetPage(DtDto dt)
+        public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(new XpImportRead(ImportType).GetPage(Ctrl, dt));
+            return JsonToCnt(await new XpImportRead(ImportType).GetPageAsync(Ctrl, dt));
         }
 
         //run import, drived class implement !!

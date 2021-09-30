@@ -3,6 +3,7 @@ using Base.Models;
 using BaseWeb.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
@@ -12,14 +13,14 @@ namespace HrAdm.Controllers
         public ActionResult Read()
         {
             //for read view
-            ViewBag.Flows = _XpCode.GetFlows();
+            ViewBag.Flows = _XpCode.GetFlowsAsync();
             return View();
         }
 
         [HttpPost]
-        public ContentResult GetPage(DtDto dt)
+        public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(new XpFlowSignRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new XpFlowSignRead().GetPage(Ctrl, dt));
         }
 
         private XpFlowSignEdit EditService(string flowCode)
@@ -28,15 +29,15 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public ContentResult GetUpdateJson(string flowCode, string key)
+        public async Task<ContentResult> GetUpdJson(string flowCode, string key)
         {
-            return JsonToCnt(EditService(flowCode).GetUpdateJson(key));
+            return JsonToCnt(await EditService(flowCode).GetUpdJsonAsync(key));
         }
 
         [HttpPost]
-        public ContentResult GetViewJson(string flowCode, string key)
+        public async Task<ContentResult> GetViewJson(string flowCode, string key)
         {
-            return JsonToCnt(EditService(flowCode).GetViewJson(key));
+            return JsonToCnt(await EditService(flowCode).GetViewJsonAsync(key));
         }
 
         //get file/image

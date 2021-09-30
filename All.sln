@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbAdm", "..\DbAdm\DbAdm.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyRpt", "..\EasyRpt\EasyRpt.csproj", "{7C9B8F06-FDB9-4A91-AE1F-9E03D167BAF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mantis", "..\Mantis\Mantis.csproj", "{B06F1AC4-CA61-4A62-9E72-50578BACD531}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mantis", "..\Mantis\Mantis.csproj", "{B06F1AC4-CA61-4A62-9E72-50578BACD531}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaoApi", "..\BaoApi\BaoApi.csproj", "{E9A4C1B7-9DCB-453F-A7B0-340CAC148536}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{B06F1AC4-CA61-4A62-9E72-50578BACD531}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B06F1AC4-CA61-4A62-9E72-50578BACD531}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B06F1AC4-CA61-4A62-9E72-50578BACD531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9A4C1B7-9DCB-453F-A7B0-340CAC148536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9A4C1B7-9DCB-453F-A7B0-340CAC148536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9A4C1B7-9DCB-453F-A7B0-340CAC148536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9A4C1B7-9DCB-453F-A7B0-340CAC148536}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

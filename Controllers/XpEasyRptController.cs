@@ -3,6 +3,7 @@ using Base.Services;
 using BaseWeb.Controllers;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
@@ -14,9 +15,9 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public ContentResult GetPage(DtDto dt)
+        public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(new XpEasyRptRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new XpEasyRptRead().GetPageAsync(Ctrl, dt));
         }
 
         private XpEasyRptEdit EditService()
@@ -25,33 +26,33 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public ContentResult GetUpdateJson(string key)
+        public async Task<ContentResult> GetUpdJson(string key)
         {
-            return JsonToCnt(EditService().GetUpdateJson(key));
+            return JsonToCnt(await EditService().GetUpdJsonAsync(key));
         }
 
         [HttpPost]
-        public ContentResult GetViewJson(string key)
+        public async Task<ContentResult> GetViewJson(string key)
         {
-            return JsonToCnt(EditService().GetViewJson(key));
+            return JsonToCnt(await EditService().GetViewJsonAsync(key));
         }
 
         [HttpPost]
         public JsonResult Create(string json)
         {
-            return Json(EditService().Create(_Json.StrToJson(json)));
+            return Json(EditService().CreateAsync(_Str.ToJson(json)));
         }
 
         [HttpPost]
         public JsonResult Update(string key, string json)
         {
-            return Json(EditService().Update(key, _Json.StrToJson(json)));
+            return Json(EditService().UpdateAsync(key, _Str.ToJson(json)));
         }
 
         [HttpPost]
         public JsonResult Delete(string key)
         {
-            return Json(EditService().Delete(key));
+            return Json(EditService().DeleteAsync(key));
         }
 
     }//class

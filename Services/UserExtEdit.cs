@@ -125,7 +125,7 @@ namespace HrAdm.Services
         public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
             var service = Service();
-            var result = service.Create(json);
+            var result = await service.CreateAsync(json);
             if (_Valid.ResultStatus(result))
             {
                 var newKeyJson = service.GetNewKeyJson();
@@ -140,7 +140,7 @@ namespace HrAdm.Services
         public async Task<ResultDto> UpdateAsnyc(string key, JObject json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
             var service = Service();
-            var result = service.Update(key, json);
+            var result = await service.UpdateAsync(key, json);
             if (_Valid.ResultStatus(result))
             {
                 var newKeyJson = service.GetNewKeyJson();
