@@ -1,13 +1,13 @@
 ﻿using Base.Models;
 using Base.Services;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
-    public class XpEasyRptController : XpCtrl
+    public class XpEasyRptController : ApiCtrl
     {
         public ActionResult Read()
         {
@@ -38,21 +38,21 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(string json)
+        public async Task<JsonResult> Create(string json)
         {
-            return Json(EditService().CreateAsync(_Str.ToJson(json)));
+            return Json(await EditService().CreateAsync(_Str.ToJson(json)));
         }
 
         [HttpPost]
-        public JsonResult Update(string key, string json)
+        public async Task<JsonResult> Update(string key, string json)
         {
-            return Json(EditService().UpdateAsync(key, _Str.ToJson(json)));
+            return Json(await EditService().UpdateAsync(key, _Str.ToJson(json)));
         }
 
         [HttpPost]
-        public JsonResult Delete(string key)
+        public async Task<JsonResult> Delete(string key)
         {
-            return Json(EditService().DeleteAsync(key));
+            return Json(await EditService().DeleteAsync(key));
         }
 
     }//class

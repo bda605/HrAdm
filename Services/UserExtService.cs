@@ -4,6 +4,7 @@ using BaseWeb.Services;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
@@ -14,7 +15,7 @@ namespace HrAdm.Services
         /// </summary>
         /// <param name="userId">User.Id</param>
         /// <return>error msg if any</return>
-        public string GenWord(string userId)
+        public async Task<bool> GenWordAsync(string userId)
         {
             #region 1.check data && template file
             var error = "";
@@ -24,7 +25,7 @@ namespace HrAdm.Services
                 goto lab_error;
             }
 
-            var tplPath = _Xp.GetTpl("UserExt.docx", true);
+            var tplPath = _Xp.GetTplPath("UserExt.docx", true);
             if (!File.Exists(tplPath))
             {
                 error = "no file " + tplPath;
@@ -98,15 +99,15 @@ namespace HrAdm.Services
             };
 
             //5.call public method
-            error = _WebWord.ExportByTplRowAsync(tplPath, "UserExt.docx", user, childs, images);
-            if (!_Str.IsEmpty(error))
-                goto lab_error;
+            if (!await _WebWord.ExportByTplRowAsync(tplPath, "UserExt.docx", user, childs, images))
+                return false;
 
             //case of ok
-            return "";
+            return true;
 
         lab_error:
-            return "UserExtService.cs GenWord() failed: " + error;
+            await _Log.ErrorAsync("UserExtService.cs GenWord() failed: " + error);
+            return false;
         }
 
     }//class

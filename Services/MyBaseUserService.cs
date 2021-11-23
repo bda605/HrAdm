@@ -1,7 +1,7 @@
 ﻿using Base.Models;
 using Base.Services;
+using BaseApi.Services;
 using BaseWeb.Extensions;
-using BaseWeb.Services;
 
 namespace HrAdm.Services
 {

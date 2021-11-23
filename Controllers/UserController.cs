@@ -1,6 +1,6 @@
 ﻿using Base.Models;
 using Base.Services;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class UserController : XpCtrl
+    public class UserController : ApiCtrl
     {
-        public ActionResult Read()
+        public async Task<ActionResult> Read()
         {
 			//for read view
-			ViewBag.Depts = _XpCode.GetDeptsAsync();
+			ViewBag.Depts = await _XpCode.GetDeptsAsync();
 			//for edit view
-			ViewBag.Roles = _XpCode.GetRolesAsync();
+			ViewBag.Roles = await _XpCode.GetRolesAsync();
             return View();
         }
 
         [HttpPost]
         public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(await new UserRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new UserRead().GetPageAsync(Ctrl, dt));
         }
 
         private UserEdit EditService()
@@ -31,9 +31,9 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(string json)
+        public async Task<JsonResult> Create(string json)
         {
-            return Json(EditService().CreateAsync(_Str.ToJson(json)));
+            return Json(await EditService().CreateAsync(_Str.ToJson(json)));
         }
 
         [HttpPost]
@@ -43,23 +43,15 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public JsonResult Update(string key, string json)
+        public async Task<JsonResult> Update(string key, string json)
         {
-            return Json(EditService().UpdateAsync(key, _Str.ToJson(json)));
+            return Json(await EditService().UpdateAsync(key, _Str.ToJson(json)));
         }
 
-        /*
         [HttpPost]
-        public JsonResult SetStatus(string key, bool status)
+        public async Task<JsonResult> Delete(string key)
         {
-            return Json(_Db.SetRowStatus("dbo.[User]", "Id", key, status));
-        }
-        */
-
-        [HttpPost]
-        public JsonResult Delete(string key)
-        {
-            return Json(EditService().DeleteAsync(key));
+            return Json(await EditService().DeleteAsync(key));
         }
 
         [HttpPost]

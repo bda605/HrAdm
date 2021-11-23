@@ -1,5 +1,5 @@
 ﻿using Base.Models;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class LeaveSignController : XpCtrl
+    public class LeaveSignController : ApiCtrl
     {
-        public ActionResult Read()
+        public async Task<ActionResult> Read()
         {
             //for read view
             var locale0 = _Xp.GetLocale0();
-            ViewBag.SignStatuses2 = _XpCode.GetSignStatuses2Async(locale0);
+            ViewBag.SignStatuses2 = await _XpCode.GetSignStatuses2Async(locale0);
             return View();
         }
 
         [HttpPost]
         public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(await new LeaveSignRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new LeaveSignRead().GetPageAsync(Ctrl, dt));
         }
 
         private LeaveSignEdit EditService()
@@ -56,9 +56,9 @@ namespace HrAdm.Controllers
 
         //TODO: add your code
         //get file/image
-        public FileResult ViewFile(string table, string fid, string key, string ext)
+        public async Task<FileResult> ViewFile(string table, string fid, string key, string ext)
         {
-            return _Xp.ViewLeave(fid, key, ext);
+            return await _Xp.ViewLeaveAsync(fid, key, ext);
         }
 
     }//class

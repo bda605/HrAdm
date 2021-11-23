@@ -31,19 +31,19 @@ left join dbo.[User] u2 on l.Reviser=u2.Id
 join dbo.[User] u3 on l.UserId=u3.Id
 where l.Id='{{0}}'
 ",
-                Items = new [] 
+                Items = new EitemDto[] 
 				{
-					new EitemDto { Fid = "Id" },
-					new EitemDto { Fid = "UserId", Required = true },
-					new EitemDto { Fid = "AgentId", Required = true },
-					new EitemDto { Fid = "LeaveType", Required = true },
-					new EitemDto { Fid = "StartTime", Required = true },
-					new EitemDto { Fid = "EndTime", Required = true },
-					new EitemDto { Fid = "Hours", Required = true },
-                    new EitemDto { Fid = "FileName" },
-                    new EitemDto { Fid = "FlowLevel", Value = "1" },
-                    new EitemDto { Fid = "FlowStatus", Value = "0" },
-					new EitemDto { Fid = "Status", Value = 1 },
+					new() { Fid = "Id" },
+					new() { Fid = "UserId", Required = true },
+					new() { Fid = "AgentId", Required = true },
+					new() { Fid = "LeaveType", Required = true },
+					new() { Fid = "StartTime", Required = true },
+					new() { Fid = "EndTime", Required = true },
+					new() { Fid = "Hours", Required = true },
+                    new() { Fid = "FileName" },
+                    new() { Fid = "FlowLevel", Value = "1" },
+                    new() { Fid = "FlowStatus", Value = "0" },
+					new() { Fid = "Status", Value = 1 },
                 },
             };
         }
@@ -61,7 +61,7 @@ where l.Id='{{0}}'
         public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_FileName)
         {
             _inputRow = _Json.ReadInputJson0(json);
-            var service = Service();
+            var service = EditService();
             var result = await service.CreateAsync(json, null, FnCreateSignRowsAsync);
             if (_Valid.ResultStatus(result))
             {
@@ -72,7 +72,7 @@ where l.Id='{{0}}'
 
         public async Task<ResultDto> UpdateAsnyc(string key, JObject json, IFormFile t0_FileName)
         {
-            var service = Service();
+            var service = EditService();
             var result = await service.UpdateAsync(key, json);
             if (_Valid.ResultStatus(result))
             {

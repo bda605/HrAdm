@@ -1,6 +1,6 @@
 ﻿using Base.Models;
 using Base.Services;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,16 +9,17 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpRoleController : XpCtrl
+    public class XpRoleController : ApiCtrl
     {
         public async Task<ActionResult> Read()
         {
             //for edit view
             await using (var db = new Db())
             {
+                var locale0 = _Xp.GetLocale0();
                 ViewBag.Users = await _XpCode.GetUsersAsync(db);
-                ViewBag.Progs = await _XpCode.GetProgsAsync(db);
-                ViewBag.AuthRanges = await _XpCode.GetAuthRangesAsync(_Xp.GetLocale0(), db);
+                //ViewBag.Progs = await _XpCode.GetProgsAsync(locale0, db);
+                ViewBag.AuthRanges = await _XpCode.GetAuthRangesAsync(locale0, db);
             }
             return View();
         }
@@ -45,14 +46,6 @@ namespace HrAdm.Controllers
         {
             return Json(await EditService().UpdateAsync(key, _Str.ToJson(json)));
         }
-
-        /*
-        [HttpPost]
-        public JsonResult SetStatus(string key, bool status)
-        {
-            return Json(_Db.SetRowStatus("dbo.[Role]", "Id", key, status));
-        }
-        */
 
         [HttpPost]
         public async Task<JsonResult> Delete(string key)

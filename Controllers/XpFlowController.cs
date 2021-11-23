@@ -1,6 +1,6 @@
 ﻿using Base.Models;
 using Base.Services;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
-    public class XpFlowController : XpCtrl
+    public class XpFlowController : ApiCtrl
     {
         public async Task<ActionResult> Read()
         {
             await using(var db = new Db())
             {
                 var locale0 = _Xp.GetLocale0();
-                ViewBag.NodeTypes = _XpCode.GetNodeTypesAsync(locale0, db);
-                ViewBag.SignerTypes = _XpCode.GetSignerTypesAsync(locale0, db);
-                ViewBag.AndOrs = _XpCode.GetAndOrsAsync(locale0, db);
-                ViewBag.LineOps = _XpCode.GetLineOpsAsync(locale0, db);
+                ViewBag.NodeTypes = await _XpCode.GetNodeTypesAsync(locale0, db);
+                ViewBag.SignerTypes = await _XpCode.GetSignerTypesAsync(locale0, db);
+                ViewBag.AndOrs = await _XpCode.GetAndOrsAsync(locale0, db);
+                ViewBag.LineOps = await _XpCode.GetLineOpsAsync(locale0, db);
             }
             return View();
         }
@@ -46,14 +46,6 @@ namespace HrAdm.Controllers
         {
             return JsonToCnt(await EditService().GetViewJsonAsync(key));
         }
-
-        /*
-        [HttpPost]
-        public JsonResult SetStatus(string key, bool status)
-        {
-            return Json(_Db.SetRowStatus("dbo.[Flow]", "Id", key, status));
-        }
-        */
 
         [HttpPost]
         public async Task<JsonResult> Create(string json)

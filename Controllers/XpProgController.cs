@@ -1,6 +1,6 @@
 ﻿using Base.Models;
 using Base.Services;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpProgController : XpCtrl
+    public class XpProgController : ApiCtrl
     {
         public async Task<ActionResult> Read()
         {
             //for edit view
             await using (var db = new Db())
             {
-                ViewBag.Roles = _XpCode.GetRolesAsync(db);
-                ViewBag.AuthRanges = _XpCode.GetAuthRangesAsync(_Xp.GetLocale0(), db);
+                ViewBag.Roles = await _XpCode.GetRolesAsync(db);
+                ViewBag.AuthRanges = await _XpCode.GetAuthRangesAsync(_Xp.GetLocale0(), db);
             }
             return View();
         }
@@ -34,21 +34,21 @@ namespace HrAdm.Controllers
         }
 
         [HttpPost]
-        public JsonResult Create(string json)
+        public async Task<JsonResult> Create(string json)
         {
-            return Json(EditService().CreateAsync(_Str.ToJson(json)));
+            return Json(await EditService().CreateAsync(_Str.ToJson(json)));
         }
 
         [HttpPost]
-        public JsonResult Update(string key, string json)
+        public async Task<JsonResult> Update(string key, string json)
         {
-            return Json(EditService().UpdateAsync(key, _Str.ToJson(json)));
+            return Json(await EditService().UpdateAsync(key, _Str.ToJson(json)));
         }
 
         [HttpPost]
-        public JsonResult Delete(string key)
+        public async Task<JsonResult> Delete(string key)
         {
-            return Json(EditService().DeleteAsync(key));
+            return Json(await EditService().DeleteAsync(key));
         }
 
         [HttpPost]

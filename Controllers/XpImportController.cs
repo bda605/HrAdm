@@ -1,5 +1,5 @@
 ﻿using Base.Models;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using BaseWeb.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //Excel import base controller
-    abstract public class XpImportController : XpCtrl 
+    abstract public class XpImportController : ApiCtrl 
     {
         //public string ProgName;     //program display name
         public string ImportType;   //map to ImportLog.Type
@@ -29,22 +29,26 @@ namespace HrAdm.Controllers
         }
 
         //run import, drived class implement !!
-        abstract public JsonResult Import(IFormFile file);
+        //abstract could not be async(CS1994), must use virtual method !!
+        virtual public async Task<JsonResult> Import(IFormFile file) 
+        { 
+            return await Task.FromResult<JsonResult>(null); ;
+        }
 
         /// <summary>
         /// download template file
         /// </summary>
         /// <param name="file">file name</param>
         /// <returns>file</returns>
-        public FileResult Template()
+        public async Task<FileResult> Template()
         {
-            return _WebFile.ViewFile(TplPath);  //use this instead of PhysicalFile()
+            return await _WebFile.ViewFileAsync(TplPath);  //use this instead of PhysicalFile()
         }
 
         //download source import file
-        public FileResult GetSource(string id, string name)
+        public async Task<FileResult> GetSource(string id, string name)
         {
-            return GetFile(id, name);
+            return await GetFile(id, name);
             /*
             var file = GetFile(id, name);
             return (file == null)
@@ -53,15 +57,15 @@ namespace HrAdm.Controllers
         }
 
         //download failed import file
-        public FileResult GetFail(string id, string name)
+        public async Task<FileResult> GetFail(string id, string name)
         {
-            return GetFile(id + "_fail", name);
+            return await GetFile(id + "_fail", name);
         }
 
         //download import file
-        private FileResult GetFile(string realFileStem, string downFileName)
+        private async Task<FileResult> GetFile(string realFileStem, string downFileName)
         {
-            return _WebFile.ViewFile($"{DirUpload}/{realFileStem}.xlsx", downFileName);
+            return await _WebFile.ViewFileAsync($"{DirUpload}/{realFileStem}.xlsx", downFileName);
         }
 
     }//class

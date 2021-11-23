@@ -19,14 +19,14 @@ namespace HrAdm.Services
 				Table = "dbo.[User]",
                 PkeyFid = "Id",
                 Col4 = null,
-                Items = new [] 
+                Items = new EitemDto[] 
 				{
-					new EitemDto { Fid = "Id" },
-					new EitemDto { Fid = "Account" },
-					new EitemDto { Fid = "Name" },
-					new EitemDto { Fid = "DeptId" },
-                    new EitemDto { Fid = "PhotoFile" },
-                    new EitemDto { Fid = "Status" },
+					new() { Fid = "Id" },
+					new() { Fid = "Account" },
+					new() { Fid = "Name" },
+					new() { Fid = "DeptId" },
+                    new() { Fid = "PhotoFile" },
+                    new() { Fid = "Status" },
                 },
                 Childs = new EditDto[]
                 {
@@ -36,18 +36,18 @@ namespace HrAdm.Services
                         PkeyFid = "Id",
                         FkeyFid = "UserId",
                         Col4 = null,
-                        Items = new [] 
+                        Items = new EitemDto[] 
 						{
-							new EitemDto { Fid = "Id" },
-							new EitemDto { Fid = "UserId" },
-							new EitemDto { Fid = "JobName", Required = true },
-							new EitemDto { Fid = "JobType" },
-							new EitemDto { Fid = "JobPlace" },
-							new EitemDto { Fid = "StartEnd", Required = true },
-							new EitemDto { Fid = "CorpName", Required = true },
-							new EitemDto { Fid = "CorpUsers" },
-							new EitemDto { Fid = "IsManaged" },
-							new EitemDto { Fid = "JobDesc" },
+							new() { Fid = "Id" },
+							new() { Fid = "UserId" },
+							new() { Fid = "JobName", Required = true },
+							new() { Fid = "JobType" },
+							new() { Fid = "JobPlace" },
+							new() { Fid = "StartEnd", Required = true },
+							new() { Fid = "CorpName", Required = true },
+							new() { Fid = "CorpUsers" },
+							new() { Fid = "IsManaged" },
+							new() { Fid = "JobDesc" },
                         },
                     },
                     new EditDto
@@ -56,15 +56,15 @@ namespace HrAdm.Services
                         PkeyFid = "Id",
                         FkeyFid = "UserId",
                         Col4 = null,
-                        Items = new [] 
+                        Items = new EitemDto[] 
 						{
-							new EitemDto { Fid = "Id" },
-							new EitemDto { Fid = "UserId" },
-							new EitemDto { Fid = "SchoolName", Required = true },
-							new EitemDto { Fid = "SchoolDept", Required = true },
-							new EitemDto { Fid = "SchoolType" },
-							new EitemDto { Fid = "StartEnd", Required = true },
-							new EitemDto { Fid = "Graduated" },
+							new() { Fid = "Id" },
+							new() { Fid = "UserId" },
+							new() { Fid = "SchoolName", Required = true },
+							new() { Fid = "SchoolDept", Required = true },
+							new() { Fid = "SchoolType" },
+							new() { Fid = "StartEnd", Required = true },
+							new() { Fid = "Graduated" },
                         },
                     },
                     new EditDto
@@ -74,16 +74,16 @@ namespace HrAdm.Services
                         FkeyFid = "UserId",
 						OrderBy = "Sort",
                         Col4 = null,
-                        Items = new [] 
+                        Items = new EitemDto[] 
 						{
-							new EitemDto { Fid = "Id" },
-							new EitemDto { Fid = "UserId" },
-							new EitemDto { Fid = "LangName", Required = true },
-							new EitemDto { Fid = "ListenLevel" },
-							new EitemDto { Fid = "SpeakLevel" },
-							new EitemDto { Fid = "ReadLevel" },
-							new EitemDto { Fid = "WriteLevel" },
-							new EitemDto { Fid = "Sort" },
+							new() { Fid = "Id" },
+							new() { Fid = "UserId" },
+							new() { Fid = "LangName", Required = true },
+							new() { Fid = "ListenLevel" },
+							new() { Fid = "SpeakLevel" },
+							new() { Fid = "ReadLevel" },
+							new() { Fid = "WriteLevel" },
+							new() { Fid = "Sort" },
                         },
                     },
                     new EditDto
@@ -92,13 +92,13 @@ namespace HrAdm.Services
                         PkeyFid = "Id",
                         FkeyFid = "UserId",
                         Col4 = null,
-                        Items = new [] 
+                        Items = new EitemDto[] 
 						{
-							new EitemDto { Fid = "Id" },
-							new EitemDto { Fid = "UserId" },
-							new EitemDto { Fid = "LicenseName", Required = true },
-							new EitemDto { Fid = "StartEnd", Required = true },
-							new EitemDto { Fid = "FileName" },
+							new() { Fid = "Id" },
+							new() { Fid = "UserId" },
+							new() { Fid = "LicenseName", Required = true },
+							new() { Fid = "StartEnd", Required = true },
+							new() { Fid = "FileName" },
                         },
                     },
                     new EditDto
@@ -107,13 +107,13 @@ namespace HrAdm.Services
                         PkeyFid = "Id",
                         FkeyFid = "UserId",
                         Col4 = null,
-                        Items = new [] 
+                        Items = new EitemDto[] 
 						{
-							new EitemDto { Fid = "Id" },
-							new EitemDto { Fid = "UserId" },
-							new EitemDto { Fid = "SkillName", Required = true },
-							new EitemDto { Fid = "SkillDesc" },
-							new EitemDto { Fid = "Sort" },
+							new() { Fid = "Id" },
+							new() { Fid = "UserId" },
+							new() { Fid = "SkillName", Required = true },
+							new() { Fid = "SkillDesc" },
+							new() { Fid = "Sort" },
                         },
                     },
                 },
@@ -124,7 +124,7 @@ namespace HrAdm.Services
         //t03_FileName: t + table serial _ + fid
         public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
-            var service = Service();
+            var service = EditService();
             var result = await service.CreateAsync(json);
             if (_Valid.ResultStatus(result))
             {
@@ -139,7 +139,7 @@ namespace HrAdm.Services
         //t03_FileName: t + table serial _ + fid
         public async Task<ResultDto> UpdateAsnyc(string key, JObject json, IFormFile t0_PhotoFile, List<IFormFile> t03_FileName)
         {
-            var service = Service();
+            var service = EditService();
             var result = await service.UpdateAsync(key, json);
             if (_Valid.ResultStatus(result))
             {

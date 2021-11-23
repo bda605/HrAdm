@@ -1,8 +1,8 @@
 ﻿using Base.Models;
 using Base.Services;
+using BaseApi.Services;
 using BaseWeb.Attributes;
 using BaseWeb.Extensions;
-using BaseWeb.Services;
 using HrAdm.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;

@@ -2,6 +2,8 @@
 //use chart.js
 var _chart = {
 
+    _nowChart: null,
+
     //彩虹顏色
     rainbowColors: [
         "#F32E37",
@@ -65,4 +67,50 @@ var _chart = {
         return new Chart(canvasObj, config0);
     },
 
+    /**
+     * show one line chart
+     * param {string} divId
+     * param {List<IdNumDto>} rows 
+     */
+    line: function (canvasId, rows, color) {
+        var ids = [];
+        var values = [];
+        for (var i=0; i<rows.length; i++) {
+            var row = rows[i];
+            ids[i] = row.Id;
+            values[i] = row.Num;
+        }
+        _chart.drawLine(canvasId, ids, values, color);
+    },
+
+    //show one line chart
+    drawLine: function (canvasId, ids, values, color) {
+        if (_chart._nowChart != null)
+            _chart._nowChart.destroy();
+
+        _chart._nowChart = new Chart(document.getElementById(canvasId), {
+            type: 'line',
+            data: {
+                labels: ids,
+                datasets: [{
+                    //label: "Africa",
+                    data: values,
+                    borderColor: color,
+                    fill: false
+                }]
+            },
+            options: {
+                //legend: { display: false },
+                plugins: {
+                    legend: { display: false },
+                },
+                /*
+                title: {
+                    display: true,
+                    text: 'World population per region (in millions)'
+                }
+                */
+            }
+        });
+    },
 }; //class

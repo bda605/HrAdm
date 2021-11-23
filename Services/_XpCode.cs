@@ -26,16 +26,21 @@ namespace HrAdm.Services
         {
             return await TableToListAsync("XpRole", db);
         }
-        public static async Task<List<IdStrDto>> GetProgsAsync(Db db = null)
+
+        /*
+        public static async Task<List<IdStrDto>> GetProgsAsync(string locale0, Db db = null)
         {
             //return TableToList("XpProg", db);
-            var sql = @"
+            var sql = $@"
 select 
-    Id, (case when AuthRow=1 then '*' else '' end)+Name as Str
-from dbo.XpProg
-order by Id";
+    p.Id, (case when p.AuthRow=1 then '*' else '' end)+c.Name_{locale0} as Str
+from dbo.XpProg p
+join dbo.XpCode c on c.Type='Menu' and p.Code=c.Value
+order by p.Sort";
             return await SqlToListAsync(sql, db);
         }
+        */
+
         public static async Task<List<IdStrDto>> GetFlowsAsync(Db db = null)
         {
             return await TableToListAsync("XpFlow", db);
@@ -43,27 +48,27 @@ order by Id";
         #endregion
 
         #region get from XpCode table
-        public static async Task<List<IdStrDto>> GetAuthRangesAsync(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetAuthRangesAsync(string locale0, Db db = null)
         {
-            return await TypeToListAsync(locale, "AuthRange", db);
+            return await TypeToListAsync(locale0, "AuthRange", db);
         }
-        public static async Task<List<IdStrDto>> GetLangLevelsAsync(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetLangLevelsAsync(string locale0, Db db = null)
         {
-            return await TypeToListAsync(locale, "LangLevel", db);
+            return await TypeToListAsync(locale0, "LangLevel", db);
         }
-        public static async Task<List<IdStrDto>> GetLeaveTypesAsync(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetLeaveTypesAsync(string locale0, Db db = null)
         {
-            return await TypeToListAsync(locale, "LeaveType", db);
+            return await TypeToListAsync(locale0, "LeaveType", db);
         }
-        public static async Task<List<IdStrDto>> GetSignStatusesAsync(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetSignStatusesAsync(string locale0, Db db = null)
         {
-            return await TypeToListAsync(locale, "SignStatus", db);
+            return await TypeToListAsync(locale0, "SignStatus", db);
         }
-        public static async Task<List<IdStrDto>> GetSignStatuses2Async(string locale, Db db = null)
+        public static async Task<List<IdStrDto>> GetSignStatuses2Async(string locale0, Db db = null)
         {
             var sql = $@"
 select 
-    Value as Id, Name_{locale} as Str
+    Value as Id, Name_{locale0} as Str
 from dbo.XpCode
 where Type='SignStatus'
 and Ext='1'
@@ -142,11 +147,11 @@ order by Id
         }
 
         //get code table rows
-        private static async Task<List<IdStrDto>> TypeToListAsync(string locale, string type, Db db = null)
+        private static async Task<List<IdStrDto>> TypeToListAsync(string locale0, string type, Db db = null)
         {
             var sql = $@"
 select 
-    Value as Id, Name_{locale} as Str
+    Value as Id, Name_{locale0} as Str
 from dbo.XpCode
 where Type='{type}'
 order by Sort";

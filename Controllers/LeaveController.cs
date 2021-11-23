@@ -2,7 +2,7 @@
 using Base.Models;
 using Base.Services;
 using BaseWeb.Attributes;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class LeaveController : XpCtrl
+    public class LeaveController : ApiCtrl
     {
-        public ActionResult Read()
+        public async Task<ActionResult> Read()
         {
             //for read view
             var locale0 = _Xp.GetLocale0();
-            ViewBag.LeaveTypes = _XpCode.GetLeaveTypesAsync(locale0);
-			ViewBag.SignStatuses = _XpCode.GetSignStatusesAsync(locale0);
+            ViewBag.LeaveTypes = await _XpCode.GetLeaveTypesAsync(locale0);
+			ViewBag.SignStatuses = await _XpCode.GetSignStatusesAsync(locale0);
 			//for edit view
-			ViewBag.Users = _XpCode.GetUsersAsync();
+			ViewBag.Users = await _XpCode.GetUsersAsync();
             return View();
         }
 
@@ -28,7 +28,7 @@ namespace HrAdm.Controllers
         [XgProgAuth(CrudEnum.Read)]
         public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(await new LeaveRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new LeaveRead().GetPageAsync(Ctrl, dt));
         }
 
         private LeaveEdit EditService()
@@ -59,9 +59,9 @@ namespace HrAdm.Controllers
 
         [HttpPost]
         [XgProgAuth(CrudEnum.Delete)]
-        public JsonResult Delete(string key)
+        public async Task<JsonResult> Delete(string key)
         {
-            return Json(EditService().DeleteAsync(key));
+            return Json(await EditService().DeleteAsync(key));
         }
 
         [HttpPost]
@@ -72,9 +72,9 @@ namespace HrAdm.Controllers
         }
 
         //get file/image
-        public FileResult ViewFile(string table, string fid, string key, string ext)
+        public async Task<FileResult> ViewFile(string table, string fid, string key, string ext)
         {
-            return _Xp.ViewLeave(fid, key, ext);
+            return await _Xp.ViewLeaveAsync(fid, key, ext);
         }
 
         /// <summary>

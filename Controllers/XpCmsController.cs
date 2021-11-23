@@ -1,6 +1,6 @@
 ﻿using Base.Models;
 using Base.Services;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using HrAdm.Models;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //CMS base controller, abstract class
-    abstract public class XpCmsController : XpCtrl 
+    abstract public class XpCmsController : ApiCtrl 
     {
         //public string ProgName;     //program name
         public string CmsType;      //map to CmsTypeEstr
@@ -29,7 +29,7 @@ namespace HrAdm.Controllers
         [HttpPost]
         public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(await new XpCmsRead(CmsType).GetPage(Ctrl, dt));
+            return JsonToCnt(await new XpCmsRead(CmsType).GetPageAsync(Ctrl, dt));
         }
 
         private XpCmsEdit EditService()
@@ -52,15 +52,15 @@ namespace HrAdm.Controllers
         }
 
         //by cmsType
-        public FileResult ViewFile(string table, string fid, string key, string ext)
+        public async Task<FileResult> ViewFile(string table, string fid, string key, string ext)
         {
-            return _Xp.ViewCmsType(fid, key, ext, CmsType);
+            return await _Xp.ViewCmsTypeAsync(fid, key, ext, CmsType);
         }
 
         [HttpPost]
-        public JsonResult Delete(string key)
+        public async Task<JsonResult> Delete(string key)
         {
-            return Json(EditService().DeleteAsync(key));
+            return Json(await EditService().DeleteAsync(key));
         }
 
         [HttpPost]

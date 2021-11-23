@@ -1,5 +1,5 @@
 ﻿using Base.Models;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpTranLogController : XpCtrl
+    public class XpTranLogController : ApiCtrl
     {
         public ActionResult Read()
         {

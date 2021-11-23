@@ -55,7 +55,7 @@ var _ihtml = $.extend({}, _ibase, {
                         var me = $(this);   //jquery object
                         var data = new FormData();
                         data.append('file', files[0]);
-                        data.append('prog', me.data('prog'));
+                        //data.append('prog', me.data('prog'));
                         $.ajax({
                             data: data,
                             type: "POST",

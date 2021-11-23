@@ -145,8 +145,8 @@ var _ajax = {
             //async: false,
             success: function (result) {
                 //result maps to ResultDto/JObject
-                //if (!result)
-                //    return;
+                if (!result)
+                    return;
 
                 var msg = _ajax.resultToMsg(result);
                 if (msg) {

@@ -1,6 +1,6 @@
 ﻿using Base.Models;
 using Base.Services;
-using BaseWeb.Controllers;
+using BaseApi.Controllers;
 using BaseWeb.Services;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
-    public class CustInputController : XpCtrl
+    public class CustInputController : ApiCtrl
     {
         public ActionResult Read()
         {
@@ -28,7 +28,7 @@ namespace HrAdm.Controllers
             //testing error case
             //return JsonToCnt(_Json.GetError());
 
-            return JsonToCnt(await new CustInputRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new CustInputRead().GetPageAsync(Ctrl, dt));
         }
 
         private CustInputEdit EditService()
@@ -68,33 +68,33 @@ namespace HrAdm.Controllers
 
         //TODO: add your code
         //get file/image
-        public FileResult ViewFile(string table, string fid, string key, string ext)
+        public async Task<FileResult> ViewFile(string table, string fid, string key, string ext)
         {
             //for testing exception
             //_Fun.Except();
 
-            return _Xp.ViewCustInput(fid, key, ext);
+            return await _Xp.ViewCustInputAsync(fid, key, ext);
         }
 
         [HttpPost]
-        public JsonResult Delete(string key)
+        public async Task<JsonResult> Delete(string key)
         {
             //testing error case
             //return Json(_Model.GetError());
 
-            return Json(EditService().DeleteAsync(key));
+            return Json(await EditService().DeleteAsync(key));
         }
 
         /// <summary>
-        /// upload html image, image fileName: time string
+        /// upload html image, image fileName: _Str.NewId() string
         /// </summary>
         /// <param name="file"></param>
-        /// <param name="prog"></param>
-        /// <returns>return url</returns>
-        public async Task<string> SetHtmlImage(IFormFile file, string prog)
+        /// <returns>return image url</returns>
+        public async Task<string> SetHtmlImage(IFormFile file)
         {
-            var fileName = await _WebFile.SaveHtmlImage(file, prog);
-            return $"/image/{prog}/{fileName}";
+            var subDir = "image/CustInput";
+            var fileName = await _WebFile.SaveHtmlImage(file, $"{_Web.DirWeb}{subDir}");
+            return _Fun.GetHtmlImageUrl($"{subDir}/{fileName}");
         }
 
     }//class

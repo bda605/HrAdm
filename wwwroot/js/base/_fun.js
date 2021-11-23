@@ -16,7 +16,7 @@ var _fun = {
     FunD: 'D',     //delete, for input file
     FunV: 'V',     //view row
 
-    //error BR code, same to _Fun.PreBrError
+    //error BR code, same to _Fun.PreBrError, fixed len to 2
     PreBrError: 'B:',
     //#endregion
 

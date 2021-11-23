@@ -8,7 +8,7 @@ namespace HrAdm.Services
 {
     public class XpCmsRead
     {
-        private string _cmsType;
+        private readonly string _cmsType;
 
         //constructor
         public XpCmsRead(string cmsType)
@@ -26,15 +26,15 @@ from dbo.Cms
 where CmsType='{_cmsType}'
 order by Id desc
 ",
-                Items = new[] {
-                    new QitemDto { Fid = "Title", Op = ItemOpEstr.Like },
+                Items = new QitemDto[] {
+                    new() { Fid = "Title", Op = ItemOpEstr.Like },
                 },
             };
         }
 
-        public async Task<JObject> GetPage(string ctrl, DtDto dt)
+        public async Task<JObject> GetPageAsync(string ctrl, DtDto dt)
         {
-            return await new CrudRead().GetPageAsync(ctrl, GetDto(), dt);
+            return await new CrudRead().GetPageAsync(GetDto(), dt, ctrl);
         }
 
     } //class

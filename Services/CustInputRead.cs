@@ -7,20 +7,20 @@ namespace HrAdm.Services
 {
     public class CustInputRead
     {
-        private ReadDto dto = new ReadDto()
+        private readonly ReadDto dto = new()
         {
             ReadSql = @"
 select * from dbo.CustInput
 order by Id
 ",
-            Items = new [] {
-                new QitemDto { Fid = "FldText" },
+            Items = new QitemDto[] {
+                new() { Fid = "FldText" },
             },
         };
 
-        public async Task<JObject> GetPage(string ctrl, DtDto dt)
+        public async Task<JObject> GetPageAsync(string ctrl, DtDto dt)
         {
-            return await new CrudRead().GetPageAsync(ctrl, dto, dt);
+            return await new CrudRead().GetPageAsync(dto, dt, ctrl);
         }
 
     } //class

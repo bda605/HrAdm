@@ -137,7 +137,7 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
                     this._start = this.dt.page.info().start;
                     this._keepStart = false; //reset
 
-                    var msg = _ajax.getErrorMsg(result);
+                    var msg = _ajax.resultToMsg(result);
                     if (msg) {
                         _tool.msg(msg);
                         result.recordsFiltered = 0;

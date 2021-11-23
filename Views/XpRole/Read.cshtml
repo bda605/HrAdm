@@ -3,6 +3,30 @@
 @{
     var isAuthRow = _Fun.IsAuthTypeData();
     var authRanges = (List<IdStrDto>)ViewBag.AuthRanges;
+    var progs = GetProgs();
+}
+
+@functions {
+    //re-set menu.Name(add locale)
+    public List<IdStrDto> GetProgs()
+    {
+        return new List<IdStrDto>()
+        {
+            new() { Id = "Leave", Str = R0["MenuLeave"].Value },
+            new() { Id = "LeaveSign", Str = R0["MenuLeaveSign"].Value },
+            new() { Id = "XpFlow", Str = R0["MenuXpFlow"].Value },
+            new() { Id = "XpFlowSign", Str = R0["MenuXpFlowSign"].Value },
+            new() { Id = "User", Str = R0["MenuUser"].Value },
+            new() { Id = "XpRole", Str = R0["MenuXpRole"].Value },
+            new() { Id = "XpProg", Str = R0["MenuXpProg"].Value },
+            new() { Id = "UserExt", Str = R0["MenuUserExt"].Value },
+            new() { Id = "CustInput", Str = R0["MenuCustInput"].Value },
+            new() { Id = "UserImport", Str = R0["MenuUserImport"].Value },
+            new() { Id = "CmsMsg", Str = R0["MenuCmsMsg"].Value },
+            new() { Id = "XpEasyRpt", Str = R0["MenuXpEasyRpt"].Value },
+            new() { Id = "TranLog", Str = R0["MenuTranLog"].Value },
+        };        
+    }
 }
 
 <script src="~/js/view/XpRole.js"></script>
@@ -71,7 +95,7 @@
             <table class="table table-bordered xg-table xg-no-hline" cellspacing="0">
                 <thead>
                     <tr>
-                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["Prog"].Value, Required = true })
+                        @await Component.InvokeAsync("XgTh", new XgThDto { Title = R["Prog"].Value, Tip = "欄位前面有*表示有資料權限",  Required = true })
                         <th>@R0["Create"]</th>
                         <th>@R0["Read"]</th>
                         <th>@R0["Update"]</th>
@@ -93,7 +117,7 @@
     <tr>
         @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "Id" })
         @await Component.InvokeAsync("XiHide", new XiHideDto { Fid = "RoleId" })
-        <td>@await Component.InvokeAsync("XiSelect", new XiSelectDto { Fid = "ProgId", Rows = (List<IdStrDto>)ViewBag.Progs, Required = true })</td>
+        <td>@await Component.InvokeAsync("XiSelect", new XiSelectDto { Fid = "ProgId", Rows = progs, Required = true })</td>
 
         @if (isAuthRow)
         {

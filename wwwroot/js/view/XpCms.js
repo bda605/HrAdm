@@ -34,7 +34,7 @@
         _crud.init(config);
 
         //initial html editor
-        _ihtml.init($('#eform'), 'Html', _me.edit0);
+        _ihtml.init(_me.edit0, 'Html');
     },
 
     onViewFile: function (table, fid, elm) {

@@ -27,19 +27,19 @@ join dbo.[User] u on c.Creator=u.Id
 left join dbo.[User] u2 on c.Reviser=u2.Id
 where c.Id='{0}'
 ",
-                Items = new [] 
+                Items = new EitemDto[] 
 				{
-                    new EitemDto { Fid = "Id" },
-					new EitemDto { Fid = "CmsType", Value = _cmsType },
-                    //new EitemDto { Fid = "DataType", Value = "0" },
-                    new EitemDto { Fid = "Title", Required = true },
-                    new EitemDto { Fid = "Text" },
-					new EitemDto { Fid = "Html" },
-					new EitemDto { Fid = "Note" },
-                    new EitemDto { Fid = "FileName" },
-                    new EitemDto { Fid = "StartTime", Required = true },
-                    new EitemDto { Fid = "EndTime", Required = true },
-                    new EitemDto { Fid = "Status" },
+                    new() { Fid = "Id" },
+					new() { Fid = "CmsType", Value = _cmsType },
+                    //new() { Fid = "DataType", Value = "0" },
+                    new() { Fid = "Title", Required = true },
+                    new() { Fid = "Text" },
+					new() { Fid = "Html" },
+					new() { Fid = "Note" },
+                    new() { Fid = "FileName" },
+                    new() { Fid = "StartTime", Required = true },
+                    new() { Fid = "EndTime", Required = true },
+                    new() { Fid = "Status" },
                 },
             };
         }
@@ -47,7 +47,7 @@ where c.Id='{0}'
         public async Task<ResultDto> CreateAsnyc(JObject json, IFormFile t0_FileName, string dirUpload, string cmsType)
         {
             _cmsType = cmsType;
-            var service = Service();
+            var service = EditService();
             var result = await service.CreateAsync(json);
             if (_Valid.ResultStatus(result))
                 await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), dirUpload, t0_FileName, nameof(t0_FileName));
@@ -56,7 +56,7 @@ where c.Id='{0}'
 
         public async Task<ResultDto> UpdateAsnyc(string key, JObject json, IFormFile t0_FileName, string dirUpload)
         {
-            var service = Service();
+            var service = EditService();
             var result = await service.UpdateAsync(key, json);
             if (_Valid.ResultStatus(result))
                 await _WebFile.SaveCrudFileAsnyc(json, service.GetNewKeyJson(), dirUpload, t0_FileName, nameof(t0_FileName));

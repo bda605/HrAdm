@@ -2,6 +2,7 @@
 using BaseWeb.Services;
 using HrAdm.Tables;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace HrAdm.Services
 {
@@ -10,7 +11,7 @@ namespace HrAdm.Services
     {
         //public const string SiteVer = "20201228f";     //for my.js/css
         public static string MyVer = _Date.NowSecStr(); //for my.js/css
-        public const string LibVer = "20210712e";       //for lib.js/css
+        public const string LibVer = "20210712b";       //for lib.js/css
 
         public static string NoImagePath = _Fun.DirRoot + "/wwwroot/image/noImage.jpg";
 
@@ -50,47 +51,33 @@ namespace HrAdm.Services
         }
 
         #region get file content
-        public static FileResult ViewLeave(string fid, string key, string ext)
+        public static async Task<FileResult> ViewLeaveAsync(string fid, string key, string ext)
         {
-            return ViewFile(DirLeave, fid, key, ext);
-            //var path = _File.GetFirstPath(DirLeave, "FileName_" + key, NoImagePath);
-            //return _WebFile.EchoImage(path);
+            return await ViewFileAsync(DirLeave, fid, key, ext);
         }
         
-        public static FileResult ViewUserExt(string fid, string key, string ext)
+        public static async Task<FileResult> ViewUserExtAsync(string fid, string key, string ext)
         {
             //return _WebFile.EchoImage(PathUserExt(key));
-            return ViewFile(DirUserExt, fid, key, ext);
+            return await ViewFileAsync(DirUserExt, fid, key, ext);
         }
-        public static FileResult ViewUserLicense(string fid, string key, string ext)
+        public static async Task<FileResult> ViewUserLicenseAsync(string fid, string key, string ext)
         {
-            //var path = _File.GetFirstPath(DirUserLicense, "FileName_" + key, NoImagePath);
-            //return _WebFile.EchoImage(path);
-            return ViewFile(DirUserLicense, fid, key, ext);
+            return await ViewFileAsync(DirUserLicense, fid, key, ext);
         }
-        public static FileResult ViewCmsType(string fid, string key, string ext, string cmsType)
+        public static async Task<FileResult> ViewCmsTypeAsync(string fid, string key, string ext, string cmsType)
         {
-            //var path = _File.GetFirstPath(DirCmsType(cmsType), "FileName_" + key, NoImagePath);
-            //return _WebFile.EchoImage(path);
-            return ViewFile(DirCmsType(cmsType), fid, key, ext);
+            return await ViewFileAsync(DirCmsType(cmsType), fid, key, ext);
         }
-        public static FileResult ViewCustInput(string fid, string key, string ext)
+        public static async Task<FileResult> ViewCustInputAsync(string fid, string key, string ext)
         {
-            return ViewFile(DirCustInput, fid, key, ext);
+            return await ViewFileAsync(DirCustInput, fid, key, ext);
         }
 
-        /*
-        public static FileResult ViewFile(string prog, string fid, string key, string ext)
-        {
-            var path = GetUploadFilePath(prog, fid, key, ext);
-            return _WebFile.ViewFile(path, $"{fid}.{ext}");
-        }
-        */
-
-        private static FileResult ViewFile(string dir, string fid, string key, string ext)
+        private static async Task<FileResult> ViewFileAsync(string dir, string fid, string key, string ext)
         {
             var path = $"{dir}{fid}_{key}.{ext}";
-            return _WebFile.ViewFile(path, $"{fid}.{ext}");
+            return await _WebFile.ViewFileAsync(path, $"{fid}.{ext}");
         }
 
         #endregion
@@ -108,7 +95,7 @@ namespace HrAdm.Services
         /// get template file
         /// </summary>
         /// <returns></returns>
-        public static string GetTpl(string fileName, bool hasLocale)
+        public static string GetTplPath(string fileName, bool hasLocale)
         {
             var dir = DirTpl;
             if (hasLocale)
@@ -117,6 +104,7 @@ namespace HrAdm.Services
             return dir + fileName;
         }
 
+        #region remmark code
         /*
         //constructor
         static _Xp()
@@ -174,6 +162,7 @@ namespace HrAdm.Services
             rm.GetString("");
         }
         */
+        #endregion
 
     }//class
 }

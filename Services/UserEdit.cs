@@ -14,14 +14,14 @@ namespace HrAdm.Services
 				Table = "dbo.[User]",
                 PkeyFid = "Id",
                 Col4 = null,
-                Items = new [] 
+                Items = new EitemDto[] 
 				{
-					new EitemDto { Fid = "Id" },
-					new EitemDto { Fid = "Account" },
-					new EitemDto { Fid = "Name" },
-					new EitemDto { Fid = "Pwd" },
-					new EitemDto { Fid = "DeptId" },
-					new EitemDto { Fid = "Status" },
+					new() { Fid = "Id" },
+					new() { Fid = "Account" },
+					new() { Fid = "Name" },
+					new() { Fid = "Pwd" },
+					new() { Fid = "DeptId" },
+					new() { Fid = "Status" },
                 },
                 Childs = new EditDto[]
                 {
@@ -31,11 +31,11 @@ namespace HrAdm.Services
                         PkeyFid = "Id",
                         FkeyFid = "UserId",
                         Col4 = null,
-                        Items = new [] 
+                        Items = new EitemDto[] 
 						{
-							new EitemDto { Fid = "Id" },
-							new EitemDto { Fid = "UserId" },
-							new EitemDto { Fid = "RoleId", Required = true },
+							new() { Fid = "Id" },
+							new() { Fid = "UserId" },
+							new() { Fid = "RoleId", Required = true },
                         },
                     },
                 },

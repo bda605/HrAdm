@@ -8,7 +8,7 @@ namespace HrAdm.Services
 {
     public class UserRead
     {
-        private ReadDto dto = new ReadDto()
+        private readonly ReadDto dto = new()
         {
             ReadSql = @"
 select u.Id, u.Account, u.Name, u.Status,
@@ -17,16 +17,16 @@ from dbo.[User] u
 join dbo.Dept d on u.DeptId=d.Id
 order by u.Name
 ",
-            Items = new [] {
-                new QitemDto { Fid = "Account", Op = ItemOpEstr.Like },
-                new QitemDto { Fid = "Name", Op = ItemOpEstr.Like },
-                new QitemDto { Fid = "DeptId" },
+            Items = new QitemDto[] {
+                new() { Fid = "Account", Op = ItemOpEstr.Like },
+                new() { Fid = "Name", Op = ItemOpEstr.Like },
+                new() { Fid = "DeptId" },
             },
         };
 
-        public async Task<JObject> GetPage(string ctrl, DtDto dt)
+        public async Task<JObject> GetPageAsync(string ctrl, DtDto dt)
         {
-            return await new CrudRead().GetPageAsync(ctrl, dto, dt);
+            return await new CrudRead().GetPageAsync(dto, dt, ctrl);
         }
 
     } //class

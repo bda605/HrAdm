@@ -57,7 +57,8 @@ namespace HrAdm
             
             //7.session (memory cache)
             services.AddDistributedMemoryCache();
-            //services.AddStackExchangeRedisCache(opts => { opts.Configuration = "127.0.0.1:6379"; });
+            //AddDistributedRedisCache is old
+            //services.AddStackExchangeRedisCache(opts => { opts.Configuration = config.Redis; });
             services.AddSession(opts =>
             {
                 opts.Cookie.HttpOnly = true;
@@ -71,7 +72,7 @@ namespace HrAdm
         {
             //initial & set locale
             _Fun.Init(env.IsDevelopment(), app.ApplicationServices, DbTypeEnum.MSSql, AuthTypeEnum.Data);
-            _Locale.SetCulture(_Fun.Config.Locale);
+            _Locale.SetCultureAsync(_Fun.Config.Locale);
 
             if (env.IsDevelopment())
             {
@@ -88,7 +89,7 @@ namespace HrAdm
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthorization();
+            // app.UseAuthorization();
 
             //session
             app.UseSession();

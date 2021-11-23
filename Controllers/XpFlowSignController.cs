@@ -1,6 +1,5 @@
-﻿using Base.Enums;
-using Base.Models;
-using BaseWeb.Controllers;
+﻿using Base.Models;
+using BaseApi.Controllers;
 using HrAdm.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -8,19 +7,19 @@ using System.Threading.Tasks;
 namespace HrAdm.Controllers
 {
     //[XgProgAuth]
-    public class XpFlowSignController : XpCtrl
+    public class XpFlowSignController : ApiCtrl
     {
-        public ActionResult Read()
+        public async Task<ActionResult> Read()
         {
             //for read view
-            ViewBag.Flows = _XpCode.GetFlowsAsync();
+            ViewBag.Flows = await _XpCode.GetFlowsAsync();
             return View();
         }
 
         [HttpPost]
         public async Task<ContentResult> GetPage(DtDto dt)
         {
-            return JsonToCnt(await new XpFlowSignRead().GetPage(Ctrl, dt));
+            return JsonToCnt(await new XpFlowSignRead().GetPageAsync(Ctrl, dt));
         }
 
         private XpFlowSignEdit EditService(string flowCode)
@@ -41,9 +40,9 @@ namespace HrAdm.Controllers
         }
 
         //get file/image
-        public FileResult ViewFile(string table, string fid, string key, string ext)
+        public async Task<FileResult> ViewFile(string table, string fid, string key, string ext)
         {
-            return _Xp.ViewLeave(fid, key, ext);
+            return await _Xp.ViewLeaveAsync(fid, key, ext);
         }
 
         /// <summary>

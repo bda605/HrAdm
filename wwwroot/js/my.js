@@ -145,10 +145,10 @@ var _ajax = {
             //async: false,
             success: function (result) {
                 //result maps to ResultDto/JObject
-                if (!result)
-                    return;
+                //if (!result)
+                //    return;
 
-                var msg = _ajax.getErrorMsg(result);
+                var msg = _ajax.resultToMsg(result);
                 if (msg) {
                     if (fnError == null)
                         _tool.msg(msg);
@@ -156,8 +156,8 @@ var _ajax = {
                         fnError(result);
 
                 //case of getStr()
-                } else if (typeof result === 'string' && result.substring(0, _fun.PreBrError.length) === _fun.PreBrError) {
-                    var msg = result.substring(_fun.PreBrError.length);
+                } else if (typeof result === 'string' && result.substring(0, 2) === _fun.PreBrError) {
+                    var msg = _ajax.strToMsg(result)
                     if (fnError == null)
                         _tool.msg(msg);
                     else
@@ -189,12 +189,24 @@ var _ajax = {
         $.ajax(_json.copy(json, config));
     },
 
-    getErrorMsg: function (result) {
-        return (!result.ErrorMsg && !result.ErrorBrFid) ? "" : 
-            result.ErrorMsg ? result.ErrorMsg :
-            _BR[result.ErrorBrFid] ? _BR[result.ErrorBrFid] :
-            _str.format('_ajax._call() failed, no ErrorBrFid={0}', result.ErrorBrFid);
+    //result to error msg
+    //also called by Datatable.js
+    resultToMsg: function (result) {
+        return (result.ErrorMsg)
+            ? _ajax.strToMsg(result.ErrorMsg)
+            : '';
+    },
 
+    strToMsg: function (str) {
+        if (_str.isEmpty(str))
+            return '';
+        if (str.substring(0, 2) !== _fun.PreBrError)
+            return str;
+
+        var fid = str.substring(2);
+        return (_BR[fid])
+            ? _BR[fid]
+            : _str.format('_ajax._call() failed, no BR Fid={0}', fid);
     },
 
 };//class
@@ -309,6 +321,8 @@ var _btn = {
 //use chart.js
 var _chart = {
 
+    _nowChart: null,
+
     //彩虹顏色
     rainbowColors: [
         "#F32E37",
@@ -372,6 +386,52 @@ var _chart = {
         return new Chart(canvasObj, config0);
     },
 
+    /**
+     * show one line chart
+     * param {string} divId
+     * param {List<IdNumDto>} rows 
+     */
+    line: function (canvasId, rows, color) {
+        var ids = [];
+        var values = [];
+        for (var i=0; i<rows.length; i++) {
+            var row = rows[i];
+            ids[i] = row.Id;
+            values[i] = row.Num;
+        }
+        _chart.drawLine(canvasId, ids, values, color);
+    },
+
+    //show one line chart
+    drawLine: function (canvasId, ids, values, color) {
+        if (_chart._nowChart != null)
+            _chart._nowChart.destroy();
+
+        _chart._nowChart = new Chart(document.getElementById(canvasId), {
+            type: 'line',
+            data: {
+                labels: ids,
+                datasets: [{
+                    //label: "Africa",
+                    data: values,
+                    borderColor: color,
+                    fill: false
+                }]
+            },
+            options: {
+                //legend: { display: false },
+                plugins: {
+                    legend: { display: false },
+                },
+                /*
+                title: {
+                    display: true,
+                    text: 'World population per region (in millions)'
+                }
+                */
+            }
+        });
+    },
 }; //class
 /**
  * crud function
@@ -505,54 +565,60 @@ var _crud = {
      * param updName {string} update name, default to _BR.Update
      */
     init: function (dtConfig, edits, updName) {
-        //#region 1.set _me.edits[]
-        var Childs = _crud.Childs;  //constant
-        var edit0 = null;  //master edit object
-        if (edits == null) {
-            edit0 = new EditOne();
-            //_me.hasChild = false;
-        } else {
-            edit0 = (edits[0] === null) ? new EditOne() : edits[0];
-            //_me.hasChild = edits.length > 1;
-            if (edits.length > 1) {
-                edit0[Childs] = [];
-                //var childs = _me.edits._childs;
-                for (var i = 1; i < edits.length; i++)
-                    edit0[Childs][i - 1] = edits[i];
+        //_crud.initEdit(edits);
+        _me.divEdit = $('#divEdit');
+        _me.hasEdit = (_me.divEdit.length > 0);
+        if (_me.hasEdit) {
+            var Childs = _crud.Childs;  //constant
+            var edit0 = null;  //master edit object
+            if (edits == null) {
+                edit0 = new EditOne();
+                //_me.hasChild = false;
+            } else {
+                edit0 = (edits[0] === null) ? new EditOne() : edits[0];
+                //_me.hasChild = edits.length > 1;
+                if (edits.length > 1) {
+                    edit0[Childs] = [];
+                    //var childs = _me.edits._childs;
+                    for (var i = 1; i < edits.length; i++)
+                        edit0[Childs][i - 1] = edits[i];
+                }
             }
+
+            _me.edit0 = edit0;
+            _me.hasChild = (_fun.hasValue(_me.edit0[Childs]) && _me.edit0[Childs].length > 0);
+            //_me.editLen = _me.edits.length;
+            _crud.initForm(_me.edit0);
         }
-        //#endregion
 
         //#region 2.set instance variables
+        _me.divRead = $('#divRead');
+        _me.hasRead = (_me.divRead.length > 0);
+        if (_me.hasRead) {
+            _me.rform = $('#formRead');
+            if (_me.rform.length === 0)
+                _me.rform = null;
+            _me.rform2 = $('#formRead2');
+            if (_me.rform2.length === 0)
+                _me.rform2 = null;
+            if (_me.rform != null)
+                _idate.init(_me.rform);
+            if (_me.rform2 != null)
+                _idate.init(_me.rform2);
+
+            //4.Create Datatable object
+            _me.dt = new Datatable('#tableRead', 'GetPage', dtConfig);
+        }
+
         _me.nowFun = '';    //now fun of edit0 form
         _me.updName = updName;
-        _me.divRead = $('#divRead');
-        _me.divEdit = $('#divEdit');
-        _me.rform = $('#formRead');
-        if (_me.rform.length === 0)
-            _me.rform = null;
-        _me.rform2 = $('#formRead2');
-        if (_me.rform2.length === 0)
-            _me.rform2 = null;
-        if (_me.rform != null)
-            _idate.init(_me.rform);
-        if (_me.rform2 != null)
-            _idate.init(_me.rform2);
-
-        _me.edit0 = edit0;
-        _me.hasChild = (_fun.hasValue(_me.edit0[Childs]) && _me.edit0[Childs].length > 0);
-        //_me.editLen = _me.edits.length;
 
         //for xgOpenModal
         _me.modal = null;
         //#endregion
 
         //3.initial forms(recursive)
-        _crud.initForm(_me.edit0);
         _prog.init();   //prog path
-
-        //4.Create Datatable object
-        _me.dt = new Datatable('#tableRead', 'GetPage', dtConfig);
     },
 
     /**
@@ -593,6 +659,9 @@ var _crud = {
      * param newDiv {object} jquery object
      */ 
     swap: function (toRead) {
+        if (!_me.hasRead || !_me.hasEdit)
+            return;
+
         var oldDiv, newDiv;
         if (toRead) {
             oldDiv = _me.divEdit;
@@ -677,13 +746,15 @@ var _crud = {
     },
 
     _getJsonAndSetMode: function (key, fun) {
+        /*
         if (_str.isEmpty(key)) {
             _log.error('error: key is empty !');
             return;
         }
+        */
 
         //_crud.toUpdateMode(key);
-        var act = (fun == _fun.FunU) ? 'GetUpdateJson' : 
+        var act = (fun == _fun.FunU) ? 'GetUpdJson' : 
             (fun == _fun.FunV) ? 'GetViewJson' : '';
         _ajax.getJson(act, { key: key }, function (data) {
             _crud.toEditMode(fun, data);
@@ -1122,8 +1193,11 @@ var _crud = {
         //case of ok
         //var start = _me.dt.dt.page.info().start;
         _tool.alert(_BR.SaveOk + '(' + data.Value + ')');
-        _me.dt.reload();
-        _crud.toReadMode();
+
+        if (_me.hasRead) {
+            _me.dt.reload();
+            _crud.toReadMode();
+        }
     },
 
     /**
@@ -2011,7 +2085,7 @@ var _fun = {
     FunD: 'D',     //delete, for input file
     FunV: 'V',     //view row
 
-    //error BR code, same to _Fun.PreBrError
+    //error BR code, same to _Fun.PreBrError, fixed len to 2
     PreBrError: 'B:',
     //#endregion
 
@@ -2851,7 +2925,7 @@ var _ihtml = $.extend({}, _ibase, {
                         var me = $(this);   //jquery object
                         var data = new FormData();
                         data.append('file', files[0]);
-                        data.append('prog', me.data('prog'));
+                        //data.append('prog', me.data('prog'));
                         $.ajax({
                             data: data,
                             type: "POST",
@@ -3969,7 +4043,7 @@ var _pjax = {
 
     /**
      * initial
-     * param {string} boxFt : box(container) filter, ex: '.xu-body'
+     * param {string} boxFt : box(container) filter
      */
     init: function (boxFt) {
         //if skip 'POST', it will trigger twice !!
@@ -4654,7 +4728,7 @@ function Datatable(selector, url, dtConfig, findJson, fnOk, tbarHtml) {
                     this._start = this.dt.page.info().start;
                     this._keepStart = false; //reset
 
-                    var msg = _ajax.getErrorMsg(result);
+                    var msg = _ajax.resultToMsg(result);
                     if (msg) {
                         _tool.msg(msg);
                         result.recordsFiltered = 0;
@@ -6335,12 +6409,4 @@ function Flow(boxId, mNode, mLine) {
 }//class
 var _xp = {
 
-    //initial application
-    init: function () {
-        _leftmenu.init();
-        _pjax.init('.xu-body');
-        _tool.init();
-        moment.locale(_fun.locale);
-    },
-    
 };//class

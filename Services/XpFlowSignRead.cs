@@ -8,7 +8,7 @@ namespace HrAdm.Services
 {
     public class XpFlowSignRead
     {
-        private ReadDto dto = new ReadDto()
+        private readonly ReadDto dto = new()
         {
             ReadSql = @"
 select a.SourceId, a.SignerName, a.SignTime,
@@ -19,16 +19,16 @@ where a.FlowLevel=0
 order by a.SignTime
 ",            
             TableAs = "a",
-            Items = new [] {
-                new QitemDto { Fid = "SignTime", Type = QitemTypeEnum.Date },
-                new QitemDto { Fid = "FlowId", Col = "f.Id" },
-                //new QitemDto { Fid = "FlowStatus" },
+            Items = new QitemDto[] {
+                new() { Fid = "SignTime", Type = QitemTypeEnum.Date },
+                new() { Fid = "FlowId", Col = "f.Id" },
+                //new() { Fid = "FlowStatus" },
             },
         };
 
-        public async Task<JObject> GetPage(string ctrl, DtDto dt)
+        public async Task<JObject> GetPageAsync(string ctrl, DtDto dt)
         {
-            return await new CrudRead().GetPageAsync(ctrl, dto, dt);
+            return await new CrudRead().GetPageAsync(dto, dt, ctrl);
         }
 
     } //class

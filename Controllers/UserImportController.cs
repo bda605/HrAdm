@@ -2,6 +2,7 @@
 using HrAdm.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace HrAdm.Controllers
 {
@@ -20,9 +21,9 @@ namespace HrAdm.Controllers
 
         //3.override
         [HttpPost]
-        override public JsonResult Import(IFormFile file)
+        override public async Task<JsonResult> Import(IFormFile file)
         {
-            return Json(new UserImportService().ImportAsync(file, this.DirUpload));
+            return Json(await new UserImportService().ImportAsync(file, this.DirUpload));
         }
 
     }//class

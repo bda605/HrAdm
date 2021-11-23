@@ -211,7 +211,7 @@
         <td>@await Component.InvokeAsync("XiText", new XiTextDto { Fid = "CorpName", MaxLen = 30, Required = true })</td>
         <td>@await Component.InvokeAsync("XiInt", new XiIntDto { Fid = "CorpUsers" })</td>
         <td class='text-center'>@await Component.InvokeAsync("XiCheck", new XiCheckDto { Fid = "IsManaged" })</td>
-        <td width='85px' class='text-center'>@await Component.InvokeAsync("XgOpenModal", new { title = R["JobNote"].Value, Fid = "JobDesc", MaxLen = -1 })</td>
+        <td width='85px' class='text-center'>@await Component.InvokeAsync("XgOpenModal", new { title = R["JobNote"].Value, Fid = "JobDesc" })</td>
         <td width='60px' class='text-center'>@await Component.InvokeAsync("XgDeleteRow", "_me.mUserJob.onDeleteRow(this)")</td>
     </tr>
 </script>

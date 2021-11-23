@@ -130,54 +130,60 @@ var _crud = {
      * param updName {string} update name, default to _BR.Update
      */
     init: function (dtConfig, edits, updName) {
-        //#region 1.set _me.edits[]
-        var Childs = _crud.Childs;  //constant
-        var edit0 = null;  //master edit object
-        if (edits == null) {
-            edit0 = new EditOne();
-            //_me.hasChild = false;
-        } else {
-            edit0 = (edits[0] === null) ? new EditOne() : edits[0];
-            //_me.hasChild = edits.length > 1;
-            if (edits.length > 1) {
-                edit0[Childs] = [];
-                //var childs = _me.edits._childs;
-                for (var i = 1; i < edits.length; i++)
-                    edit0[Childs][i - 1] = edits[i];
+        //_crud.initEdit(edits);
+        _me.divEdit = $('#divEdit');
+        _me.hasEdit = (_me.divEdit.length > 0);
+        if (_me.hasEdit) {
+            var Childs = _crud.Childs;  //constant
+            var edit0 = null;  //master edit object
+            if (edits == null) {
+                edit0 = new EditOne();
+                //_me.hasChild = false;
+            } else {
+                edit0 = (edits[0] === null) ? new EditOne() : edits[0];
+                //_me.hasChild = edits.length > 1;
+                if (edits.length > 1) {
+                    edit0[Childs] = [];
+                    //var childs = _me.edits._childs;
+                    for (var i = 1; i < edits.length; i++)
+                        edit0[Childs][i - 1] = edits[i];
+                }
             }
+
+            _me.edit0 = edit0;
+            _me.hasChild = (_fun.hasValue(_me.edit0[Childs]) && _me.edit0[Childs].length > 0);
+            //_me.editLen = _me.edits.length;
+            _crud.initForm(_me.edit0);
         }
-        //#endregion
 
         //#region 2.set instance variables
+        _me.divRead = $('#divRead');
+        _me.hasRead = (_me.divRead.length > 0);
+        if (_me.hasRead) {
+            _me.rform = $('#formRead');
+            if (_me.rform.length === 0)
+                _me.rform = null;
+            _me.rform2 = $('#formRead2');
+            if (_me.rform2.length === 0)
+                _me.rform2 = null;
+            if (_me.rform != null)
+                _idate.init(_me.rform);
+            if (_me.rform2 != null)
+                _idate.init(_me.rform2);
+
+            //4.Create Datatable object
+            _me.dt = new Datatable('#tableRead', 'GetPage', dtConfig);
+        }
+
         _me.nowFun = '';    //now fun of edit0 form
         _me.updName = updName;
-        _me.divRead = $('#divRead');
-        _me.divEdit = $('#divEdit');
-        _me.rform = $('#formRead');
-        if (_me.rform.length === 0)
-            _me.rform = null;
-        _me.rform2 = $('#formRead2');
-        if (_me.rform2.length === 0)
-            _me.rform2 = null;
-        if (_me.rform != null)
-            _idate.init(_me.rform);
-        if (_me.rform2 != null)
-            _idate.init(_me.rform2);
-
-        _me.edit0 = edit0;
-        _me.hasChild = (_fun.hasValue(_me.edit0[Childs]) && _me.edit0[Childs].length > 0);
-        //_me.editLen = _me.edits.length;
 
         //for xgOpenModal
         _me.modal = null;
         //#endregion
 
         //3.initial forms(recursive)
-        _crud.initForm(_me.edit0);
         _prog.init();   //prog path
-
-        //4.Create Datatable object
-        _me.dt = new Datatable('#tableRead', 'GetPage', dtConfig);
     },
 
     /**
@@ -218,6 +224,9 @@ var _crud = {
      * param newDiv {object} jquery object
      */ 
     swap: function (toRead) {
+        if (!_me.hasRead || !_me.hasEdit)
+            return;
+
         var oldDiv, newDiv;
         if (toRead) {
             oldDiv = _me.divEdit;
@@ -302,13 +311,15 @@ var _crud = {
     },
 
     _getJsonAndSetMode: function (key, fun) {
+        /*
         if (_str.isEmpty(key)) {
             _log.error('error: key is empty !');
             return;
         }
+        */
 
         //_crud.toUpdateMode(key);
-        var act = (fun == _fun.FunU) ? 'GetUpdateJson' : 
+        var act = (fun == _fun.FunU) ? 'GetUpdJson' : 
             (fun == _fun.FunV) ? 'GetViewJson' : '';
         _ajax.getJson(act, { key: key }, function (data) {
             _crud.toEditMode(fun, data);
@@ -747,8 +758,11 @@ var _crud = {
         //case of ok
         //var start = _me.dt.dt.page.info().start;
         _tool.alert(_BR.SaveOk + '(' + data.Value + ')');
-        _me.dt.reload();
-        _crud.toReadMode();
+
+        if (_me.hasRead) {
+            _me.dt.reload();
+            _crud.toReadMode();
+        }
     },
 
     /**
